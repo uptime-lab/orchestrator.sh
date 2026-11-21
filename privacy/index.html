@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy · Uptime Orchestrator</title>
+<meta name="description" content="How orchestrator.sh handles personal data: no cookies, no analytics.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<style>
+/* COPIED from ../index.html (tokens, base, nav, buttons, stamps, spec list,
+   footer) so the landing stays a single file. Change both together. */
+:root {
+  color-scheme: dark;
+  --ink: #050604;
+  --panel: #0c0e09;
+  --line: #232a12;
+  --lime: #c8f31d;
+  --lime-deep: #5d7410;
+  --violet: #8b4dff;
+  --text: #e8ecda;
+  --mute: #8c9279;
+  --display: "Archivo", "Arial Black", "Helvetica Neue", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --gutter: clamp(16px, 4vw, 56px);
+  --cut: 18px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--ink); color: var(--text);
+  font: 400 15px/1.6 var(--mono);
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 64px 64px; background-position: -1px -1px;
+  background-attachment: fixed;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(120% 70% at 50% 0%, transparent 0%, var(--ink) 75%);
+}
+a { color: var(--lime); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+.wrap { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 0 var(--gutter); }
+
+h1, h2, h3 { font-family: var(--display); font-stretch: 125%; text-transform: uppercase; margin: 0; text-wrap: balance; }
+h1 { font-weight: 900; font-size: clamp(40px, 8.4vw, 124px); line-height: .88; letter-spacing: -.02em; }
+h2 { font-weight: 900; font-size: clamp(28px, 4.6vw, 62px); line-height: .95; letter-spacing: -.015em; }
+h3 { font-weight: 800; font-size: 17px; letter-spacing: .01em; }
+p { margin: 0; max-width: 62ch; }
+.mute { color: var(--mute); }
+.lime { color: var(--lime); }
+.out { color: transparent; -webkit-text-stroke: 1.5px var(--lime); }
+
+header.nav { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--ink) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; gap: 28px; min-height: 60px; flex-wrap: wrap; }
+.mark { font-family: var(--display); font-stretch: 125%; font-weight: 900; text-transform: uppercase; letter-spacing: .02em; color: var(--lime); text-decoration: none; display: flex; gap: 10px; align-items: baseline; }
+.mark small { font: 500 11px var(--mono); color: var(--mute); letter-spacing: .14em; }
+.nav nav { display: flex; gap: 22px; margin-left: auto; flex-wrap: wrap; }
+.nav nav a { color: var(--text); text-decoration: none; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.nav nav a:hover { color: var(--lime); }
+.btn { display: inline-block; font: 700 13px var(--mono); letter-spacing: .1em; text-transform: uppercase; text-decoration: none; padding: 14px 22px; border: 1px solid var(--lime); color: var(--lime); background: transparent; cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); }
+.btn:not(.solid) { clip-path: none; }
+.btn.solid { background: var(--lime); color: var(--ink); }
+.btn:hover { background: var(--lime); color: var(--ink); }
+.btn.solid:hover { background: var(--text); border-color: var(--text); }
+
+section { position: relative; padding: clamp(56px, 9vw, 120px) 0 0; }
+.stamp { display: flex; align-items: center; gap: 14px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); margin-bottom: 22px; }
+.stamp b { color: var(--ink); background: var(--lime); padding: 3px 9px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stamp::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--lime-deep), transparent); }
+
+.hero { padding-top: clamp(40px, 6vw, 84px); }
+.hero .lead { margin-top: 28px; display: grid; gap: 14px; }
+.hero .lead p { font-size: clamp(15px, 1.5vw, 18px); }
+
+.spec { margin: 30px 0 0; border-top: 1px solid var(--lime-deep); }
+.spec div { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.spec dt, .spec h3 { color: var(--lime); }
+.spec dd { margin: 0; }
+.spec p { color: var(--mute); max-width: 74ch; font-size: 14px; }
+.spec p b { color: var(--text); font-weight: 500; }
+@media (max-width: 720px) { .spec div { grid-template-columns: 1fr; gap: 6px; } }
+
+footer { margin-top: clamp(64px, 10vw, 140px); border-top: 1px solid var(--line); padding: 34px 0 60px; font-size: 12.5px; color: var(--mute); }
+footer .wrap { display: flex; gap: 14px 40px; flex-wrap: wrap; justify-content: space-between; }
+footer a { color: var(--mute); }
+.proto { border: 1px dashed var(--mute); padding: 2px 8px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* end of the copied block */
+
+/* this page only: the contact panel, cut like the landing's rack */
+.ask { margin-top: 30px; border: 1px solid var(--lime-deep); background: var(--panel); padding: clamp(22px, 3vw, 40px);
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 5vw, 64px); align-items: start;
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut))); }
+.ask .send { display: grid; gap: 16px; justify-items: start; }
+.ask .send p { color: var(--mute); font-size: 14px; }
+.ask .addr { color: var(--text); overflow-wrap: anywhere; }
+.ask ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.ask li { padding-left: 18px; position: relative; color: var(--mute); font-size: 14px; }
+.ask li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 1px; background: var(--lime); }
+.ask li b { color: var(--text); font-weight: 500; }
+.back { margin-top: 30px; display: flex; gap: 14px; flex-wrap: wrap; }
+@media (max-width: 860px) { .ask { grid-template-columns: 1fr; } }
+.legal h2 { font-size: clamp(20px, 2.2vw, 28px); line-height: 1.1; margin: 44px 0 12px; }
+.legal p, .legal li { color: var(--mute); max-width: 74ch; font-size: 15px; line-height: 1.6; }
+.legal p + p { margin-top: 12px; }
+.legal ul { margin: 8px 0 0; padding-left: 20px; }
+.legal a { color: inherit; text-decoration: underline; }
+.legal { padding-bottom: clamp(56px, 9vw, 120px); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="../">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="../#four-minutes">How it works</a>
+      <a href="../#install">Install</a>
+      <a href="../#after">Features</a>
+      <a href="../#boards">Boards</a>
+      <a href="../subscription/">Pricing</a>
+    </nav>
+    <span class="proto">Prototype</span>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero legal" aria-labelledby="title">
+  <div class="wrap">
+    <h1 id="title">Privacy</h1>
+    <p>This notice covers the website <strong>orchestrator.sh</strong>. Last updated 21 November 2026.</p>
+    <h2>Who is responsible</h2>
+    <p>Uptime Lab Inc., 99 Wall Street #4269, New York, NY 10005, United States of America. Contact for privacy questions: <a href="mailto:info@orchestrator.sh">info@orchestrator.sh</a>.</p>
+    <h2>What this website does not do</h2>
+    <p>It sets no cookies and uses no browser storage. It runs no analytics, no advertising and no tracking scripts. Fonts and scripts are served from this site, not from a third party. For that reason there is no cookie banner.</p>
+    <h2>Hosting and server logs</h2>
+    <p>The website is hosted on GitHub Pages, a service of GitHub, Inc. (88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA). When you open a page, GitHub necessarily receives your IP address and the usual request data (time, page, browser type) and may keep them in its logs for security and to operate the service. We do not have access to these logs and do not combine them with other data. Legal basis: our legitimate interest in providing the website securely (Art. 6(1)(f) GDPR). GitHub describes its processing in the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub General Privacy Statement</a>.</p>
+    <h2>When you write to us</h2>
+    <p>If you send us an email, we process your address and whatever you write in order to answer you and, if you ask about a subscription, to prepare an offer. Our mailboxes are provided by Google Workspace (Google LLC). Legal basis: steps taken at your request before a contract (Art. 6(1)(b) GDPR) or our legitimate interest in answering enquiries (Art. 6(1)(f) GDPR). We keep the correspondence for as long as the enquiry or the resulting business relationship requires and the law demands, and delete it afterwards.</p>
+    <h2>Transfers outside the European Union</h2>
+    <p>We are located in the United States, and so are the providers named above. Data you send us is therefore processed in the United States.</p>
+    <h2>Links to other sites</h2>
+    <p>This website links to GitHub, to computeblade.com and to the hosted service at app.orchestrator.sh. Those sites have their own privacy terms; nothing is sent to them until you follow a link.</p>
+    <h2>Your rights</h2>
+    <p>Where the GDPR applies, you may ask us for access to your data, for its correction or deletion, for restriction of its processing and for a copy in a portable format, and you may object to processing based on legitimate interest. Write to <a href="mailto:info@orchestrator.sh">info@orchestrator.sh</a>. You may also complain to the data protection authority of your country.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md">Install guide</a> · <a href="../subscription/">Subscriptions</a> · <a href="../imprint/">Imprint</a> · <a href="../privacy/">Privacy</a> · <a href="https://computeblade.com">Compute Blade</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
