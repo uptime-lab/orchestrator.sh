@@ -36,6 +36,7 @@
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/" aria-current="page">Hardware profiles, overclocking and the watchdog</a></li>
+<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/">Organizational units and policies</a></li>
@@ -46,10 +47,12 @@
 </ul>
 <h4>Automation</h4><ul>
 <li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+<li><a href="/docs/api/">Using the API</a></li>
 </ul>
 <h4>Administration</h4><ul>
 <li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
 <li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+<li><a href="/docs/troubleshooting/">Troubleshooting</a></li>
 </ul></nav>
 <article>
 <div class="stamp"><b>Devices</b> Documentation</div>
@@ -65,9 +68,9 @@
 <p>An apply to an offline node waits until the node connects on its installed OS. <b>Scan</b> is refused while the node runs the recovery system.</p>
 <p>To declare hardware for a whole unit, use the <b>Hardware</b> section of its policies and click <b>Apply hardware profile to N nodes</b> (<a href="../organization/">Organizational units and policies</a>).</p>
 <h2 id="overclock-a-node">Overclock a node</h2>
-<figure><a href="../img/hardware-and-watchdog/02-overclock.jpg"><img src="../img/hardware-and-watchdog/02-overclock.jpg" alt="The Overclock view with Stock, Balanced and Performance presets for a CM5" loading="lazy"></a></figure>
+<figure><a href="../img/hardware-and-watchdog/02-overclock.jpg"><img src="../img/hardware-and-watchdog/02-overclock.jpg" alt="The Overclock view of a CM5 on stock clocks, with the Stock, Balanced and Performance presets and a disabled Apply preset button" loading="lazy"></a></figure>
 <ol><li>Open <b>Advanced</b> → <b>Overclock</b>.</li><li>Select <b>Stock</b>, <b>Balanced</b> or <b>Performance</b>.</li><li>Click <b>Apply</b> (for example <b>Apply balanced preset</b>).</li><li>Reboot the node.</li></ol>
-<p>Nothing changes until the reboot. An offline node gets the change when it reconnects. Until you select a preset, the button may read <b>Sent ✓</b> although nothing was sent.</p>
+<p>Nothing changes until the reboot. An offline node gets the change when it reconnects. <b>Apply preset</b> stays disabled until you select a preset.</p>
 <p>On a Pi 5 or CM5, <b>Balanced</b> is 2.6 GHz at stock voltage and <b>Performance</b> 2.8 GHz. On a Pi 4 or CM4 they are 1.8 and 2.0 GHz. <b>Stock</b> removes the overclock. No preset uses <code>force_turbo</code>, so the board still slows down when idle or hot. Check the cooling before you use <b>Performance</b>.</p>
 <aside class="callout warning"><p><b>Warning:</b> An unstable overclock can stop the board from booting its OS. If the install has the boot-loop failsafe on (<code>PROVISIONING_BOOT_FAILSAFE_THRESHOLD</code>, off by default), the node falls back to the recovery system, so apply <b>Stock</b> and reboot. Otherwise boot it from SD or USB media and delete the overclock block from config.txt.</p></aside>
 <h2 id="let-a-hung-node-reset-itself">Let a hung node reset itself</h2>
@@ -82,7 +85,7 @@
 <h2 id="turn-the-leds-off">Turn the LEDs off</h2>
 <p><b>Properties</b> → <b>LEDs</b> turns off the activity and power LEDs, and on a Compute Blade adds <b>Stealth mode</b> and <b>Digital LED indication</b>. The settings do not apply in the recovery system, and identify is on the node's Actions tab (<a href="../node-panel/">Working with a node</a>).</p>
 <p>Next: <a href="../organization/">Organizational units and policies</a>, to set these once for a whole unit.</p>
-<div class="pager"><a class="prev" href="/docs/node-panel/"><small>Previous</small>Working with a node</a><a class="next" href="/docs/organization/"><small>Next</small>Organizational units and policies</a></div>
+<div class="pager"><a class="prev" href="/docs/node-panel/"><small>Previous</small>Working with a node</a><a class="next" href="/docs/backups-and-images/"><small>Next</small>Backups and gold images</a></div>
 </article>
 </main>
 

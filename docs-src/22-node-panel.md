@@ -77,9 +77,9 @@ Credentials, private keys and the adoption file are refused. A version holds at 
 
 To swap hardware instead, **Replace with another node** moves the attributes, hostname and unit onto a spare node.
 
-![A deleted node record with Restore and Forget](img/node-panel/13-deleted-node.jpg)
+![A deleted node record whose board is now the live node plasma-rig-01, with Restore disabled and Forget](img/node-panel/13-deleted-node.jpg)
 
-Set the status filter on **Nodes** to **Deleted** to find deleted nodes. **Restore** gives the identity back, so the device is accepted again. History and files do not return. **Forget** removes the record for good.
+Set the status filter on **Nodes** to **Deleted** to find deleted nodes. **Restore** gives the identity back, so the device is accepted again. History and files do not return. If the board has since joined as another node in your account, **Restore** is disabled and the panel names that node. Delete it first to take the old one back. **Forget** removes the record for good.
 
 > **Warning:** A device set up for network boot keeps its node credential in the bootloader, and **Restore** makes it valid again. To revoke it, delete the node and then **Forget** it.
 

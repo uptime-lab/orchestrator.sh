@@ -10,13 +10,15 @@ Install or reinstall an OS on an approved node. The node boots a small recovery 
 1. Go to **Operations** → **Install images**, click **Upload image**, fill in **Title** and **Version**, choose the file, and click **Done**. Use `.img`, `.iso`, `.xz` or `.zst`.
 2. Open the node, go to **Actions**, click **Reboot to recovery** and confirm. Wait until the node turns violet and shows **RECOVERY**.
 3. Click **Install OS** in the **Provisioning** group.
-4. Pick the **Image** and the **Target Device**. Read the device path, because a board with a card or eMMC lists those too.
+4. Check the **Image** and pick the **Target Device**. The node's default image is preselected and marked **default**, and an image without an uploaded file is listed but can't be chosen. Read the device path, because a board with a card or eMMC lists those too.
 5. Click **Install OS** and confirm. This erases the target drive. Progress shows in **Command history**.
 6. Click **Install Agent**, choose the same **Target Device**, keep the other defaults and start it. It takes seconds.
 7. Open **Properties** and set **Boot behavior** to **Local OS**.
 8. Click **Actions** → **Reboot**.
 
-![The Install OS form with Ubuntu Server 26.04.1 and /dev/nvme0n1 selected](img/install-an-os/06-install-os-form.jpg)
+![Opening Actions on plasma-rig-01, clicking Reboot to recovery, and the confirmation that appears](img/install-an-os/g1-reboot-to-recovery.gif "Reboot to recovery")
+
+![Opening Install OS on a node in recovery: the default image Ubuntu Server 26.04.1 is preselected, then /dev/nvme0n1 is chosen as the target device](img/install-an-os/g2-install-os.gif "Install OS")
 
 The node comes back **ONLINE** in the new system with the image's default hostname, which you can change with **Actions** → **Change hostname**. If an install fails, the node's boot target switches to **Recovery** so it doesn't boot a half-written disk. Run **Install OS** and **Install Agent** again.
 
@@ -50,6 +52,6 @@ Network boot works because each node's bootloader knows your server's address an
 
 ## Back up a node
 
-**Create backup** in the **Provisioning** group captures the node's drive as an image you can restore onto the same node. Tick **Golden image** to strip the machine identity so the image can be installed on any device ([OS-IMAGES.md](https://github.com/uptime-lab/orchestrator/blob/main/docs/OS-IMAGES.md)).
+**Create backup** in the **Provisioning** group captures the node's drive as an image you can put back later. See [Backups and gold images](../backups-and-images/).
 
 Next: [Working with a node](../node-panel/).

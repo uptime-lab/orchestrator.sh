@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Troubleshooting · Uptime Orchestrator docs</title>
+<meta name="description" content="Find what you see, why it happens, and what to do.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css" rel="stylesheet">
+<script src="/docs/search.js" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Install</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+      <a href="/subscription/">Pricing</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs wrap">
+<nav class="side" aria-label="Documentation">
+<div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
+<h4>Start</h4><ul>
+<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+</ul>
+<h4>Devices</h4><ul>
+<li><a href="/docs/add-a-device/">Adding a device</a></li>
+<li><a href="/docs/install-an-os/">Installing an operating system</a></li>
+<li><a href="/docs/node-panel/">Working with a node</a></li>
+<li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
+</ul>
+<h4>Operating a fleet</h4><ul>
+<li><a href="/docs/organization/">Organizational units and policies</a></li>
+<li><a href="/docs/access-and-credentials/">Access: SSH keys and device users</a></li>
+<li><a href="/docs/secrets-and-variables/">Secrets and variables</a></li>
+<li><a href="/docs/utilities/">Utilities: managed software</a></li>
+<li><a href="/docs/status-and-audit/">Status, attention and the audit trail</a></li>
+</ul>
+<h4>Automation</h4><ul>
+<li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+<li><a href="/docs/api/">Using the API</a></li>
+</ul>
+<h4>Administration</h4><ul>
+<li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
+<li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+<li><a href="/docs/troubleshooting/" aria-current="page">Troubleshooting</a></li>
+</ul></nav>
+<article>
+<div class="stamp"><b>Administration</b> Documentation</div>
+<h1>Troubleshooting</h1>
+<p class="summary">Find what you see, why it happens, and what to do.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#a-device-does-not-appear">A device does not appear</a></li><li><a href="#a-node-is-stuck-in-recovery-or-will-not-boot-its-system">A node is stuck in recovery or will not boot its system</a></li><li><a href="#a-command-or-install-does-not-finish">A command or install does not finish</a></li><li><a href="#i-cannot-sign-in">I cannot sign in</a></li><li><a href="#the-server-will-not-start-after-an-upgrade">The server will not start after an upgrade</a></li><li><a href="#when-nothing-here-matches">When nothing here matches</a></li></ul></nav>
+<p>Find what you see, then do what the entry says.</p>
+<h2 id="a-device-does-not-appear">A device does not appear</h2>
+<ul><li><b>A card-booted device shows a login prompt and never appears.</b> The card has a GUID partition table. In macOS Disk Utility, choose <b>View</b> → <b>Show All Devices</b>, select the card itself, erase it as <b>MS-DOS (FAT)</b> with scheme <b>Master Boot Record</b>, and unzip the bundle again.</li><li><b>A device another server managed ignores the card and boots its old system.</b> Its bootloader tries network, NVMe, USB, then SD. Remove the drive while the card does its work, or <a href="../add-a-device/#flash-a-board-from-the-browser">flash the board from the browser</a>.</li><li><b>The one command seems to hang on a new system.</b> The system's first package upgrade holds the package manager, for up to about half an hour on a fresh Ubuntu. The script waits and names the process holding the lock once a minute. Leave it running.</li><li><b>The node appears as PENDING.</b> A device from <b>One command</b> or <b>Master image</b> waits for approval. Open it, check the <b>HW serial</b> and click <b>Approve</b>. By default Admins and Super Admins can approve.</li><li><b>The backend log says <code>adoption handshake rejected … node not found</code>.</b> The device presents an identity from another server or from a node you deleted. Flash it from the browser. If you adopted it again here, click <b>Update bootloader</b> on the new node.</li></ul>
+<h2 id="a-node-is-stuck-in-recovery-or-will-not-boot-its-system">A node is stuck in recovery or will not boot its system</h2>
+<ul><li><b>A device that already ran its own OS comes back in recovery after approval.</b> Its <b>Boot behavior</b> is <b>Inherit</b>, which means <b>Recovery</b> unless you changed the account default. Set it to <b>Local OS</b> in <b>Properties</b> and reboot.</li><li><b>A node boots into nothing, or into a system this server did not install.</b> It is set to <b>Local OS</b>, and its drive holds no system with this server's agent. Set <b>Boot behavior</b> to <b>Recovery</b> and power-cycle it. Then <a href="../install-an-os/">install an OS</a> and set <b>Local OS</b>.</li><li><b>Reboot to recovery is refused.</b> The node is offline, or its bootloader does not try network boot first. Bring the node online, or click <b>Update bootloader</b> in <b>Advanced</b> → <b>Bootloader / EEPROM</b>.</li><li><b>A node goes offline on and off for up to half an hour after an OS install.</b> The fresh system runs its first package upgrade, which restarts services. Wait. It settles when the upgrade ends.</li></ul>
+<h2 id="a-command-or-install-does-not-finish">A command or install does not finish</h2>
+<ul><li><b>Install OS shows an image but you can't pick it.</b> The image has no uploaded file, no checksum yet, or is still being processed. The label says which. Wait, or upload the file in <b>Operations</b> → <b>Install images</b>.</li><li><b>Install OS fails with "device … is mounted".</b> The node is using that drive. Check the <b>Target Device</b> and pick the drive you mean to erase.</li><li><b>Install OS fails during the download.</b> The node retries an interrupted download three times by itself. If it still fails, run <b>Install OS</b> again.</li><li><b>After a failed install the node keeps booting recovery.</b> It stays there until an install succeeds, so it never boots a half-written disk. Run <b>Install OS</b> and <b>Install Agent</b> again.</li><li><b>A command stays Queued.</b> The node is offline. Changes of state wait up to a day: access, hostname, watchdog, LEDs, hardware profile, utilities, overclock and agent updates. A queued command that waits longer ends as <b>Expired</b>. A reboot, a script, an identify or an OS install fails at once instead.</li><li><b>Status shows "Command stopped reporting".</b> A command the node accepted has said nothing for 30 minutes, usually because its report was lost. It settles when the node reconnects, for example after a power-cycle.</li><li><b>Restore of a deleted node is refused.</b> Its board was adopted again as another node in this account, named in the deleted node's row. Delete that node first.</li><li><b>The uninstall script ends with <code>NOT DONE</code>.</b> Another package operation held the package manager, so the agent package is still installed. Run the script again once that operation has finished.</li></ul>
+<h2 id="i-cannot-sign-in">I cannot sign in</h2>
+<ul><li><b>You forgot your password or lost your authenticator app.</b> Use a recovery code if you saved them. Otherwise the operator resets it from the server's command line in one command (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#recover-a-lost-password-or-authenticator">Recover a lost password or authenticator</a>).</li></ul>
+<h2 id="the-server-will-not-start-after-an-upgrade">The server will not start after an upgrade</h2>
+<ul><li><b>The page loads but every request fails with 502.</b> The backend refuses a database that a newer release has already migrated. Run <code>docker compose -f docker-compose.community.yml logs backend | grep -i schema</code> in the install directory to see why. Go forward to the newer release again, or restore the backup you took before the upgrade. There is no downgrade.</li><li><b>After an upgrade, nothing answers on ports 443, 80 and 50051.</b> The proxy cannot read its route files under <code>proxy/</code>. Run <code>chmod -R a+rX proxy</code> in the install directory, with <code>sudo</code> if the files aren't yours, then <code>docker restart orchestrator-proxy</code>.</li><li><b>The browser shows a self-signed certificate.</b> The proxy could not get its Let's Encrypt certificate. <code>DOMAIN</code> must resolve to this server from the internet, and port 80 must be open to it. <code>docker logs orchestrator-proxy 2&gt;&amp;1 | grep -i acme</code> names the reason. Fix it, then run <code>docker restart orchestrator-proxy</code>. Let's Encrypt pauses a name for an hour after five failures.</li></ul>
+<h2 id="when-nothing-here-matches">When nothing here matches</h2>
+<ol><li>Open the node and read <b>Actions</b> → <b>Command history</b>. A failed command says why.</li><li>Open <b>Status</b> → <b>Attention</b> (<a href="../status-and-audit/">Status, attention and the audit trail</a>).</li><li>On the server, run <code>docker compose -f docker-compose.community.yml logs backend</code> in the install directory.</li><li>Ask in the <a href="https://github.com/uptime-lab/orchestrator/issues">repository's issues</a>. Report a security problem the private way <code>SECURITY.md</code> describes, never in an issue.</li></ol>
+<div class="pager"><a class="prev" href="/docs/backup-and-upgrade/"><small>Previous</small>Backup, restore and upgrading the server</a></div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

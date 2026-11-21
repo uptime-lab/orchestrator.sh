@@ -30,7 +30,7 @@ The token works for 7 days and for several devices. You find it under **Secrets*
 
 This writes the board's bootloader so it boots from your server. Use Chrome or Edge over HTTPS. On Windows, install the WinUSB driver first as the tab explains.
 
-![The USB flash tab with the Connect device button, an empty Board serial field, the Node name field, the yellow flashing warning and a disabled Flash EEPROM button.](img/add-a-device/04-usb-flash.jpg)
+![The USB flash tab with the Connect device button, an empty Board serial field, the Node name field, the yellow flashing warning, the line Power the device on within 30 days of flashing, and a disabled Flash EEPROM button.](img/add-a-device/04-usb-flash.jpg)
 
 1. Put the board into USB boot mode and connect it to your computer.
 2. Click **Connect device** and pick the board. **Board serial** fills in.
@@ -38,11 +38,11 @@ This writes the board's bootloader so it boots from your server. Use Chrome or E
 4. Click **Flash EEPROM** and don't unplug the board until the green notice appears.
 5. Unplug USB, connect Ethernet and power the board on.
 
-The node arrives already approved. Power the board on within 30 days of the flash, or the node gives up the board's serial and you have to flash it again.
+The node arrives already approved. Power the board on within the days the tab names (30 by default). Until the board first connects, your account holds its serial only that long. After that another account can claim the serial. The node stays and binds the board when it connects, unless another account has claimed it first.
 
 ## Boot a blank device from a provisioning card
 
-![The Master image tab: description of the FAT32 MBR requirement, the GPL source note, the yellow keep-the-card-in warning, and the Name field set to sd-provisioning.](img/add-a-device/05-master-image.jpg)
+![The Master image tab: description of the FAT32 MBR requirement with the macOS scheme Master Boot Record, the GPL source note, the yellow keep-the-card-in warning, and the Name field set to sd-provisioning.](img/add-a-device/05-master-image.jpg)
 
 1. Open the **Master image** tab.
 2. Pick an **SSH key** for the new nodes, and set **Expires At** if 7 days is wrong for you.

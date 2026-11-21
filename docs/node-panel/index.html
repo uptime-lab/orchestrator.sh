@@ -36,6 +36,7 @@
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/" aria-current="page">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/">Organizational units and policies</a></li>
@@ -46,10 +47,12 @@
 </ul>
 <h4>Automation</h4><ul>
 <li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+<li><a href="/docs/api/">Using the API</a></li>
 </ul>
 <h4>Administration</h4><ul>
 <li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
 <li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+<li><a href="/docs/troubleshooting/">Troubleshooting</a></li>
 </ul></nav>
 <article>
 <div class="stamp"><b>Devices</b> Documentation</div>
@@ -87,8 +90,8 @@
 <h2 id="remove-a-node">Remove a node</h2>
 <p><b>Actions</b> → <b>Delete node</b> deletes the node's command history, tracked files and secret attachments. A connected device erases its adoption file and keeps its users, keys, data and agent. To remove the agent too, run the uninstall script from <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md">INSTALL.md</a>. An offline device is not told and keeps trying to connect with an identity the platform refuses.</p>
 <p>To swap hardware instead, <b>Replace with another node</b> moves the attributes, hostname and unit onto a spare node.</p>
-<figure><a href="../img/node-panel/13-deleted-node.jpg"><img src="../img/node-panel/13-deleted-node.jpg" alt="A deleted node record with Restore and Forget" loading="lazy"></a></figure>
-<p>Set the status filter on <b>Nodes</b> to <b>Deleted</b> to find deleted nodes. <b>Restore</b> gives the identity back, so the device is accepted again. History and files do not return. <b>Forget</b> removes the record for good.</p>
+<figure><a href="../img/node-panel/13-deleted-node.jpg"><img src="../img/node-panel/13-deleted-node.jpg" alt="A deleted node record whose board is now the live node plasma-rig-01, with Restore disabled and Forget" loading="lazy"></a></figure>
+<p>Set the status filter on <b>Nodes</b> to <b>Deleted</b> to find deleted nodes. <b>Restore</b> gives the identity back, so the device is accepted again. History and files do not return. If the board has since joined as another node in your account, <b>Restore</b> is disabled and the panel names that node. Delete it first to take the old one back. <b>Forget</b> removes the record for good.</p>
 <aside class="callout warning"><p><b>Warning:</b> A device set up for network boot keeps its node credential in the bootloader, and <b>Restore</b> makes it valid again. To revoke it, delete the node and then <b>Forget</b> it.</p></aside>
 <p>Next: <a href="../hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a>.</p>
 <div class="pager"><a class="prev" href="/docs/install-an-os/"><small>Previous</small>Installing an operating system</a><a class="next" href="/docs/hardware-and-watchdog/"><small>Next</small>Hardware profiles, overclocking and the watchdog</a></div>

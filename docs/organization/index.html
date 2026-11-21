@@ -36,6 +36,7 @@
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/" aria-current="page">Organizational units and policies</a></li>
@@ -46,10 +47,12 @@
 </ul>
 <h4>Automation</h4><ul>
 <li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+<li><a href="/docs/api/">Using the API</a></li>
 </ul>
 <h4>Administration</h4><ul>
 <li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
 <li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+<li><a href="/docs/troubleshooting/">Troubleshooting</a></li>
 </ul></nav>
 <article>
 <div class="stamp"><b>Operating a fleet</b> Documentation</div>
@@ -66,7 +69,7 @@
 <p><b>Delete unit</b> refuses while the unit still holds nodes, child units, playbooks or utility assignments. Move those out first.</p>
 <h2 id="move-nodes-into-a-unit">Move nodes into a unit</h2>
 <ol><li>Open <b>Nodes</b>.</li><li>Click <b>Select / assign to unit</b> above the table.</li><li>Tick the nodes.</li><li>Open <b>Assign to unit</b> and pick the unit.</li></ol>
-<figure><a href="../img/organization/08-assign-to-unit.jpg"><img src="../img/organization/08-assign-to-unit.jpg" alt="The Nodes page in selection mode with two nodes ticked and the Assign to unit menu open" loading="lazy"></a></figure>
+<figure><a href="../img/organization/08-assign-to-unit.jpg"><img src="../img/organization/08-assign-to-unit.jpg" alt="The Nodes page in selection mode with jetpack-test-03 and paint-booth-display ticked and the Assign to unit menu open on Basement" loading="lazy"></a></figure>
 <p>You can also drag selected rows onto a unit in the left rail, or use <b>Move</b> on the <b>Unit</b> row of a node's <b>Overview</b>. A moved node picks up the new unit's settings at once. To place new devices in a unit when they join, give their adoption token an <b>Adoption OU</b> (<a href="../secrets-and-variables/">Secrets and variables</a>).</p>
 <h2 id="set-a-policy-on-a-unit-or-for-the-whole-account">Set a policy on a unit or for the whole account</h2>
 <ol><li>Open <b>Organization</b>.</li><li>Select a unit in the rail, or <b>Account defaults</b> for every node that has no answer of its own.</li><li>On the <b>Policies</b> tab, change the fields you need.</li><li>Click <b>Save policies</b>.</li></ol>
@@ -77,7 +80,7 @@
 <p><b>Password login</b> goes to the devices as soon as you save. Saving hardware or watchdog settings only stores them, and nothing changes on a device until you apply them.</p>
 <p>The unit's <b>Contents</b> tab lists its nodes and everything that reaches them. <b>N override(s)</b> next to a node means it sets some fields itself, and <b>Reset to inherited</b> clears them.</p>
 <p>Next: <a href="../access-and-credentials/">Access: SSH keys and device users</a>.</p>
-<div class="pager"><a class="prev" href="/docs/hardware-and-watchdog/"><small>Previous</small>Hardware profiles, overclocking and the watchdog</a><a class="next" href="/docs/access-and-credentials/"><small>Next</small>Access: SSH keys and device users</a></div>
+<div class="pager"><a class="prev" href="/docs/backups-and-images/"><small>Previous</small>Backups and gold images</a><a class="next" href="/docs/access-and-credentials/"><small>Next</small>Access: SSH keys and device users</a></div>
 </article>
 </main>
 

@@ -36,6 +36,7 @@
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/">Organizational units and policies</a></li>
@@ -46,10 +47,12 @@
 </ul>
 <h4>Automation</h4><ul>
 <li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+<li><a href="/docs/api/">Using the API</a></li>
 </ul>
 <h4>Administration</h4><ul>
 <li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
 <li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+<li><a href="/docs/troubleshooting/">Troubleshooting</a></li>
 </ul></nav>
 <article>
 <div class="stamp"><b>Operating a fleet</b> Documentation</div>
@@ -68,9 +71,9 @@
 <figure><a href="../img/status-and-audit/03-logs.jpg"><img src="../img/status-and-audit/03-logs.jpg" alt="The Logs tab with status and time filters and the most recent commands" loading="lazy"></a></figure>
 <p><b>Status</b> → <b>Logs</b> lists every command sent to any node, whether you, a playbook or the platform sent it. Filter it by status, time window and command name, and click a row to open that node's panel. <b>Replaced</b>, <b>Expired</b> and <b>Skipped</b> are not failures. Details that may hold secret values read <code>[redacted — requires secret.read_value]</code>.</p>
 <h2 id="see-who-did-what">See who did what</h2>
-<figure><a href="../img/status-and-audit/04-audit.jpg"><img src="../img/status-and-audit/04-audit.jpg" alt="The Audit tab filtered to playbook.run_start, showing six runs started by a member" loading="lazy"></a></figure>
-<p>Open the account menu, then <b>Account Settings</b> → <b>Audit</b>. Only a <b>Super Admin</b> sees this tab. It lists every privileged action, such as secrets read, commands sent, terminals opened, playbooks started and members changed.</p>
-<p><b>Filter by action</b> takes an exact name such as <code>playbook.run_start</code>. Actions the platform took on its own show <b>the platform</b> as the actor. In the beta the actor may show a member's internal ID instead of a name, and entries carry no source address. Nothing in the UI can delete an event.</p>
+<figure><a href="../img/status-and-audit/04-audit.jpg"><img src="../img/status-and-audit/04-audit.jpg" alt="The Audit tab filtered to playbook.run_start, showing eight runs started by a member" loading="lazy"></a></figure>
+<p>Open the account menu, then <b>Account</b> → <b>Audit</b>. Only a <b>Super Admin</b> sees this tab. It lists every privileged action, such as secrets read, commands sent, terminals opened, playbooks started and members changed.</p>
+<p><b>Filter by action</b> takes an exact name such as <code>playbook.run_start</code>. Actions the platform took on its own show <b>the platform</b> as the actor. Entries carry no source address. Nothing in the UI can delete an event.</p>
 <h2 id="how-long-entries-are-kept">How long entries are kept</h2>
 <p>Audit events are kept 365 days by default (<code>AUDIT_EVENT_RETENTION_DAYS</code>, <code>0</code> keeps them forever), and the line above the list shows this account's value. To keep them longer, export them with <code>GET /api/v1/audit-events</code> before they age out.</p>
 <p>Command history is kept forever by default (<code>NODE_COMMAND_RETENTION_DAYS</code>) and 90 days in the community compose file. A command still waiting for delivery is never deleted. Finished playbook runs are kept 30 days.</p>

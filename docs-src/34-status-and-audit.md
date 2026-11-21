@@ -48,11 +48,11 @@ The results list each node as **Sent**, **Queued**, **Skipped** or **Failed**. T
 
 ## See who did what
 
-![The Audit tab filtered to playbook.run_start, showing six runs started by a member](img/status-and-audit/04-audit.jpg)
+![The Audit tab filtered to playbook.run_start, showing eight runs started by a member](img/status-and-audit/04-audit.jpg)
 
-Open the account menu, then **Account Settings** → **Audit**. Only a **Super Admin** sees this tab. It lists every privileged action, such as secrets read, commands sent, terminals opened, playbooks started and members changed.
+Open the account menu, then **Account** → **Audit**. Only a **Super Admin** sees this tab. It lists every privileged action, such as secrets read, commands sent, terminals opened, playbooks started and members changed.
 
-**Filter by action** takes an exact name such as `playbook.run_start`. Actions the platform took on its own show **the platform** as the actor. In the beta the actor may show a member's internal ID instead of a name, and entries carry no source address. Nothing in the UI can delete an event.
+**Filter by action** takes an exact name such as `playbook.run_start`. Actions the platform took on its own show **the platform** as the actor. Entries carry no source address. Nothing in the UI can delete an event.
 
 ## How long entries are kept
 

@@ -36,6 +36,7 @@
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/">Organizational units and policies</a></li>
@@ -46,41 +47,43 @@
 </ul>
 <h4>Automation</h4><ul>
 <li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+<li><a href="/docs/api/">Using the API</a></li>
 </ul>
 <h4>Administration</h4><ul>
 <li><a href="/docs/team-and-security/" aria-current="page">Team, sign-in security and the device limit</a></li>
 <li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+<li><a href="/docs/troubleshooting/">Troubleshooting</a></li>
 </ul></nav>
 <article>
 <div class="stamp"><b>Administration</b> Documentation</div>
 <h1>Team, sign-in security and the device limit</h1>
 <p class="summary">Invite people, give them roles, protect your sign-in and see how many devices your server admits.</p>
 <nav class="toc" aria-label="On this page"><ul><li><a href="#invite-someone">Invite someone</a></li><li><a href="#which-role-to-give">Which role to give</a></li><li><a href="#turn-on-two-step-sign-in">Turn on two-step sign-in</a></li><li><a href="#see-and-end-your-sessions">See and end your sessions</a></li><li><a href="#the-device-limit">The device limit</a></li><li><a href="#lost-passwords-and-single-sign-on">Lost passwords and single sign-on</a></li></ul></nav>
-<p>Invite colleagues, choose what each may do, and protect your own sign-in. Click your initials at the top right: <b>Team Management</b> holds the members, <b>Account Settings</b> your own sign-in.</p>
-<figure><a href="../img/team-and-security/01-account-menu.jpg"><img src="../img/team-and-security/01-account-menu.jpg" alt="The account menu open at the top right, showing the user&#x27;s name, an Active badge, the email address, Team Management, Account Settings and Sign out" loading="lazy"></a><figcaption>The account menu</figcaption></figure>
+<p>Invite colleagues, choose what each may do, and protect your own sign-in. Click your initials at the top right: <b>Team Management</b> holds the members, <b>Account</b> your own sign-in.</p>
+<figure><a href="../img/team-and-security/01-account-menu.jpg"><img src="../img/team-and-security/01-account-menu.jpg" alt="The account menu open at the top right, showing the user&#x27;s name, an Active badge, the email address, Team Management, Account and Sign out" loading="lazy"></a><figcaption>The account menu</figcaption></figure>
 <h2 id="invite-someone">Invite someone</h2>
 <ol><li>Open <b>Team Management</b>.</li><li>Under <b>Invite a member</b>, type the address into <b>Email</b> and pick a role.</li><li>Click <b>Create invite</b>, then confirm it's you.</li><li>Without a mail server, copy the one-time link the page shows and hand it over through a channel you trust. With one, the person gets it by email.</li></ol>
-<figure><a href="../img/team-and-security/07-invite-and-members.jpg"><img src="../img/team-and-security/07-invite-and-members.jpg" alt="The Invite a member form filled in with apprentice@uptime.example and the Viewer role, the pending invitation for intern@uptime.example with Resend and Revoke, and the three members with their role selectors" loading="lazy"></a><figcaption>Inviting and the member list</figcaption></figure>
-<p>The link expires after seven days. <b>Resend</b> makes a new link and <b>Revoke</b> withdraws the invitation.</p>
-<p>To change a role later, pick another one in the member's selector. <b>Disable</b> suspends a member until you click <b>Enable</b>, and <b>Remove</b> takes them out of the account. Both take effect at once.</p>
+<figure><a href="../img/team-and-security/07-invite-and-members.jpg"><img src="../img/team-and-security/07-invite-and-members.jpg" alt="The Invite a member form filled in with apprentice@uptime.example and the Viewer role, the pending invitation for intern@uptime.example marked Not emailed with its expiry date, Resend and Revoke, and the three members with their role selectors" loading="lazy"></a><figcaption>Inviting and the member list</figcaption></figure>
+<p>The link expires after seven days, and the pending invitation shows the date. <b>Resend</b> makes a new link and <b>Revoke</b> withdraws the invitation.</p>
+<p>To change a role later, pick another one in the member's selector. <b>Disable</b> suspends a member until you click <b>Enable</b>, and <b>Remove</b> takes them out of the account. Each change asks you to confirm, then takes effect at once.</p>
 <h2 id="which-role-to-give">Which role to give</h2>
 <div class="table"><table><thead><tr><th>Role</th><th>May do</th></tr></thead><tbody><tr><td><b>Viewer</b></td><td>See nodes, playbooks and utilities. No secrets, no commands.</td></tr><tr><td><b>Manager</b></td><td>Reboot nodes, set hostnames, run playbooks without privileged steps.</td></tr><tr><td><b>Admin</b></td><td>Install an OS, open the web terminal, manage secrets and run any playbook.</td></tr></tbody></table></div>
 <p>Each role includes the one above it. A <b>Super Admin</b> can do everything, including managing members and the subscription. You can also grant a role on a single unit from the <a href="../organization/">Organization</a> page.</p>
 <h2 id="turn-on-two-step-sign-in">Turn on two-step sign-in</h2>
-<ol><li>Open <b>Account Settings</b>.</li><li>Under <b>Two-step verification</b>, click <b>Turn on</b>, then confirm it's you.</li><li>Scan the QR code with your authenticator app.</li><li>Type the six-digit code into <b>Code from your app</b> and click <b>Confirm</b>.</li><li>Store the ten recovery codes away from your phone, then click <b>I have saved them</b>.</li></ol>
-<figure><a href="../img/team-and-security/02-account-page.jpg"><img src="../img/team-and-security/02-account-page.jpg" alt="The Account tab of the Account page: Two-step verification is off with a Turn on button, the Passkeys section with a name field and Add a passkey, and the start of Sessions" loading="lazy"></a><figcaption>Account Settings</figcaption></figure>
+<ol><li>Open <b>Account</b>.</li><li>Under <b>Two-step verification</b>, click <b>Turn on</b>, then confirm it's you.</li><li>Scan the QR code with your authenticator app.</li><li>Type the six-digit code into <b>Code from your app</b> and click <b>Confirm</b>.</li><li>Store the ten recovery codes away from your phone, then click <b>I have saved them</b>.</li></ol>
+<figure><a href="../img/team-and-security/02-account-page.jpg"><img src="../img/team-and-security/02-account-page.jpg" alt="The Account tab of the Account page: the Display name field, Two-step verification off with a Turn on button, the Passkeys section with a name field and Add a passkey, and the start of Sessions" loading="lazy"></a><figcaption>Account</figcaption></figure>
 <aside class="callout warning"><p><b>Warning:</b> The recovery codes are shown only once. The QR code, its key and each recovery code are enough to pass your second step, so keep them out of tickets and screenshots.</p></aside>
 <p>To make two-step sign-in mandatory for everyone, tick <b>Require two-step verification</b> in <b>Team Management</b>.</p>
 <h2 id="see-and-end-your-sessions">See and end your sessions</h2>
-<p><b>Sessions</b> on <b>Account Settings</b> lists every browser and script signed in as you. Your current browser is marked <b>this device</b>.</p>
-<figure><a href="../img/team-and-security/04-sessions.jpg"><img src="../img/team-and-security/04-sessions.jpg" alt="The Sessions section with one session row showing the browser&#x27;s identification, an address, the time it was last used and a Sign out button" loading="lazy"></a><figcaption>Sessions</figcaption></figure>
-<p>Click <b>Sign out</b> on a row to end that session, or <b>Sign out of my other sessions</b> to end all but this one. You can hold 10 sessions, and a new sign-in beyond that signs out the one used least recently. Give scripts their own user so they do not push your browser out.</p>
+<p><b>Sessions</b> on <b>Account</b> lists every browser and script signed in as you, by browser and system, or <b>Unknown device</b> for a script. Your current browser is marked <b>this device</b>. Hover over a row to see the full browser identification.</p>
+<figure><a href="../img/team-and-security/04-sessions.jpg"><img src="../img/team-and-security/04-sessions.jpg" alt="The Sessions section: Chrome on macOS marked this device, two Unknown device rows, each with an address, the time it was last used and a Sign out button" loading="lazy"></a><figcaption>Sessions</figcaption></figure>
+<p>Click <b>Sign out</b> on a row to end that session, or <b>Sign out of my other sessions</b> to end all but this one, then confirm. You can hold 10 sessions, and a new sign-in beyond that signs out the one used least recently. Give scripts their own user so they do not push your browser out.</p>
 <h2 id="the-device-limit">The device limit</h2>
-<p>A server admits 25 devices free. The count is on <b>Account Settings</b> → <b>Subscription</b>. To raise the limit, get an entitlement file at <a href="https://orchestrator.sh/subscription/">orchestrator.sh/subscription</a> and apply it there.</p>
+<p>A server admits 25 devices free. The count is on <b>Account</b> → <b>Subscription</b>. To raise the limit, get an entitlement file at <a href="https://orchestrator.sh/subscription/">orchestrator.sh/subscription</a> and apply it there.</p>
 <h2 id="lost-passwords-and-single-sign-on">Lost passwords and single sign-on</h2>
 <p>The operator resets a forgotten password or a lost authenticator from the server's command line (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#recover-a-lost-password-or-authenticator">Recover a lost password or authenticator</a>). Sign-in through an identity provider such as Google is off until the operator sets it up (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md#email-and-single-sign-on">Email and single sign-on</a>).</p>
 <p>Next: <a href="../backup-and-upgrade/">Backup, restore and upgrading the server</a>.</p>
-<div class="pager"><a class="prev" href="/docs/playbooks/"><small>Previous</small>Playbooks: automating work across nodes</a><a class="next" href="/docs/backup-and-upgrade/"><small>Next</small>Backup, restore and upgrading the server</a></div>
+<div class="pager"><a class="prev" href="/docs/api/"><small>Previous</small>Using the API</a><a class="next" href="/docs/backup-and-upgrade/"><small>Next</small>Backup, restore and upgrading the server</a></div>
 </article>
 </main>
 

@@ -50,11 +50,11 @@ The run ends with the address to open and where the owner password is. It also n
 
 You land on **Nodes**, which is empty on a new server. Sign-up is closed, so colleagues join by invitation ([Team and security](../team-and-security/)).
 
-![The Nodes page with twelve devices across the units Laboratory, Garage and Basement](img/quick-start/02-nodes-first-screen.jpg "Nodes, with a fleet already added")
+![The Nodes page: the Add node button at the top right, the search box and filters, and the first nodes of a fleet](img/quick-start/02-nodes-first-screen.jpg "Nodes, with a fleet already added")
 
 ## Change the generated password
 
-1. Click the round badge with your initials at the top right, then **Account Settings**.
+1. Click the round badge with your initials at the top right, then **Account**.
 2. Expand **Password**.
 3. Type the new password in **New password** and **Confirm password**. It needs at least 8 characters.
 4. Click **Save password**, paste the generated password into **Current password**, and click **Confirm**.

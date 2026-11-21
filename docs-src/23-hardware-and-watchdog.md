@@ -26,14 +26,14 @@ To declare hardware for a whole unit, use the **Hardware** section of its polici
 
 ## Overclock a node
 
-![The Overclock view with Stock, Balanced and Performance presets for a CM5](img/hardware-and-watchdog/02-overclock.jpg)
+![The Overclock view of a CM5 on stock clocks, with the Stock, Balanced and Performance presets and a disabled Apply preset button](img/hardware-and-watchdog/02-overclock.jpg)
 
 1. Open **Advanced** → **Overclock**.
 2. Select **Stock**, **Balanced** or **Performance**.
 3. Click **Apply** (for example **Apply balanced preset**).
 4. Reboot the node.
 
-Nothing changes until the reboot. An offline node gets the change when it reconnects. Until you select a preset, the button may read **Sent ✓** although nothing was sent.
+Nothing changes until the reboot. An offline node gets the change when it reconnects. **Apply preset** stays disabled until you select a preset.
 
 On a Pi 5 or CM5, **Balanced** is 2.6 GHz at stock voltage and **Performance** 2.8 GHz. On a Pi 4 or CM4 they are 1.8 and 2.0 GHz. **Stock** removes the overclock. No preset uses `force_turbo`, so the board still slows down when idle or hot. Check the cooling before you use **Performance**.
 

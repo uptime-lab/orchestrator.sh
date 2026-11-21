@@ -30,7 +30,7 @@ Rename a unit with the pencil next to its name. Drag it in the rail onto another
 3. Tick the nodes.
 4. Open **Assign to unit** and pick the unit.
 
-![The Nodes page in selection mode with two nodes ticked and the Assign to unit menu open](img/organization/08-assign-to-unit.jpg)
+![The Nodes page in selection mode with jetpack-test-03 and paint-booth-display ticked and the Assign to unit menu open on Basement](img/organization/08-assign-to-unit.jpg)
 
 You can also drag selected rows onto a unit in the left rail, or use **Move** on the **Unit** row of a node's **Overview**. A moved node picks up the new unit's settings at once. To place new devices in a unit when they join, give their adoption token an **Adoption OU** ([Secrets and variables](../secrets-and-variables/)).
 

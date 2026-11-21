@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using the API · Uptime Orchestrator docs</title>
+<meta name="description" content="Sign in from a script, then list nodes, send commands, start playbooks and read the results.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css" rel="stylesheet">
+<script src="/docs/search.js" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Install</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+      <a href="/subscription/">Pricing</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs wrap">
+<nav class="side" aria-label="Documentation">
+<div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
+<h4>Start</h4><ul>
+<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+</ul>
+<h4>Devices</h4><ul>
+<li><a href="/docs/add-a-device/">Adding a device</a></li>
+<li><a href="/docs/install-an-os/">Installing an operating system</a></li>
+<li><a href="/docs/node-panel/">Working with a node</a></li>
+<li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
+</ul>
+<h4>Operating a fleet</h4><ul>
+<li><a href="/docs/organization/">Organizational units and policies</a></li>
+<li><a href="/docs/access-and-credentials/">Access: SSH keys and device users</a></li>
+<li><a href="/docs/secrets-and-variables/">Secrets and variables</a></li>
+<li><a href="/docs/utilities/">Utilities: managed software</a></li>
+<li><a href="/docs/status-and-audit/">Status, attention and the audit trail</a></li>
+</ul>
+<h4>Automation</h4><ul>
+<li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+<li><a href="/docs/api/" aria-current="page">Using the API</a></li>
+</ul>
+<h4>Administration</h4><ul>
+<li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
+<li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+<li><a href="/docs/troubleshooting/">Troubleshooting</a></li>
+</ul></nav>
+<article>
+<div class="stamp"><b>Automation</b> Documentation</div>
+<h1>Using the API</h1>
+<p class="summary">Sign in from a script, then list nodes, send commands, start playbooks and read the results.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#find-the-api">Find the API</a></li><li><a href="#sign-in-and-get-a-token">Sign in and get a token</a></li><li><a href="#list-nodes">List nodes</a></li><li><a href="#run-something-on-a-node">Run something on a node</a></li><li><a href="#start-a-playbook-and-read-the-run">Start a playbook and read the run</a></li><li><a href="#read-what-happened">Read what happened</a></li><li><a href="#confirm-it-s-you">Confirm it's you</a></li><li><a href="#what-limits-apply">What limits apply</a></li></ul></nav>
+<p>Everything the web UI does goes through an HTTP API, so a script can do the same. Sign in, keep the token, and call the routes below.</p>
+<h2 id="find-the-api">Find the API</h2>
+<p>Through the bundled proxy the base URL is <code>https://&lt;your server&gt;/api</code>. Versioned routes have <code>/api</code> twice, as in <code>/api/api/v1/nodes</code>, because the proxy strips the first one before the request reaches the server.</p>
+<p>Every route and field is in <a href="https://github.com/uptime-lab/orchestrator/blob/main/backend/docs/swagger.json"><code>backend/docs/swagger.json</code></a> in the release tree. A production server does not serve a browsable API page.</p>
+<h2 id="sign-in-and-get-a-token">Sign in and get a token</h2>
+<pre><code>API=https://orchestrator.example.com/api
+read -rs PASSWORD
+LOGIN=$(printf '{"email":"automation@example.com","password":"%s"}' "$PASSWORD" |
+  curl -fsS -X POST "$API/auth/login" -H 'Content-Type: application/json' -d @-)
+TOKEN=$(jq -r .data.access_token &lt;&lt;&lt;"$LOGIN")
+REFRESH=$(jq -r .data.refresh_token &lt;&lt;&lt;"$LOGIN")</code></pre>
+<p>Piping the body keeps the password out of the process list. Send the token as <code>Authorization: Bearer $TOKEN</code>. It lasts 15 minutes. Exchange the refresh token for a new pair before then:</p>
+<pre><code>NEXT=$(printf '{"refresh_token":"%s"}' "$REFRESH" |
+  curl -fsS -X POST "$API/auth/refresh" -H 'Content-Type: application/json' -d @-)</code></pre>
+<p>A 202 answer means sign-in is not finished. With <code>two_factor_required</code>, send the <code>two_factor_token</code> and an authenticator code to <code>POST /api/auth/2fa</code>. With <code>account selection required</code>, the user belongs to several accounts, so send the <code>pre_token</code> and one <code>account_id</code> to <code>POST /api/auth/select-account</code>.</p>
+<p>There are no long-lived API keys in this release. A script signs in as a member. Create a dedicated member for it and give it the smallest role that does the job (<a href="../team-and-security/">Team and security</a>). Reboots, identify and plain playbooks need <b>Manager</b>. Scripts, privileged playbooks and reading script output need <b>Admin</b>. The audit trail needs <b>Super Admin</b>.</p>
+<p>The tokens under <b>Secrets</b> → <b>Tokens</b> enrol new devices. They do not sign in to the API.</p>
+<h2 id="list-nodes">List nodes</h2>
+<pre><code>curl -fsS "$API/api/v1/nodes?search=bench&amp;page=1&amp;per_page=50" \
+  -H "Authorization: Bearer $TOKEN" | jq '.data.nodes[] | {id, name, status, ipv4}'</code></pre>
+<p>Add <code>ou_id=&lt;unit-id&gt;</code> for the nodes directly in a unit.</p>
+<h2 id="run-something-on-a-node">Run something on a node</h2>
+<p>Blink the node's LED:</p>
+<pre><code>curl -fsS -X POST "$API/api/v1/nodes/&lt;node-id&gt;/identify" \
+  -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+  -d '{"duration_sec":60}'
+# {"success":true,"data":{"command_id":"&lt;command-id&gt;","duration_sec":60},...}</code></pre>
+<p>Run a script, then poll its command:</p>
+<pre><code>CMD=$(curl -fsS -X POST "$API/api/v1/nodes/&lt;node-id&gt;/command" \
+  -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+  -d '{"command":"run_script","params":{"script":"df -h /","timeout_seconds":30}}' |
+  jq -r .data.command_id)
+
+curl -fsS "$API/api/v1/node-commands/$CMD" -H "Authorization: Bearer $TOKEN" |
+  jq '.data | {status, result}'
+# {"status":"success","result":{"exit_code":"0","stdout":"Filesystem ...","stderr":""}}</code></pre>
+<p><code>status</code> moves through <code>registered</code>, <code>sent</code> and <code>in_progress</code>. It ends as <code>success</code>, <code>failed</code>, <code>superseded</code>, <code>expired</code> or <code>skipped</code>. A non-zero exit code fails the command. The other commands and their parameters are in the <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/DEVICE-COMMANDS.md">device commands reference</a>.</p>
+<h2 id="start-a-playbook-and-read-the-run">Start a playbook and read the run</h2>
+<p>Find the playbook's id, then start it on the nodes you name:</p>
+<pre><code>curl -fsS "$API/api/v1/workflow-templates?name=Nightly" -H "Authorization: Bearer $TOKEN" |
+  jq '.data[] | {id, name}'
+
+RUN=$(curl -fsS -X POST "$API/api/v1/workflow-executions" \
+  -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+  -d '{"template_id":"&lt;playbook-id&gt;","node_ids":["&lt;node-id&gt;"]}' | jq -r .data.id)
+
+curl -fsS "$API/api/v1/workflow-executions/$RUN" -H "Authorization: Bearer $TOKEN" |
+  jq '.data | {status, nodes: [.nodes[] | {node_id, status, error_message}]}'</code></pre>
+<p>To run it on a unit, list the unit's nodes with <code>ou_id</code> and pass their ids. A run ends as <code>completed</code>, <code>failed</code> or <code>partially_failed</code>. A draft playbook answers 409.</p>
+<h2 id="read-what-happened">Read what happened</h2>
+<pre><code>curl -fsS "$API/api/v1/audit-events?action=node.delete&amp;per_page=50" \
+  -H "Authorization: Bearer $TOKEN" | jq '.data.events[] | {created_at, action, actor_user_id, target_id}'</code></pre>
+<p>The audit trail filters by <code>action</code> and <code>actor</code> but not by time. For device commands since a moment, set <code>SINCE</code> to an RFC3339 time:</p>
+<pre><code>curl -fsS "$API/api/v1/fleet/activity?since=$SINCE&amp;status=failed" \
+  -H "Authorization: Bearer $TOKEN" | jq '.data.activity[] | {created_at, node_name, slug, status}'</code></pre>
+<h2 id="confirm-it-s-you">Confirm it's you</h2>
+<p>Routes that change who can sign in or what a member may do need an <code>X-Reauth-Ticket</code> header. These include inviting members, changing roles and the security settings. Get a ticket by sending the password again:</p>
+<pre><code>TICKET=$(printf '{"password":"%s"}' "$PASSWORD" |
+  curl -fsS -X POST "$API/api/v1/users/me/reauth/password" \
+  -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d @- |
+  jq -r .data.ticket)</code></pre>
+<p>The ticket lasts five minutes and works for several requests from the same session. Without it those routes answer 403 with <code>"code": "reauth_required"</code>.</p>
+<h2 id="what-limits-apply">What limits apply</h2>
+<ul><li>Too many failed sign-ins from one address answer 429 with <code>login_throttled</code> and a <code>Retry-After</code> header.</li><li>A user holds at most 10 sessions, and each sign-in past that ends the oldest one. Reuse and refresh the token instead of signing in on every call.</li><li>The API allows 20 requests per second per account, with bursts of 100.</li><li>Most lists page with <code>page</code> and <code>per_page</code> (default 50, at most 200).</li><li>Errors carry <code>success: false</code>, a <code>message</code> and sometimes a <code>code</code> to act on.</li></ul>
+<div class="pager"><a class="prev" href="/docs/playbooks/"><small>Previous</small>Playbooks: automating work across nodes</a><a class="next" href="/docs/team-and-security/"><small>Next</small>Team, sign-in security and the device limit</a></div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
