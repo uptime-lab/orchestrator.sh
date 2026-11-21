@@ -44,7 +44,7 @@ A node on **Inherit** takes its unit's value, then the parent unit's, then the a
 
 ## Update the bootloader
 
-Network boot works because each node's bootloader knows your server's address and key. It is written on approval by default. Open **Advanced** → **Bootloader / EEPROM** and click **Update bootloader** when it shows **Update available** or a banner says the bootloader isn't set up for this server. Then click **Reboot to apply**.
+Network boot works because each node's bootloader knows your server's address and key. It is written when you flash the board from the browser, or by default when you approve a device booted from a provisioning card. Open **Advanced** → **Bootloader / EEPROM** and click **Update bootloader** when it shows **Update available** or a banner says the bootloader isn't set up for this server. Then click **Reboot to apply**.
 
 ![The Bootloader / EEPROM view: firmware version Up to date, Flash from OS, Update bootloader, boot order http, nvme, usb_msd, sd, restart](img/install-an-os/16-bootloader.jpg)
 

@@ -67,7 +67,7 @@ The server closes the shell within a minute if you lose access. The [audit trail
 
 **Refresh from device** stores a new version when the file changed on the device.
 
-Credentials, private keys and the adoption file are refused. A version holds at most 512 KiB, and anyone who can manage the node's files can read it.
+The password-hash files, the adoption file and files ending in `.pem`, `.key`, `.p12` or `.pfx` are refused, so don't track any other file that holds a secret. A version holds at most 512 KiB, and anyone who can manage the node's files can read it.
 
 `/boot/firmware/config.txt` is tracked on every node as **MANAGED**. You can edit it but not untrack it. To stop tracking another file, click **Untrack (keep the file on the device)**. **Delete on device** removes the file and keeps a backup beside it.
 

@@ -15,7 +15,7 @@ Find what you see, then do what the entry says.
 
 ## A node is stuck in recovery or will not boot its system
 
-- **A device that already ran its own OS comes back in recovery after approval.** Its **Boot behavior** is **Inherit**, which means **Recovery** unless you changed the account default. Set it to **Local OS** in **Properties** and reboot.
+- **A device that already ran its own OS comes back in recovery.** Its bootloader boots from this server, and its **Boot behavior** is **Inherit**, which means **Recovery** unless you changed the account default. Set it to **Local OS** in **Properties** and reboot.
 - **A node boots into nothing, or into a system this server did not install.** It is set to **Local OS**, and its drive holds no system with this server's agent. Set **Boot behavior** to **Recovery** and power-cycle it. Then [install an OS](../install-an-os/) and set **Local OS**.
 - **Reboot to recovery is refused.** The node is offline, or its bootloader does not try network boot first. Bring the node online, or click **Update bootloader** in **Advanced** → **Bootloader / EEPROM**.
 - **A node goes offline on and off for up to half an hour after an OS install.** The fresh system runs its first package upgrade, which restarts services. Wait. It settles when the upgrade ends.
@@ -24,7 +24,7 @@ Find what you see, then do what the entry says.
 
 - **Install OS shows an image but you can't pick it.** The image has no uploaded file, no checksum yet, or is still being processed. The label says which. Wait, or upload the file in **Operations** → **Install images**.
 - **Install OS fails with "device … is mounted".** The node is using that drive. Check the **Target Device** and pick the drive you mean to erase.
-- **Install OS fails during the download.** The node retries an interrupted download three times by itself. If it still fails, run **Install OS** again.
+- **Install OS fails during the download.** The node tries an interrupted download up to three times by itself. If it still fails, run **Install OS** again.
 - **After a failed install the node keeps booting recovery.** It stays there until an install succeeds, so it never boots a half-written disk. Run **Install OS** and **Install Agent** again.
 - **A command stays Queued.** The node is offline. Changes of state wait up to a day: access, hostname, watchdog, LEDs, hardware profile, utilities, overclock and agent updates. A queued command that waits longer ends as **Expired**. A reboot, a script, an identify or an OS install fails at once instead.
 - **Status shows "Command stopped reporting".** A command the node accepted has said nothing for 30 minutes, usually because its report was lost. It settles when the node reconnects, for example after a power-cycle.

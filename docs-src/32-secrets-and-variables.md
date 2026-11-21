@@ -5,7 +5,7 @@ section: Operating a fleet
 ---
 On **Secrets** you store a value once, attach it where it is needed and use it as `{{secrets.NAME}}`. Only account admins and super admins see this page.
 
-A variable stays readable and editable, so use it for URLs, time zones and settings. A secret can't be read back by anyone after you save it, so use it for passwords and keys. Where an attached value reaches follows the unit rules on [Organizational units and policies](../organization/).
+A variable stays readable and editable, so use it for URLs, time zones and settings. A secret's value is hidden on this page once you save it, so use it for passwords and keys. Admins and Super Admins can still see the value in the commands and playbook runs that used it. Where an attached value reaches follows the unit rules on [Organizational units and policies](../organization/).
 
 ## Add a variable or a secret
 

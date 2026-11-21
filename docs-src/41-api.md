@@ -118,7 +118,8 @@ The ticket lasts five minutes and works for several requests from the same sessi
 ## What limits apply
 
 - Too many failed sign-ins from one address answer 429 with `login_throttled` and a `Retry-After` header.
+- The `/auth/` routes, refresh included, allow about 30 requests a minute per client address, with bursts of 10. Past that they answer 429 without a code.
 - A user holds at most 10 sessions, and each sign-in past that ends the oldest one. Reuse and refresh the token instead of signing in on every call.
 - The API allows 20 requests per second per account, with bursts of 100.
 - Most lists page with `page` and `per_page` (default 50, at most 200).
-- Errors carry `success: false`, a `message` and sometimes a `code` to act on.
+- Errors carry `success: false`, a `message` and sometimes a `code` to act on. The node command route answers a refusal as `{"error": <code>, "message": …}` instead.

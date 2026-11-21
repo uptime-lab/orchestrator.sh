@@ -7,8 +7,8 @@
 <link href="/fonts/fonts.css" rel="stylesheet">
 <style>
 /* Layout idea: the page is one install, top to bottom. A signal trace runs down
-   the left edge and every section is stamped with the elapsed time of a real
-   run (T+0:00 … T+4:21). One world, one theme: the rack at night. */
+   the left edge and every section is stamped with the elapsed time of recorded
+   runs, in rounded minutes (T+0 … T+6). One world, one theme: the rack at night. */
 :root {
   color-scheme: dark;
   --ink: #050604;          /* page */
@@ -203,10 +203,10 @@ footer a { color: var(--mute); }
 
 <section class="hero">
   <div class="wrap">
-    <div class="stamp"><b>T+0:00</b> A board with an empty drive gets power</div>
+    <div class="stamp"><b>T+0</b> A board with an empty drive gets power</div>
     <h1>Blank boards in.<br><span class="out">Managed fleet</span> out.</h1>
     <div class="lead">
-      <p>Plug a Compute Module into the rack. Uptime Orchestrator boots it from the network, checks the signature, writes the operating system and brings it online under your control. On a CM4 that takes <span class="lime">4 minutes 21 seconds</span>, and nobody touches the board.</p>
+      <p>Plug a Compute Module into the rack. Uptime Orchestrator boots it from the network, checks the signature, writes the operating system and brings it online under your control. On a CM4 that takes <span class="lime">about six minutes</span>, and nobody touches the board.</p>
       <div class="cta">
         <a class="btn solid" href="#install">Install the server</a>
         <a class="btn" href="https://github.com/uptime-lab/orchestrator">Read the source</a>
@@ -234,18 +234,18 @@ footer a { color: var(--mute); }
 <section id="four-minutes">
   <div class="wrap trace">
     <div>
-      <div class="stamp"><b>T+0:07</b> The bootloader learns who to trust</div>
-      <h2>What happens in those four minutes</h2>
-      <p class="mute" style="margin-top:20px">Every step below is something the platform does and you can read back afterwards in the node's command history. The times are from one unattended run.</p>
-      <p class="note">Measured on a Compute Module 4 with an NVMe drive on a wired network, installing Ubuntu Server 26.04 from a 1.5 GB image. A CM5 Lite did the same in 5 min 57 s.</p>
+      <div class="stamp"><b>T+0</b> The bootloader learns who to trust</div>
+      <h2>What happens in those six minutes</h2>
+      <p class="mute" style="margin-top:20px">You start each step below from the server, by hand or with a playbook, and each command shows afterwards in the node's command history. The times are minutes, rounded from recorded runs.</p>
+      <p class="note">On a server reached over the internet, a CM5 Lite went from approval to a managed Ubuntu in 5 min 42 s and a CM4 in 6 min 9 s.</p>
     </div>
     <ol>
-      <li><time>T+0:00</time><div><h3>Approved</h3><p>The board announced itself with its hardware serial. You said yes.</p></div></li>
-      <li><time>T+0:07</time><div><h3>Bootloader signed and flashed</h3><p>The server bakes a bootloader for this one board: your public key, your server's name, a boot order that tries the network first.</p></div></li>
-      <li class="v"><time>T+2:29</time><div><h3>Netbooted into recovery</h3><p>The ROM fetches a 98 MB recovery system over HTTP and refuses it unless your key signed it. It runs from RAM and touches no disk.</p></div></li>
-      <li><time>T+3:46</time><div><h3>Operating system written</h3><p>The image streams from the server straight onto the drive, checksum verified. 77 seconds for Ubuntu on NVMe.</p></div></li>
-      <li><time>T+3:50</time><div><h3>Agent and identity placed</h3><p>The agent package is verified against its signature and installed into the new system with this node's own credential.</p></div></li>
-      <li class="done"><time>T+4:21</time><div><h3>Online, managed</h3><p>The board boots its own drive and reports in. From here it takes users, keys, software and playbooks from the server.</p></div></li>
+      <li><time>T+0</time><div><h3>Approved</h3><p>The board announced itself with its hardware serial. You said yes.</p></div></li>
+      <li><time>T+0</time><div><h3>Bootloader signed and flashed</h3><p>The server bakes a bootloader for this one board: your public key, your server's name, a boot order that tries the network first.</p></div></li>
+      <li class="v"><time>T+2</time><div><h3>Netbooted into recovery</h3><p>The ROM fetches a 98 MB recovery system over HTTP and refuses it unless your key signed it. It runs from RAM and touches no disk.</p></div></li>
+      <li><time>T+3</time><div><h3>Operating system written</h3><p>The image streams from the server straight onto the drive, checksum verified. 81 seconds for Ubuntu on a CM4.</p></div></li>
+      <li><time>T+4</time><div><h3>Agent and identity placed</h3><p>The agent package is verified against its signature and installed into the new system with this node's own credential.</p></div></li>
+      <li class="done"><time>T+6</time><div><h3>Online, managed</h3><p>The board boots its own drive and reports in. From here it takes users, keys, software and playbooks from the server.</p></div></li>
     </ol>
   </div>
 </section>
@@ -278,7 +278,7 @@ footer a { color: var(--mute); }
 
 <section id="after">
   <div class="wrap">
-    <div class="stamp"><b>T+4:21</b> The board is online. Now it is a node</div>
+    <div class="stamp"><b>T+6</b> The board is online. Now it is a node</div>
     <h2>What you run from the server</h2>
     <dl class="spec">
       <div><dt><h3>Shell access</h3></dt><dd><p>Declare who gets a login: <b>users, SSH keys, sudo, certificate authorities</b>, per node, per unit or for the whole account. A change that would lock everyone out is refused before it is sent, and again on the device.</p></dd></div>
@@ -297,7 +297,7 @@ footer a { color: var(--mute); }
     <div class="stamp"><b>Every hop</b> Nothing boots or installs on trust</div>
     <h2>Signed from the ROM to the agent</h2>
     <div class="chain">
-      <div><span>Boot ROM</span><h3>Your key</h3><p>The key that signs your recovery image is generated on your server and never leaves it. Each board's bootloader carries only the public half.</p></div>
+      <div><span>Boot ROM</span><h3>Your key</h3><p>The key that signs your recovery image is generated on your server and stays there unless you copy it out for a backup. Each board's bootloader carries only the public half.</p></div>
       <div><span>Recovery</span><h3>Verified image</h3><p>A board fetches the recovery system over the network and runs it only if the signature matches. A tampered image falls through to the next boot device.</p></div>
       <div><span>Agent</span><h3>Verified package</h3><p>Agent releases are signed with offline hardware keys. The server checks a release before it stores it, and the device checks it again before it installs.</p></div>
       <div><span>Server</span><h3>Files, not env</h3><p>Credentials reach the containers as files with tight modes. A production server refuses to start on a placeholder secret.</p></div>
@@ -340,7 +340,7 @@ footer a { color: var(--mute); }
         <h3>Hosted by us</h3>
         <div class="big out">0</div>
         <p><b>servers to run.</b> The same software at app.orchestrator.sh: point a board at it with one command and manage it from the browser.</p>
-        <p>The hosted service is in an invite-only beta. Boards reach it over TLS on three ports, and network boot works across the internet.</p>
+        <p>The hosted service is in an invite-only beta. Boards reach it over TLS on ports 443 and 50051. Network boot works across the internet over plain HTTP on port 80, and a board runs the recovery system only if its signature checks out.</p>
         <a class="btn" href="https://app.orchestrator.sh">Ask for an invite</a>
       </div>
     </div>
@@ -360,13 +360,14 @@ footer a { color: var(--mute); }
 (function () {
   "use strict";
   // ---- the rack: twenty blades, each walking the real install ----------
-  // Stage lengths are the measured run scaled to about 16 s per blade.
+  // Stage lengths follow a recorded CM4 run (about six minutes from the reboot
+  // into recovery to online) scaled to about 16 s per blade.
   var STAGES = [
     { s: "blank",    ms: 1400, text: "Blank drive, no OS. Waiting for power." },
-    { s: "rom",      ms: 2600, text: "ROM asks the server for boot.sig, checks it against your key." },
-    { s: "recovery", ms: 3000, text: "Recovery system running from RAM. Agent connected." },
-    { s: "install",  ms: 5200, text: "Writing the OS image to the drive." },
-    { s: "agent",    ms: 1100, text: "Agent and identity placed on the new system." },
+    { s: "rom",      ms: 4600, text: "ROM asks the server for boot.sig, checks it against your key." },
+    { s: "recovery", ms: 800,  text: "Recovery system running from RAM. Agent connected." },
+    { s: "install",  ms: 3600, text: "Writing the OS image to the drive." },
+    { s: "agent",    ms: 7000, text: "Agent and identity placed. Booting the new system." },
     { s: "managed",  ms: 0,    text: "Online, managed." }
   ];
   var slots = document.getElementById("slots");

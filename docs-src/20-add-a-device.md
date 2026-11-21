@@ -11,7 +11,7 @@ Adopt a device so it shows up in **Nodes** and you can manage it. Open **Nodes**
 | A board you can connect over USB in boot mode | **USB flash** |
 | Blank, and you can put a card into it | **Master image** (provisioning card) |
 
-The device needs Ethernet and outbound access to the server on ports 443 and 50051. The USB and card ways bring their own recovery system, so you install an OS afterwards ([Installing an operating system](../install-an-os/)).
+The device needs Ethernet and outbound access to the server on port 50051, plus port 80 for a server on your local network or 443 for one on the internet. The USB and card ways bring their own recovery system, so you install an OS afterwards ([Installing an operating system](../install-an-os/)).
 
 ![Clicking Add node on the Nodes page and stepping through the One command, USB flash and Master image tabs of the panel that opens](img/add-a-device/v1-add-node-tabs.mp4 "The three ways to add a device")
 
@@ -24,9 +24,9 @@ The device needs Ethernet and outbound access to the server on ports 443 and 500
 3. Click **Generate command**, then **Copy command**.
 4. Run the line on the device as a user with sudo.
 
-The script installs the agent and prints `OK: agent connected`. On a fresh system it first waits for the system's own package upgrade to finish and tells you so. The device needs arm64 with `systemd`, `dpkg`, `curl` or `wget`, and `openssl`.
+The script installs the agent and tells you when it has connected. On a fresh system it first waits for the system's own package upgrade to finish and tells you so. The device needs arm64 with `systemd`, `dpkg`, `curl` or `wget`, and `openssl`.
 
-The token works for 7 days and for several devices. You find it under **Secrets** → **Tokens** ([Secrets and variables](../secrets-and-variables/#manage-tokens-for-new-devices)). To remove the agent later, run `curl -fsSL https://<your platform>/uninstall.sh | sudo sh`.
+The token works for 7 days and for several devices. You find it under **Secrets** → **Tokens** ([Secrets and variables](../secrets-and-variables/#manage-tokens-for-new-devices)). To remove the agent later, run `curl -fsSL <server address>/uninstall.sh | sudo sh` with the same `http://` or `https://` address as in the install command.
 
 ## Flash a board from the browser
 
@@ -62,7 +62,7 @@ To prepare a card for one named device, use the **Single node** tab instead. Cre
 
 ## Approve it
 
-A device from **One command** or **Master image** shows a yellow bar and **PENDING** in **Nodes**. Click it, check the **HW serial**, and click **Approve**. Approval applies the node's access and utilities at once, and by default a card-booted device also gets a bootloader that boots from your server.
+A device from **One command** or **Master image** shows a yellow bar and **PENDING** in **Nodes**. Click it, check the **HW serial**, and click **Approve**. Approval applies the node's access and utilities at once. By default, a device running the recovery system from a provisioning card also gets a bootloader that boots from your server. A device added with **One command** keeps its bootloader.
 
 ![The doomsday-clock panel with the Pending Approval banner, its explanation, the Approve and Reject buttons, and the node's IP, MAC and hardware serial.](img/add-a-device/08-approve.jpg)
 
