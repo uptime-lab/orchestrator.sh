@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentation · Uptime Orchestrator docs</title>
+<meta name="description" content="How to install Uptime Orchestrator, add devices and run a fleet.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css" rel="stylesheet">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Install</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+      <a href="/subscription/">Pricing</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs-index wrap">
+<div class="stamp"><b>Docs</b> Uptime Orchestrator 0.1</div>
+<h1>Documentation</h1>
+<p class="summary">From an empty server to a managed fleet. The reference pages for self-hosting live with the source, in <a href="https://github.com/uptime-lab/orchestrator/tree/main/docs">the repository</a>.</p>
+<h2>Start</h2>
+<div class="cards">
+<a class="card" href="/docs/quick-start/"><h3>Quick start</h3><p>Install the server with one command, sign in as the owner and change the generated password.</p></a>
+<a class="card" href="/docs/interface-tour/"><h3>A tour of the interface</h3><p>The top navigation, the organizational-unit sidebar, the Nodes table and the account menu.</p></a>
+</div>
+<h2>Devices</h2>
+<div class="cards">
+<a class="card" href="/docs/add-a-device/"><h3>Adding a device</h3><p>The four ways to turn a Raspberry Pi-class board into a managed node, what each dialog asks for, and what happens on the device afterwards.</p></a>
+<a class="card" href="/docs/install-an-os/"><h3>Installing an operating system</h3><p>Bring a node into the recovery system, write an OS image to its drive, and boot it back into the new system.</p></a>
+<a class="card" href="/docs/node-panel/"><h3>Working with a node</h3><p>The node panel tab by tab: what it shows, the commands it sends, the terminal, tracked files and deleting a node.</p></a>
+<a class="card" href="/docs/hardware-and-watchdog/"><h3>Hardware profiles, overclocking and the watchdog</h3><p>Declare the carrier board and modules, apply an overclock preset, let a hung device reset itself, and control the board LEDs.</p></a>
+</div>
+<h2>Operating a fleet</h2>
+<div class="cards">
+<a class="card" href="/docs/organization/"><h3>Organizational units and policies</h3><p>Group nodes into units, set boot, SSH, install, hardware and watchdog policies once, and let every node in the unit inherit them.</p></a>
+<a class="card" href="/docs/access-and-credentials/"><h3>Access: SSH keys and device users</h3><p>Keep an inventory of SSH keys, define the Linux users the agent creates on your nodes, and scope them to the whole account, a unit or one node.</p></a>
+<a class="card" href="/docs/secrets-and-variables/"><h3>Secrets and variables</h3><p>Store configuration values and credentials once, deliver them to units, nodes or tagged groups, and reference them from playbooks and utilities.</p></a>
+<a class="card" href="/docs/utilities/"><h3>Utilities: managed software</h3><p>Assign built-in software roles — security updates, Docker, a kiosk display, VPNs, metrics — to units or nodes and keep them installed and configured.</p></a>
+<a class="card" href="/docs/status-and-audit/"><h3>Status, attention and the audit trail</h3><p>Find the nodes that need you, fix them in bulk, read the command log, and see who did what in the account.</p></a>
+</div>
+<h2>Automation</h2>
+<div class="cards">
+<a class="card" href="/docs/playbooks/"><h3>Playbooks: automating work across nodes</h3><p>Build a playbook from blocks, scope it to units, run it on nodes or on a schedule, and read what happened on each node.</p></a>
+</div>
+<h2>Administration</h2>
+<div class="cards">
+<a class="card" href="/docs/team-and-security/"><h3>Team, sign-in security and the device limit</h3><p>Your own sign-in settings, two-step verification and sessions, inviting and managing members and their roles, and how many devices a server admits.</p></a>
+<a class="card" href="/docs/backup-and-upgrade/"><h3>Backup, restore and upgrading the server</h3><p>What a self-hosted server must keep safe, how restore and upgrade work in outline, and how agents on devices are updated from the UI.</p></a>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Working with a node · Uptime Orchestrator docs</title>
+<meta name="description" content="The node panel tab by tab: what it shows, the commands it sends, the terminal, tracked files and deleting a node.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css" rel="stylesheet">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Install</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+      <a href="/subscription/">Pricing</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs wrap">
+<nav class="side" aria-label="Documentation">
+<h4>Start</h4><ul>
+<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+</ul>
+<h4>Devices</h4><ul>
+<li><a href="/docs/add-a-device/">Adding a device</a></li>
+<li><a href="/docs/install-an-os/">Installing an operating system</a></li>
+<li><a href="/docs/node-panel/" aria-current="page">Working with a node</a></li>
+<li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+</ul>
+<h4>Operating a fleet</h4><ul>
+<li><a href="/docs/organization/">Organizational units and policies</a></li>
+<li><a href="/docs/access-and-credentials/">Access: SSH keys and device users</a></li>
+<li><a href="/docs/secrets-and-variables/">Secrets and variables</a></li>
+<li><a href="/docs/utilities/">Utilities: managed software</a></li>
+<li><a href="/docs/status-and-audit/">Status, attention and the audit trail</a></li>
+</ul>
+<h4>Automation</h4><ul>
+<li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+</ul>
+<h4>Administration</h4><ul>
+<li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
+<li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+</ul></nav>
+<article>
+<div class="stamp"><b>Devices</b> Documentation</div>
+<h1>Working with a node</h1>
+<p class="summary">The node panel tab by tab: what it shows, the commands it sends, the terminal, tracked files and deleting a node.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#the-header-and-overview">The header and Overview</a></li><li><a href="#actions">Actions</a></li><li><a href="#the-terminal">The terminal</a></li><li><a href="#properties-and-advanced">Properties and Advanced</a></li><li><a href="#files">Files</a></li><li><a href="#deleting-a-node">Deleting a node</a></li></ul></nav>
+<p>Click a node on the <b>Nodes</b> page and its panel opens on the right. Everything you do to one device happens here. The examples use <b>rocket-bench-01</b>, a Compute Module 5 Lite in the <b>Garage</b> unit.</p>
+<h2 id="the-header-and-overview">The header and Overview</h2>
+<figure><a href="../img/node-panel/01-overview.jpg"><img src="../img/node-panel/01-overview.jpg" alt="The node panel of rocket-bench-01 on the Overview tab" loading="lazy"></a><figcaption>The Overview tab of an online node.</figcaption></figure>
+<p>The badge shows the state: <b>Online</b>, <b>Offline</b>, <b>Recovery</b> (running the network recovery system), <b>Maintenance</b> (a command is holding the node), <b>Restarting</b>, <b>Awaiting approval</b>. <b>uptime</b> counts from the last boot. The star adds the node to <b>Favorites</b>. The bulb icon is identify, the clock opens <b>Command history</b>, the pencil opens <b>Properties</b>. After you send a command a chip such as <b>IDENTIFY ✓</b> appears below them, yellow while it runs, green or red when done; click it for the history, <b>×</b> to dismiss.</p>
+<p><b>Hostname</b>, <b>IP</b>, <b>MAC</b> and <b>HW serial</b> have <b>Copy</b> buttons; <b>Unit</b> has <b>Move</b>. <b>Bootloader</b> is the EEPROM version the agent reported at its last boot, with <b>up to date</b> or <b>update available</b> (see <a href="../install-an-os/">Installing an operating system</a>). <b>Agent</b> shows the agent version and an <b>Update</b> button when a newer release exists.</p>
+<p>Everything under <b>Configuration</b> is reported by the agent:</p>
+<div class="table"><table><thead><tr><th>Row</th><th>What it shows</th></tr></thead><tbody><tr><td><b>Model</b></td><td>The board (here CM5 Lite).</td></tr><tr><td><b>Platform</b></td><td>The declared carrier board, or <b>Generic</b> when none is declared; see <a href="../hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a>.</td></tr><tr><td><b>CPU</b></td><td>Cores and clock. An <b>OC</b> badge means config.txt carries an overclock.</td></tr><tr><td><b>RAM</b>, <b>OS</b></td><td>In recovery the row reads <b>OS (recovery)</b>.</td></tr><tr><td><b>Storage</b></td><td>Every drive; the green dot marks the one the node runs from.</td></tr><tr><td><b>Power</b></td><td><b>OK</b>, or the under-voltage the firmware reports. An empty row means no data, not a good supply.</td></tr></tbody></table></div>
+<p><b>Notes</b> holds free text (<b>Edit</b>). Below it, <b>Live Metrics</b> shows CPU, memory, load and temperature while the node is online.</p>
+<h2 id="actions">Actions</h2>
+<figure><a href="../img/node-panel/03-actions.jpg"><img src="../img/node-panel/03-actions.jpg" alt="The Actions tab with Terminal, Command history, Change hostname, Run playbook, Reboot, Reboot to recovery and the Danger section" loading="lazy"></a><figcaption>The Actions tab. Rows your role cannot use are hidden.</figcaption></figure>
+<ul><li><b>Terminal</b>: a root shell on the device (below).</li><li><b>Command history</b>: the last 20 commands.</li><li><b>Change hostname</b>: applied on the device at once, without a reboot. DHCP and DNS learn it at the next lease renewal; <b>Refresh DHCP lease</b> pushes it now.</li><li><b>Run playbook</b>: runs a playbook on this node.</li><li><b>Reboot</b>, after a confirmation. <b>Reboot to recovery</b> network-boots the recovery system once; the next reboot returns to the normal target.</li><li><b>Danger</b>: <b>Replace with another node</b> moves attributes, hostname and unit onto a spare node; <b>Shutdown</b> keeps the device off until someone powers it on; <b>Delete node</b> is described at the end.</li></ul>
+<p>While the node runs the recovery system, a <b>Provisioning</b> group adds <b>Install OS</b>, <b>Restore from backup</b>, <b>Create backup</b>, <b>Install Agent</b> and <b>Provision Access</b> (<a href="../install-an-os/">Installing an operating system</a>).</p>
+<p>A <b>viewer</b> sees only <b>Command history</b>. A <b>manager</b> may also reboot, identify, rename the host and run playbooks. An <b>admin</b> may shut down, delete, use the terminal, edit files and update the agent.</p>
+<p><b>Identify</b> blinks the board's activity LED (on a Compute Blade, its blue digital LEDs) for 5 minutes, or for the duration set for the account on the <b>Account</b> page (10 to 3600 seconds). The <b>ID</b> button in the node list blinks along; click it to stop early.</p>
+<h3 id="running-a-script">Running a script</h3>
+<p>The panel has no free-form script box: a script runs as a step of a playbook. Choose <b>Run playbook</b>, pick an active playbook whose scope covers the node, and click <b>Run playbook</b>. Each step's output is in the run's details under <b>Operations</b>; see <a href="../playbooks/">Playbooks</a>.</p>
+<figure><a href="../img/node-panel/05-run-playbook.jpg"><img src="../img/node-panel/05-run-playbook.jpg" alt="The Run playbook view with Collect diagnostics selected" loading="lazy"></a><figcaption>Run playbook lists the active playbooks that cover this node.</figcaption></figure>
+<h3 id="command-history">Command history</h3>
+<figure><a href="../img/node-panel/04-command-history.jpg"><img src="../img/node-panel/04-command-history.jpg" alt="Command history with a Run script and an Apply utility configuration card" loading="lazy"></a><figcaption>Each card shows the command, its status, its last change and its parameters.</figcaption></figure>
+<p>A card shows the status, the time of the last change, a result summary and the <b>Parameters</b>. A command that did not succeed adds <b>What the node reported</b>; successful script output is only in the playbook run.</p>
+<div class="table"><table><thead><tr><th>Status</th><th>Meaning</th></tr></thead><tbody><tr><td><b>registered</b></td><td>Accepted, waiting for delivery (or queued for an offline node).</td></tr><tr><td><b>sent</b> / <b>in_progress</b></td><td>Delivered / running on the device.</td></tr><tr><td><b>success</b> / <b>failed</b></td><td>Finished.</td></tr><tr><td><b>superseded</b></td><td>Replaced by a newer command of the same kind before delivery.</td></tr><tr><td><b>expired</b></td><td>Waited 24 hours for an offline node and was dropped.</td></tr><tr><td><b>skipped</b></td><td>Not applied on purpose, for example because the agent is too old.</td></tr></tbody></table></div>
+<p>Commands that mean "now" fail at once on an offline node: reboot, shutdown, scripts, file reads, installs. Declarative ones queue and are delivered on reconnect: hostname, config.txt edits (overclock), access configuration, watchdog, hardware profile, LED and utility applies, agent updates. All but the first two also wait until the node boots its installed OS. Older history is in the agent log: <code>journalctl -u orchestrator-agent</code>.</p>
+<h2 id="the-terminal">The terminal</h2>
+<figure><a href="../img/node-panel/06-terminal.jpg"><img src="../img/node-panel/06-terminal.jpg" alt="The terminal running uname, uptime, df, systemctl and whoami" loading="lazy"></a><figcaption>The web terminal is a root shell on the device.</figcaption></figure>
+<p><b>Terminal</b> opens a shell as <code>root</code>, carried over the agent's connection, so the device needs no open SSH port. It also works in the recovery system, which has no SSH server. <code>exit</code> or <b>← Back</b> closes it.</p>
+<ul><li>Admins and Super Admins may use it; a Super Admin can grant it to other roles under <b>Role permissions</b> (<a href="../team-and-security/">Team and security</a>). If the account requires two-factor authentication, yours must be enrolled.</li><li>One user may hold 5 sessions by default (<code>TERMINAL_MAX_SESSIONS_PER_USER</code>). Idle shells stay open, but every 60 seconds the server re-checks your access and closes the shell if you lost it or signed out.</li><li>Opening and closing are recorded in the audit trail (<a href="../status-and-audit/#the-audit-trail">Status and audit</a>); keystrokes are not.</li><li>The install must enable it with <code>TERMINAL_ENABLED</code> (off by default, on in the community compose file; see <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md">CONFIGURATION.md</a>). Otherwise the row is absent.</li></ul>
+<h2 id="properties-and-advanced">Properties and Advanced</h2>
+<figure><a href="../img/node-panel/07-properties.jpg"><img src="../img/node-panel/07-properties.jpg" alt="The Properties tab with Name, Boot behavior and the list of sub-views" loading="lazy"></a><figcaption>The Properties tab.</figcaption></figure>
+<p><b>Name</b> → <b>Edit</b> renames the node in the platform, not its hostname. <b>Boot behavior</b> (<b>Inherit</b>, <b>Local OS</b>, <b>Recovery</b>) is explained in <a href="../install-an-os/">Installing an operating system</a> and inherited from <a href="../organization/">Organizational units and policies</a>. <b>Credentials</b>: <a href="../access-and-credentials/">Access: SSH keys and device users</a>. <b>Secrets</b> and <b>Attributes</b>: <a href="../secrets-and-variables/">Secrets and variables</a>. <b>Utilities</b>: <a href="../utilities/">Utilities</a>. <b>Platform</b> and <b>LEDs</b>: <a href="../hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a>.</p>
+<figure><a href="../img/node-panel/08-advanced.jpg"><img src="../img/node-panel/08-advanced.jpg" alt="The Advanced tab: Watchdog, Overclock, Files, Storage, Bootloader / EEPROM, Re-adopt" loading="lazy"></a><figcaption>The Advanced tab.</figcaption></figure>
+<p><b>Watchdog</b> and <b>Overclock</b> are on the hardware page. <b>Storage</b> lists drives and partitions and offers <b>Erase drive</b>, refused for the drive holding the root filesystem. <b>Bootloader / EEPROM</b> and <b>Re-adopt</b> belong to installing and adopting devices.</p>
+<h2 id="files">Files</h2>
+<figure><a href="../img/node-panel/09-files.jpg"><img src="../img/node-panel/09-files.jpg" alt="The Files list with config.txt marked managed and never read, /etc/hostname and /etc/issue" loading="lazy"></a><figcaption>Tracked files. MANAGED marks the file the platform tracks itself.</figcaption></figure>
+<p><b>Files</b> keeps versioned copies of files from the device. <b>Add file</b> takes an absolute path, reads the file and stores it as version 1. The suggested paths are examples; one that does not exist fails with "no such file or directory" and nothing is added. Credentials and private keys (<code>/etc/shadow</code>, SSH host keys, <code>.key</code> and <code>.pem</code> files, the adoption file) and <code>/proc</code>, <code>/sys</code>, <code>/dev</code>, <code>/run</code> are refused. A version holds at most 512 KiB, and anyone who can manage the node's files can read it.</p>
+<p><code>/boot/firmware/config.txt</code> is listed on every node as <b>MANAGED</b>: editable, but it cannot be untracked or deleted. <b>NEVER READ</b> means no copy was pulled yet.</p>
+<figure><a href="../img/node-panel/11-file-editor.jpg"><img src="../img/node-panel/11-file-editor.jpg" alt="The editor for /etc/hostname showing Source, Mode, Owner, Version and the content" loading="lazy"></a><figcaption>A tracked file: metadata, current version and content.</figcaption></figure>
+<p>Click a file, change <b>Content</b> and <b>Save version</b>. The version stays on the platform until <b>Apply to device</b>, which writes it with the recorded mode and owner and shows "applying" until the device confirms. <b>Refresh from device</b> adds a version when the file changed there.</p>
+<figure><a href="../img/node-panel/12-file-versions.jpg"><img src="../img/node-panel/12-file-versions.jpg" alt="The Versions list with v1 applied, and the Danger section" loading="lazy"></a><figcaption>Versions and the two ways to stop tracking.</figcaption></figure>
+<p><b>Untrack (keep the file on the device)</b> deletes only the copies. <b>Delete on device</b> removes the file, keeps a backup beside it, and asks you to type the path.</p>
+<h2 id="deleting-a-node">Deleting a node</h2>
+<p><b>Delete node</b> permanently deletes the command history, tracked files and secret attachments. For the device:</p>
+<ul><li><b>Offline</b>: it is not told. It keeps its identity, users, keys and data, and keeps trying to connect with an identity the platform refuses.</li><li><b>Connected</b>: the agent (0.5.0 or newer) erases its adoption file. The EEPROM boot identity, users, keys, data and the agent itself stay; to remove the agent, run the uninstall script from <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md">INSTALL.md</a>.</li></ul>
+<figure><a href="../img/node-panel/13-deleted-node.jpg"><img src="../img/node-panel/13-deleted-node.jpg" alt="A deleted node record with Restore and Forget" loading="lazy"></a><figcaption>A deleted node, opened from the Deleted status filter.</figcaption></figure>
+<p>Set the status filter on <b>Nodes</b> to <b>Deleted</b> to see deleted nodes. <b>Restore</b> gives the identity back, so the device is accepted again without physical access; history and files do not return. <b>Forget</b> removes the record for good.</p>
+<aside class="callout warning"><p><b>Warning:</b> A device set up for network boot keeps its node credential in the bootloader. Restoring the record makes that credential valid again. To revoke it, delete the node and then <b>Forget</b> it.</p></aside>
+<p>Next: <a href="../hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a>.</p>
+<div class="pager"><a class="prev" href="/docs/install-an-os/"><small>Previous</small>Installing an operating system</a><a class="next" href="/docs/hardware-and-watchdog/"><small>Next</small>Hardware profiles, overclocking and the watchdog</a></div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

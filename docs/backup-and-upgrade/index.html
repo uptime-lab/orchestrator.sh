@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backup, restore and upgrading the server · Uptime Orchestrator docs</title>
+<meta name="description" content="What a self-hosted server must keep safe, how restore and upgrade work in outline, and how agents on devices are updated from the UI.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css" rel="stylesheet">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Install</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+      <a href="/subscription/">Pricing</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs wrap">
+<nav class="side" aria-label="Documentation">
+<h4>Start</h4><ul>
+<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+</ul>
+<h4>Devices</h4><ul>
+<li><a href="/docs/add-a-device/">Adding a device</a></li>
+<li><a href="/docs/install-an-os/">Installing an operating system</a></li>
+<li><a href="/docs/node-panel/">Working with a node</a></li>
+<li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+</ul>
+<h4>Operating a fleet</h4><ul>
+<li><a href="/docs/organization/">Organizational units and policies</a></li>
+<li><a href="/docs/access-and-credentials/">Access: SSH keys and device users</a></li>
+<li><a href="/docs/secrets-and-variables/">Secrets and variables</a></li>
+<li><a href="/docs/utilities/">Utilities: managed software</a></li>
+<li><a href="/docs/status-and-audit/">Status, attention and the audit trail</a></li>
+</ul>
+<h4>Automation</h4><ul>
+<li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+</ul>
+<h4>Administration</h4><ul>
+<li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
+<li><a href="/docs/backup-and-upgrade/" aria-current="page">Backup, restore and upgrading the server</a></li>
+</ul></nav>
+<article>
+<div class="stamp"><b>Administration</b> Documentation</div>
+<h1>Backup, restore and upgrading the server</h1>
+<p class="summary">What a self-hosted server must keep safe, how restore and upgrade work in outline, and how agents on devices are updated from the UI.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#what-must-be-backed-up">What must be backed up</a></li><li><a href="#the-nightly-dump">The nightly dump</a></li><li><a href="#restoring">Restoring</a></li><li><a href="#upgrading-the-server">Upgrading the server</a></li><li><a href="#updating-agents-on-devices">Updating agents on devices</a></li></ul></nav>
+<p>This page is an operator's overview of keeping a self-hosted server recoverable and current. The commands live in the reference: <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md">BACKUP-RESTORE.md</a> and <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#upgrading">INSTALL.md → Upgrading</a>. Read them before you run anything.</p>
+<h2 id="what-must-be-backed-up">What must be backed up</h2>
+<p>A database dump is not a backup on its own. Secrets, provisioning passwords, tracked files and command history are stored encrypted, and the keys sit beside the database. Keep all of these, paths as in the community compose file:</p>
+<div class="table"><table><thead><tr><th>Item</th><th>Where</th></tr></thead><tbody><tr><td>The bootloader signing key, <code>privkey.pem</code></td><td><code>data/eeprom-keys/</code></td></tr><tr><td>The credential files, including <code>secrets_encryption_key</code> and <code>db_password</code></td><td><code>secrets/</code></td></tr><tr><td>The database</td><td>a nightly dump (below)</td></tr><tr><td>The environment file: <code>DOMAIN</code>, <code>PLATFORM_VERSION</code> and your overrides</td><td><code>.env</code> beside the compose file</td></tr><tr><td>The bundled proxy's certificate store (only with the <code>proxy-tls</code> proxy)</td><td><code>data/proxy/acme.json</code></td></tr><tr><td>Uploaded and captured OS images, and the agent releases the server hands to devices (<code>agent-artifacts/</code>)</td><td><code>data/backend/storage/</code>, or your object-storage bucket</td></tr><tr><td>The key that encrypts your dumps</td><td>anywhere but the server</td></tr></tbody></table></div>
+<p>Two files cannot be regenerated, and losing either is permanent:</p>
+<ul><li><b><code>secrets/secrets_encryption_key</code></b>: without it every encrypted row is lost. The dump restores, and decrypts nothing.</li><li><b><code>data/eeprom-keys/privkey.pem</code></b>: its public half is baked into the bootloader of every device that boots from the network. Without it no rebuilt server can sign a boot image those devices accept, and recovery is a physical re-flash of each device.</li></ul>
+<p>Put both into an escrow you control, such as a password manager, on the day the server is created and before the first device is adopted. Keep the escrow separate from where the dumps go, so that neither store alone can read your data.</p>
+<aside class="callout warning"><p><b>Warning:</b> Losing <code>data/proxy/acme.json</code> is recoverable but can bite: the proxy asks Let's Encrypt for a new certificate, and a host rebuilt several times in one week can hit the limit of five certificates per name and serve a certificate browsers and agents reject. Restore it with mode 0600.</p></aside>
+<h2 id="the-nightly-dump">The nightly dump</h2>
+<p>The reference gives a complete script (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#a-scripted-nightly-dump">A scripted nightly dump</a>). It dumps the database and, separately, the database roles; compresses and encrypts both with a passphrase file you create once; checks that the result decrypts and holds a real dump before keeping it; and deletes dumps older than 14 days only after a good new one exists. Run it as root from a systemd timer or cron, then copy the newest dump off the host. The local copy protects you from a bad deletion, not from a lost disk. Images are large and not in the dump: sync the storage directory or bucket on its own schedule, or decide in writing that a lost host loses them.</p>
+<h2 id="restoring">Restoring</h2>
+<p>There are two procedures in the reference, and the order of steps matters in both.</p>
+<ul><li><b><a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#restore-into-the-same-install">Into the same install</a></b>, to undo a bad change or roll back an upgrade: stop the stack, put back the release and credential files that match the dump, move the current database directory aside, restore into an empty database, start, verify, and only then delete the old directory. Images and agent releases are not rolled back.</li><li><b><a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#restore-onto-an-empty-host">Onto an empty host</a></b>: prepare the host by hand with the same release and the same <code>DOMAIN</code>, not with the installer, which would create new keys and a new owner. Put every key in place before the backend starts for the first time, then restore roles, data and storage.</li></ul>
+<p>After a restore, the backend log must not contain <code>ENCRYPTION KEY MISMATCH</code>; the reference ends with a checklist.</p>
+<p>Devices reconnect on their own, with no re-adoption, when the restored server keeps the same name and the same keys: their adoption files name the server, and their bootloaders trust its signing key. A new name or a new signing key means re-baking each network-booting device.</p>
+<aside class="callout note"><p><b>Note:</b> The reference marks the empty-host restore as not yet exercised end to end. Try it on a scratch host before you depend on it.</p></aside>
+<p>A dump from an older release restores onto a newer one and is upgraded on start. A dump from a newer release is refused by an older one, which exits without touching the database.</p>
+<h2 id="upgrading-the-server">Upgrading the server</h2>
+<p>The full procedure is <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#upgrading">INSTALL.md → Upgrading</a>. In short:</p>
+<ol><li><b>Read the changelog.</b> <code>CHANGELOG.md</code> lists, for every release between yours and the new one, new settings, changed defaults and what the upgrade does to existing data.</li><li><b>Back up.</b> Run the dump once by hand and check that your copies of <code>secrets/</code> and <code>.env</code> are current. Rolling back means restoring this dump.</li><li><b>Get the new release's files</b> in the install directory (<code>git checkout platform-v&lt;new&gt;</code>, or unpack the release archive), compare the compose file with the old one, and create any new credential file it names.</li><li><b>Set <code>PLATFORM_VERSION</code></b> in <code>.env</code> to the new release.</li><li><b>Pull and start</b>: <code>docker compose -f docker-compose.community.yml pull</code>, then <code>up -d</code>, then check that every container is up and the backend did not refuse to start.</li></ol>
+<p>Two rules from the reference:</p>
+<ul><li><b>There is no downgrade across a schema change.</b> The backend migrates the database on start, and an older backend refuses a database a newer one has migrated: the web page still loads, but every request fails until you roll forward or restore the backup from step 2.</li><li><b>The images and the compose file move together.</b> Never run one release's images with another release's compose file.</li></ul>
+<p>The web UI does not display the platform version. <code>PLATFORM_VERSION</code> in <code>.env</code> is the authority.</p>
+<h2 id="updating-agents-on-devices">Updating agents on devices</h2>
+<p>Agents are updated from the server, never with the device's package manager. The server serves the newest agent release it has imported (see "Import an agent release" in <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#import-an-agent-release">INSTALL.md</a>); importing a new release is an operator step on the server.</p>
+<p><b>One node.</b> Open the node and look at the <b>Agent</b> row on <b>Overview</b>. It shows the running version and either <b>up to date</b> or an <b>Update</b> button. <b>Update</b> works only while the node is online. It asks "Update the agent on this node to the latest version (…)? The agent downloads it from the server and restarts."</p>
+<figure><a href="../img/backup-and-upgrade/01-agent-row.jpg"><img src="../img/backup-and-upgrade/01-agent-row.jpg" alt="The Overview tab of an offline node, welding-bot, with Hostname, Unit, IP, MAC, HW serial, Bootloader and an Agent row showing 0.8.5 and a greyed-out Update button" loading="lazy"></a><figcaption>An outdated agent. Update is greyed out because the node is offline.</figcaption></figure>
+<p><b>Many nodes.</b> <b>Status</b> → <b>Attention</b> has the condition <b>Agent update available</b>, which shows the step, for example "0.8.5 → 0.8.6". Select the rows (or <b>Select all</b>) and click <b>Update agent</b>. Each node installs the newest release, and a node that is away gets it when it returns. The number on the button is how many of the selected nodes it will actually send to.</p>
+<figure><a href="../img/backup-and-upgrade/02-status-update-agent.jpg"><img src="../img/backup-and-upgrade/02-status-update-agent.jpg" alt="Status Attention filtered to Agent update available, one node selected with an Update agent 0 button, each row showing 0.8.5 → 0.8.6 and Running apply_access_config" loading="lazy"></a><figcaption>The fleet-level update on the Status page. Here it would send to no node.</figcaption></figure>
+<p>A node that still has an unfinished command is held back, which is why the button above says 0. Its row shows the command name and an ⓘ that explains the hold:</p>
+<figure><a href="../img/backup-and-upgrade/03-update-held.jpg"><img src="../img/backup-and-upgrade/03-update-held.jpg" alt="A tooltip: A command sent earlier has not finished. Wait for it: a second one sent now can be delivered and never answered, which is what happens when the agent is restarting." loading="lazy"></a><figcaption>Why a node is not offered an update yet.</figcaption></figure>
+<p>After a platform upgrade, some actions can require a newer agent; such a command is refused, or skipped if it was queued, until you update the node. Moving a node back to an older agent is not offered in the UI; the reference explains the API call.</p>
+<div class="pager"><a class="prev" href="/docs/team-and-security/"><small>Previous</small>Team, sign-in security and the device limit</a></div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

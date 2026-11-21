@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organizational units and policies · Uptime Orchestrator docs</title>
+<meta name="description" content="Group nodes into units, set boot, SSH, install, hardware and watchdog policies once, and let every node in the unit inherit them.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css" rel="stylesheet">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Install</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+      <a href="/subscription/">Pricing</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs wrap">
+<nav class="side" aria-label="Documentation">
+<h4>Start</h4><ul>
+<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+</ul>
+<h4>Devices</h4><ul>
+<li><a href="/docs/add-a-device/">Adding a device</a></li>
+<li><a href="/docs/install-an-os/">Installing an operating system</a></li>
+<li><a href="/docs/node-panel/">Working with a node</a></li>
+<li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+</ul>
+<h4>Operating a fleet</h4><ul>
+<li><a href="/docs/organization/" aria-current="page">Organizational units and policies</a></li>
+<li><a href="/docs/access-and-credentials/">Access: SSH keys and device users</a></li>
+<li><a href="/docs/secrets-and-variables/">Secrets and variables</a></li>
+<li><a href="/docs/utilities/">Utilities: managed software</a></li>
+<li><a href="/docs/status-and-audit/">Status, attention and the audit trail</a></li>
+</ul>
+<h4>Automation</h4><ul>
+<li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+</ul>
+<h4>Administration</h4><ul>
+<li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
+<li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+</ul></nav>
+<article>
+<div class="stamp"><b>Operating a fleet</b> Documentation</div>
+<h1>Organizational units and policies</h1>
+<p class="summary">Group nodes into units, set boot, SSH, install, hardware and watchdog policies once, and let every node in the unit inherit them.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#how-units-and-inheritance-work">How units and inheritance work</a></li><li><a href="#the-organization-page">The Organization page</a></li><li><a href="#policy-fields">Policy fields</a></li><li><a href="#the-contents-tab">The Contents tab</a></li><li><a href="#create-rename-nest-and-delete-a-unit">Create, rename, nest and delete a unit</a></li><li><a href="#put-nodes-into-a-unit">Put nodes into a unit</a></li></ul></nav>
+<p>An organizational unit is a named group of nodes, such as a room, a site or a product line. You attach things to a unit once — policies, SSH users, secrets, playbooks, utilities — and they reach every node in it, including nodes you move in later. This page owns that model, which the pages on <a href="../access-and-credentials/">access</a>, <a href="../secrets-and-variables/">secrets</a> and <a href="../utilities/">utilities</a> build on, and covers the <b>Organization</b> page where you build the tree and set policies.</p>
+<h2 id="how-units-and-inheritance-work">How units and inheritance work</h2>
+<p>Units form a tree two levels deep under <b>Account defaults</b>: top-level units and their child units. The example account has <b>Laboratory</b> (with <b>Test bench</b> under it), <b>Garage</b> and <b>Basement</b>. A node belongs to at most one unit. A node in no unit is <b>Unassigned</b>.</p>
+<p>Everything you attach follows one of two rules:</p>
+<ul><li><b>Policies resolve to one value.</b> For each policy field, the platform walks up from the node: the node's own setting, then its unit, then the parent unit, then <b>Account defaults</b>, then the built-in system default. The first level that answers wins. A level that says <b>Inherit</b> passes the question up.</li><li><b>Access users, secrets and utilities add up.</b> A node receives everything attached to its own node, its unit, the parent unit and the whole account. Where two levels define the same thing (the same OS username, the same secret, the same utility), the nearer level wins.</li></ul>
+<p>On a unit page, a field left on <b>Inherit</b> shows a line under it such as <code>Effective: Recovery (netboot) (from system default)</code>, so you always see the value that actually applies and where it comes from. The possible sources are <b>this unit</b>, <b>parent unit</b>, <b>account default</b> and <b>system default</b>.</p>
+<h2 id="the-organization-page">The Organization page</h2>
+<p>Open <b>Organization</b> in the top bar. The left rail is the unit tree, with the number of nodes in each unit. The first row, <b>Account defaults</b>, is selected when the page opens.</p>
+<figure><a href="../img/organization/01-account-defaults.jpg"><img src="../img/organization/01-account-defaults.jpg" alt="The Organization page with Account defaults selected, showing the Boot card with Target and Auto-flash EEPROM on approval, and the start of the SSH access card" loading="lazy"></a><figcaption>Account defaults: the last level before the system default. Each card is one policy family.</figcaption></figure>
+<p><b>Account defaults</b> applies to nodes in no unit and to every policy a node's unit chain leaves on inherit. Here the choice that means "no opinion" is labelled with the system default it falls back to, for example <b>System default (Recovery)</b>, rather than <b>Inherit</b>.</p>
+<p>Click a unit in the rail to open it. The header shows its name with a pencil to rename it, where it sits (<b>Top-level unit</b>, or <b>Nested under Garage</b>) and a <b>Delete unit</b> button. Two tabs follow: <b>Policies</b> and <b>Contents</b>.</p>
+<figure><a href="../img/organization/02-unit-policies.jpg"><img src="../img/organization/02-unit-policies.jpg" alt="The Garage unit on the Policies tab: Target and Auto-flash EEPROM on approval both set to Inherit, with an Effective line under each" loading="lazy"></a><figcaption>A unit page. Every field on Inherit shows the value in effect and which level supplied it.</figcaption></figure>
+<h2 id="policy-fields">Policy fields</h2>
+<p>Both <b>Account defaults</b> and every unit show the same five cards. Change what you need and click <b>Save policies</b> at the bottom; a <b>Saved</b> note confirms it. If your role can only read policies, the form is disabled and says so.</p>
+<h3 id="boot">Boot</h3>
+<div class="table"><table><thead><tr><th>Field</th><th>Options</th><th>What it does</th></tr></thead><tbody><tr><td><b>Target</b></td><td><b>Inherit</b>, <b>Local OS</b>, <b>Recovery (netboot)</b></td><td>Which system a device boots. <b>Local OS</b> boots the OS installed on local storage. <b>Recovery (netboot)</b> boots the network bootstrap used for installs and maintenance. The system default is Recovery.</td></tr><tr><td><b>Auto-flash EEPROM on approval</b></td><td><b>Inherit</b>, <b>On</b>, <b>Off</b></td><td>When on, approving a node automatically flashes its EEPROM for per-device network boot. It does not change what the device boots afterwards. The system default is on.</td></tr></tbody></table></div>
+<p>A node with an installed OS usually carries its own <b>Local OS</b> target, because the system default is Recovery. That is why the Garage nodes show "1 override" on the <b>Contents</b> tab (see below): their boot target is answered on the node, not by the unit. <a href="../install-an-os/#boot-target">Installing an operating system</a> owns the full explanation of boot targets.</p>
+<h3 id="ssh-access">SSH access</h3>
+<p><b>Password login</b> controls whether <code>sshd</code> on the nodes accepts passwords. Options: <b>Inherit</b>, <b>Allowed</b>, <b>Refused (keys only)</b>. The system default is allowed.</p>
+<p>This is the one field on the page that is sent to devices as soon as you save. When you change it, a yellow line tells you how many nodes will receive the new SSH configuration, before you save.</p>
+<figure><a href="../img/organization/03-password-login-warning.jpg"><img src="../img/organization/03-password-login-warning.jpg" alt="The SSH access card with Password login set to Refused (keys only), the line &quot;Saving pushes the access config to 5 nodes now&quot; and the yellow warning box" loading="lazy"></a><figcaption>Refusing password logins in Garage: the impact line counts the nodes that receive the change.</figcaption></figure>
+<aside class="callout warning"><p><b>Warning:</b> The box under the field reads "Refusing password logins leaves SSH keys as the only way in. Verify key access on a node before turning this off. Nodes whose keys do not work become unreachable." Take it literally. Before you refuse passwords for a unit, log in to one of its nodes with a key from <a href="../access-and-credentials/">Credentials</a>. The platform refuses to send an access configuration that would leave a node with no working login at all, but it cannot tell whether <em>your</em> key works.</p></aside>
+<p>Changing this at <b>Account defaults</b> reaches every node that has no answer of its own, which can be the whole fleet. A node can still override the unit in its own panel.</p>
+<h3 id="install">Install</h3>
+<p><b>Default image</b> is the OS image installed when an install does not name one, for example an install started from a playbook. At account level the empty choice is <b>None (choose per install)</b>; on a unit it is <b>— Inherit —</b>. The example account uses <b>Ubuntu Server 26.04.1</b> as the account default. You can also set it by dragging an image onto a unit in <b>Operations → Install images</b>.</p>
+<h3 id="hardware">Hardware</h3>
+<p><b>Platform</b> declares what hardware the nodes are: the carrier board, its factory variant and plugged modules. After you pick a board, the card shows the board's variants, <b>LED behaviour</b> (for example <b>Stealth mode</b>, <b>Activity LED off</b>, <b>Power LED off</b> and the digital LEDs some carriers have) and <b>Modules</b> it can host, such as an RTC module. At account level the empty choice is <b>None (not declared)</b>.</p>
+<p>Saving only stores the declaration. Nothing reaches a device until you apply it: either per node, or with <b>Apply hardware profile to N nodes</b> at the foot of the card on a unit page. Applying needs a reboot afterwards, and the platform never reboots for you. See <a href="../hardware-and-watchdog/">Hardware and watchdog</a>.</p>
+<h3 id="watchdog">Watchdog</h3>
+<p><b>Supervision</b> is either inherited (<b>None (not declared)</b> at account level) or <b>Declared for this scope</b>. Declaring shows the watchdog fields: what to watch (agent health, OS hang, network reachability), load, temperature and memory thresholds, and timing. As with hardware, saving arms nothing: each node receives the setting through its own watchdog apply, and the device runs its own pre-arm checks. The fields are explained in <a href="../hardware-and-watchdog/">Hardware and watchdog</a>.</p>
+<h2 id="the-contents-tab">The Contents tab</h2>
+<p><b>Contents</b> lists what the unit holds and what reaches it, each section with a link to the page where you manage it.</p>
+<figure><a href="../img/organization/04-unit-contents.jpg"><img src="../img/organization/04-unit-contents.jpg" alt="The Garage unit on the Contents tab: five nodes each with &quot;1 override&quot; and a tooltip &quot;Set on the node itself: boot target.&quot;, then Shell access listing technician from this unit and auditor from account-wide" loading="lazy"></a><figcaption>Contents of Garage. Hover the info icon next to an override to see which fields the node sets itself.</figcaption></figure>
+<ul><li><b>Nodes</b> — each node with its status. <b>N override(s)</b> means the node answers some policy fields itself; hover the icon to see which. <b>Reset to inherited</b> clears all of that node's own policy settings after a confirmation, so it follows the unit again.</li><li><b>Shell access</b> — the access users that reach this unit's nodes and where each comes from: <b>from this unit</b>, <b>from parent unit</b> or <b>from account-wide</b>. In Garage, <code>technician</code> (with sudo) is set on the unit and <code>auditor</code> comes from the account.</li><li><b>Platform access</b> — team members who hold a role on this unit, and <b>Grant on this unit</b> to give one. See <a href="../team-and-security/">Team and security</a>.</li><li><b>Secrets</b>, <b>Playbooks</b> and <b>Utilities</b> — what is attached here. You can attach a secret or a tag directly from the search box.</li></ul>
+<figure><a href="../img/organization/05-unit-contents-secrets-utilities.jpg"><img src="../img/organization/05-unit-contents-secrets-utilities.jpg" alt="Lower part of the Garage Contents tab: Secrets with #network, TIMEZONE and REGISTRY_PASSWORD; Playbooks with Rotate Wi-Fi password and Update system packages; Utilities with Docker, Kiosk display and Security updates and their applied counts" loading="lazy"></a><figcaption>Utilities show how many of the unit's nodes have the current configuration applied.</figcaption></figure>
+<p>Under <b>Utilities</b>, "applied on 1 of 5" means one node in the unit has confirmed the current configuration. Garage lists <b>Kiosk display</b> and <b>Docker</b> too, although they are assigned to a single node (paint-booth-display) rather than to the unit.</p>
+<h2 id="create-rename-nest-and-delete-a-unit">Create, rename, nest and delete a unit</h2>
+<ol><li>Click <b>+ New OU</b> under the tree.</li><li>Type a <b>Name</b>.</li><li>Choose a <b>Parent</b>: <b>None — a top-level unit under Account defaults</b>, or one of the top-level units. Only top-level units are offered, because units nest two levels deep.</li><li>Click <b>Create</b>. The new unit opens; set its policies there.</li></ol>
+<figure><a href="../img/organization/06-new-unit.jpg"><img src="../img/organization/06-new-unit.jpg" alt="The New unit dialog with Name &quot;Roof antenna&quot; and Parent &quot;Garage&quot;" loading="lazy"></a><figcaption>A child unit under Garage. Policies are set on the unit's page after it is created.</figcaption></figure>
+<p>A new unit inherits everything from its parent and the account: before you set anything, its <b>Contents</b> already shows the parent's shell access users.</p>
+<p>To rename a unit, click the pencil next to its name, edit it and press Enter. To move a unit under another parent, drag it in the rail onto the new parent. Moving a unit re-sends the access configuration to its nodes, because the users they inherit change with the parent.</p>
+<p>To delete a unit, click <b>Delete unit</b> on its page or the bin icon in the rail.</p>
+<figure><a href="../img/organization/07-delete-unit.jpg"><img src="../img/organization/07-delete-unit.jpg" alt="The Delete unit confirmation dialog listing what is removed and what blocks deletion" loading="lazy"></a><figcaption>Deleting a unit removes what is scoped to it and refuses while it still holds anything.</figcaption></figure>
+<p>Deleting removes the role bindings, invitations, secret attachments and adoption tokens scoped to the unit. It is refused while the unit still holds nodes, nested units, playbooks or utility assignments: move those out first. Deleting a unit therefore never orphans a node. Once you move its nodes elsewhere, they follow their new unit's policies.</p>
+<h2 id="put-nodes-into-a-unit">Put nodes into a unit</h2>
+<p>There are three ways:</p>
+<ul><li><b>From the Nodes page.</b> Click <b>Select / assign to unit</b> above the table, tick the nodes, open <b>Assign to unit</b> and pick a unit, or <b>Remove from unit (Unassigned)</b>.</li><li><b>By dragging.</b> In selection mode, drag a node's row by its handle onto a unit in the left rail; drop it on <b>Unassigned</b> to take it out of its unit.</li><li><b>From the node panel.</b> On a node's <b>Overview</b>, the <b>Unit</b> row has a <b>Move</b> button.</li></ul>
+<figure><a href="../img/organization/08-assign-to-unit.jpg"><img src="../img/organization/08-assign-to-unit.jpg" alt="The Nodes page in selection mode with jetpack-test-03 and paint-booth-display ticked and the Assign to unit menu open, listing Laboratory, Test bench, Garage, Basement and Remove from unit" loading="lazy"></a><figcaption>Assign to unit acts on every selected node at once.</figcaption></figure>
+<p>A moved node immediately resolves its policies, users, secrets and utilities from the new unit. Access changes are pushed to it automatically; utilities and hardware or watchdog settings follow the rules on their own pages.</p>
+<p>You can also place new devices into a unit at adoption: an adoption token can name an <b>Adoption OU</b> (see <a href="../secrets-and-variables/">Secrets and variables</a>).</p>
+<p>Next: <a href="../access-and-credentials/">Access: SSH keys and device users</a>.</p>
+<div class="pager"><a class="prev" href="/docs/hardware-and-watchdog/"><small>Previous</small>Hardware profiles, overclocking and the watchdog</a><a class="next" href="/docs/access-and-credentials/"><small>Next</small>Access: SSH keys and device users</a></div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

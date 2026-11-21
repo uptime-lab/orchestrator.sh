@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Access: SSH keys and device users · Uptime Orchestrator docs</title>
+<meta name="description" content="Keep an inventory of SSH keys, define the Linux users the agent creates on your nodes, and scope them to the whole account, a unit or one node.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css" rel="stylesheet">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Install</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+      <a href="/subscription/">Pricing</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs wrap">
+<nav class="side" aria-label="Documentation">
+<h4>Start</h4><ul>
+<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+</ul>
+<h4>Devices</h4><ul>
+<li><a href="/docs/add-a-device/">Adding a device</a></li>
+<li><a href="/docs/install-an-os/">Installing an operating system</a></li>
+<li><a href="/docs/node-panel/">Working with a node</a></li>
+<li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+</ul>
+<h4>Operating a fleet</h4><ul>
+<li><a href="/docs/organization/">Organizational units and policies</a></li>
+<li><a href="/docs/access-and-credentials/" aria-current="page">Access: SSH keys and device users</a></li>
+<li><a href="/docs/secrets-and-variables/">Secrets and variables</a></li>
+<li><a href="/docs/utilities/">Utilities: managed software</a></li>
+<li><a href="/docs/status-and-audit/">Status, attention and the audit trail</a></li>
+</ul>
+<h4>Automation</h4><ul>
+<li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+</ul>
+<h4>Administration</h4><ul>
+<li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
+<li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+</ul></nav>
+<article>
+<div class="stamp"><b>Operating a fleet</b> Documentation</div>
+<h1>Access: SSH keys and device users</h1>
+<p class="summary">Keep an inventory of SSH keys, define the Linux users the agent creates on your nodes, and scope them to the whole account, a unit or one node.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#the-model-in-three-sentences">The model in three sentences</a></li><li><a href="#ssh-keys">SSH Keys</a></li><li><a href="#users">Users</a></li><li><a href="#ca-certificates">CA Certificates</a></li><li><a href="#how-changes-reach-the-devices">How changes reach the devices</a></li><li><a href="#the-provisioning-login">The provisioning login</a></li><li><a href="#avoid-locking-yourself-out">Avoid locking yourself out</a></li></ul></nav>
+<p>The <b>Credentials</b> page decides who can log in to your devices over SSH. You describe the users you want — name, keys, sudo, optional password — and where they apply. The agent on every node in that scope creates and maintains the matching Linux accounts. You never edit <code>authorized_keys</code> by hand.</p>
+<p>Scope works like everything else attached to a unit: see <a href="../organization/">Organizational units and policies</a> for the model. In short, a node receives the users of its own node, its unit, the parent unit and the whole account, and a user defined closer to the node replaces a same-named user from further up.</p>
+<h2 id="the-model-in-three-sentences">The model in three sentences</h2>
+<ul><li>An <b>SSH key</b> is inventory. Adding one grants nothing.</li><li>A <b>user</b> is a Linux account the agent creates on every node in its scope. It logs in with the keys attached to it, an optional password, or an SSH certificate.</li><li>A <b>CA certificate</b> is a certificate authority your nodes trust, so users can log in with certificates you sign with your own tooling.</li></ul>
+<p>The page has a tab for each: <b>SSH Keys</b>, <b>CA Certificates</b> and <b>Users</b>. The left rail filters each tab by scope: <b>Unassigned</b>, <b>All nodes</b> (account-wide), <b>Assigned to nodes</b>, and each unit.</p>
+<h2 id="ssh-keys">SSH Keys</h2>
+<figure><a href="../img/access-and-credentials/01-ssh-keys.jpg"><img src="../img/access-and-credentials/01-ssh-keys.jpg" alt="The SSH Keys tab listing Deploy key (CI) used by 0 users and Workshop laptop used by 2 users, with their fingerprints" loading="lazy"></a><figcaption>The key inventory. Users shows how many users each key is attached to.</figcaption></figure>
+<p>Each row shows the key's <b>Name</b>, its <b>Fingerprint</b> and how many <b>Users</b> it is attached to. The example account has two: <b>Workshop laptop</b>, attached to both users, and <b>Deploy key (CI)</b>, attached to none — so it opens nothing.</p>
+<p>To add a key, click <b>Add SSH key</b>. Under <b>Paste public key</b>, give it an <b>Alias</b> and paste one line in OpenSSH format (<code>ssh-ed25519 …</code>, <code>ssh-rsa …</code>). Click <b>Create Key</b>.</p>
+<figure><a href="../img/access-and-credentials/02-add-ssh-key.jpg"><img src="../img/access-and-credentials/02-add-ssh-key.jpg" alt="The Add SSH Key panel with Alias &quot;Field tablet&quot; and an ssh-ed25519 public key pasted" loading="lazy"></a><figcaption>Paste the public half only. The key appears in the inventory and grants nothing yet.</figcaption></figure>
+<aside class="callout note"><p><b>Note:</b> Paste exactly one key per entry. A value with several lines is accepted when you save but refused by the device when it is applied.</p></aside>
+<p>The <b>Generate keypair</b> tab is different: the platform creates an ed25519 keypair, keeps the private key encrypted and uses it for its own outbound SSH when adopting devices over the network. You can download the public part afterwards. It is not a key for you to log in with.</p>
+<p>Click a key to see its details: alias, type, fingerprint, dates, <b>Download Public Key</b>, <b>Edit</b> (rename or replace the key) and <b>Delete</b>. You can also drag a key onto a unit in the rail; the dialog that opens asks which user in that unit gets the key, or creates a new one, because a key always belongs to a named user, never to a unit.</p>
+<h2 id="users">Users</h2>
+<figure><a href="../img/access-and-credentials/03-users.jpg"><img src="../img/access-and-credentials/03-users.jpg" alt="The Users tab listing technician assigned to Garage with 1 key and sudo Yes, and auditor assigned to All nodes with 1 key and sudo No, both Active" loading="lazy"></a><figcaption>Two users. The line under the table says when changes reach the devices.</figcaption></figure>
+<p>The columns are <b>User</b> (the Linux username), <b>Assigned to</b> (the scope), <b>Keys</b>, <b>Principals</b> (certificate names), <b>Sudo</b>, <b>Password</b> and <b>Status</b>. Status is <b>Active</b> when the user has at least one way to log in, and <b>Locked</b> when it has neither a key, a password nor a usable certificate principal.</p>
+<p>The example account has two users:</p>
+<ul><li><code>technician</code> — sudo, key <b>Workshop laptop</b>, scope <b>Garage</b>. It exists on every Garage node.</li><li><code>auditor</code> — no sudo, key <b>Workshop laptop</b>, scope <b>All nodes</b>. It exists on every node in the account.</li></ul>
+<h3 id="add-a-user">Add a user</h3>
+<ol><li>In the rail, select where the user should apply (a unit, or <b>All nodes</b>). With <b>All users</b> selected, the user starts unassigned.</li><li>Click <b>Add user</b>. The panel names the scope: "The user will be created in: Garage."</li><li>Fill in <b>Username</b>, tick or clear <b>Grant sudo</b> (ticked by default), optionally set a <b>Password</b>, optionally list <b>Certificate principals</b>, and attach one or more <b>SSH keys</b> with <b>Attach</b>.</li><li>Click <b>Create user</b>.</li></ol>
+<figure><a href="../img/access-and-credentials/05-add-user.jpg"><img src="../img/access-and-credentials/05-add-user.jpg" alt="The Add user panel for Garage with username fieldtech, Grant sudo ticked, empty password, principal &quot;maintenance&quot; and the key Field tablet attached" loading="lazy"></a><figcaption>A user needs a key or a password. With no password, its sudo runs without a prompt.</figcaption></figure>
+<p>How the fields combine on the device:</p>
+<div class="table"><table><thead><tr><th>You set</th><th>Result on the node</th></tr></thead><tbody><tr><td>Key(s), no password</td><td>Key login only. With <b>Grant sudo</b>, <code>sudo</code> runs <b>without a password</b> (there is nothing to prompt for).</td></tr><tr><td>Key(s) and a password</td><td>Key or password login (if the unit allows password login). With <b>Grant sudo</b>, <code>sudo</code> asks for the password.</td></tr><tr><td>No key, no password, no principal</td><td>The account is created <b>locked</b>.</td></tr><tr><td>Certificate principals</td><td>The user can also log in with a certificate carrying one of those names, on nodes that trust a CA.</td></tr></tbody></table></div>
+<p>The password never reaches the device in clear text: the platform sends only a salted hash. Whether <code>sshd</code> accepts passwords at all is the <b>Password login</b> policy on the <a href="../organization/">Organization</a> page.</p>
+<aside class="callout warning"><p><b>Warning:</b> A sudo user with no password has passwordless root on every node in its scope. That is convenient for a technician's own key, and dangerous if the key leaks. Give sudo users a password if you want a prompt.</p></aside>
+<h3 id="change-or-remove-a-user">Change or remove a user</h3>
+<p>Click a user to open its panel. Every change here is saved immediately — there is no Save button.</p>
+<figure><a href="../img/access-and-credentials/04-user-panel.jpg"><img src="../img/access-and-credentials/04-user-panel.jpg" alt="The technician user panel: Units with Garage, SSH keys with Workshop laptop and Detach, Certificate principals empty, Grant sudo ticked, Password &quot;No password&quot; with Set, and Delete user" loading="lazy"></a><figcaption>The user panel. Keys, principals, sudo and the password are edited in place.</figcaption></figure>
+<ul><li><b>Units</b> — the units the user belongs to. A user can be in several units; click × to take it out of one. To add it to a unit, drag its row in the table onto the unit in the rail. <b>All nodes</b> makes it fleet-wide, <b>Unassigned</b> parks it (it then applies to no node).</li><li><b>SSH keys</b> — <b>Attach a key…</b> and <b>Attach</b>, or <b>Detach</b>. Detaching the last key (with no password) locks the user on the devices.</li><li><b>Grant sudo</b>, <b>Password</b> (<b>Set</b>, <b>Clear password</b>).</li><li><b>Delete user</b> — asks for confirmation.</li></ul>
+<p>What deleting does on the device: on the next apply the Linux account is <b>locked, not removed</b>. Its home directory and files stay. The same happens when a user loses its last key and has no password; adding a key back unlocks it. The platform only ever manages accounts it created itself: users you made by hand on a node are never touched.</p>
+<h3 id="users-for-a-single-node">Users for a single node</h3>
+<p>You can also assign a user to one node, from that node's panel (<b>Properties → Credentials → Assigned to this node</b>, then <b>New user</b> or pick an unassigned user). Use this for one-off or test access; for regular use, grant access per unit.</p>
+<h2 id="ca-certificates">CA Certificates</h2>
+<p>The <b>CA Certificates</b> tab holds the public keys of certificate authorities you trust. Click <b>Add CA certificate</b>, paste a bare CA public key or a whole <code>cert-authority</code> line, and optionally give it a <b>Name</b> (otherwise the key's comment is used). Then drag the CA onto a unit or <b>All nodes</b> to trust it there.</p>
+<figure><a href="../img/access-and-credentials/06-add-ca.jpg"><img src="../img/access-and-credentials/06-add-ca.jpg" alt="The Add CA Certificate panel with an ed25519 CA public key pasted and the name taken from its comment" loading="lazy"></a><figcaption>Adding a CA only puts it in the inventory. Drag it onto a unit to trust it there.</figcaption></figure>
+<p>A node accepts a certificate signed by a trusted CA when the certificate names one of the <b>Certificate principals</b> of a user. Issue and sign certificates with your own tooling; the platform stores only the CA's public key.</p>
+<h2 id="how-changes-reach-the-devices">How changes reach the devices</h2>
+<p>The line under the users table says it: "Changes apply automatically: online nodes right away, offline nodes on reconnect. Nodes on an agent older than 0.5.0 are skipped until updated."</p>
+<p>In detail:</p>
+<ul><li>Every change to a user, its keys or its scope, and every change to the <b>Password login</b> policy, sends the resolved access configuration to the affected nodes.</li><li>An offline node receives it when it reconnects. A node booted into recovery (netboot) holds it until it is back on its installed OS.</li><li>When a node reports in, the platform compares what the node last confirmed with what it should have, and re-sends if they differ.</li></ul>
+<p>To see what a particular node has, open it on the <b>Nodes</b> page and go to <b>Properties → Credentials</b>.</p>
+<figure><a href="../img/access-and-credentials/07-node-access.jpg"><img src="../img/access-and-credentials/07-node-access.jpg" alt="The Credentials section of rocket-bench-01: auditor under All nodes, technician with a SUDO badge under Organizational unit, nothing assigned to this node, and On the device listing ubuntu as unmanaged and technician and auditor as managed" loading="lazy"></a><figcaption>rocket-bench-01 after a Scan: the managed users and an account created outside the platform.</figcaption></figure>
+<p>This view shows the <b>Password login</b> setting for the node (with <b>Inherit</b>, <b>Allowed</b> and <b>Blocked</b>), the users the node gets from each level (<b>All nodes</b>, <b>Organizational unit</b>, <b>Assigned to this node</b>), and:</p>
+<ul><li><b>On the device</b> → <b>Scan</b> reads the real login accounts on the node's disk (the node must be online). Accounts the platform created are <b>managed</b>; anything else, such as the image's stock <code>ubuntu</code> user, is <b>unmanaged</b> and never changed.</li><li><b>Re-apply to device</b> re-sends the access list if the node looks out of sync. Normally you never need it.</li></ul>
+<p>Every apply also appears in the node's command history as <b>Apply access configuration</b>.</p>
+<aside class="callout note"><p><b>Note:</b> The Users table shows whether a user is active or locked, not whether each node has received the latest change. For a per-node answer, use the node's Credentials view and its command history.</p></aside>
+<h2 id="the-provisioning-login">The provisioning login</h2>
+<p>When the platform installs an OS on a node, it writes the node's access users into the new system before the first boot (the <b>Provision access</b> step). Master tokens also carry <b>Default Credentials</b> — a default username, password and SSH key — for devices adopted with them; see <a href="../secrets-and-variables/">Secrets and variables</a>.</p>
+<h2 id="avoid-locking-yourself-out">Avoid locking yourself out</h2>
+<aside class="callout warning"><p><b>Warning:</b> Before you refuse password logins, delete a user or detach a key, make sure another way in still works on the affected nodes: a user in the same scope with a key you hold, and that you have tested that key on one node. The platform refuses to send a configuration that would leave a node with no working login at all, but it cannot know which keys you still hold. If you do lock yourself out, add a key or a password back to a user in that scope: the change reaches the node over the agent's own connection, which does not depend on SSH.</p></aside>
+<p>Next: <a href="../secrets-and-variables/">Secrets and variables</a>.</p>
+<div class="pager"><a class="prev" href="/docs/organization/"><small>Previous</small>Organizational units and policies</a><a class="next" href="/docs/secrets-and-variables/"><small>Next</small>Secrets and variables</a></div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Installing an operating system · Uptime Orchestrator docs</title>
+<meta name="description" content="Bring a node into the recovery system, write an OS image to its drive, and boot it back into the new system.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css" rel="stylesheet">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Install</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+      <a href="/subscription/">Pricing</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs wrap">
+<nav class="side" aria-label="Documentation">
+<h4>Start</h4><ul>
+<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+</ul>
+<h4>Devices</h4><ul>
+<li><a href="/docs/add-a-device/">Adding a device</a></li>
+<li><a href="/docs/install-an-os/" aria-current="page">Installing an operating system</a></li>
+<li><a href="/docs/node-panel/">Working with a node</a></li>
+<li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+</ul>
+<h4>Operating a fleet</h4><ul>
+<li><a href="/docs/organization/">Organizational units and policies</a></li>
+<li><a href="/docs/access-and-credentials/">Access: SSH keys and device users</a></li>
+<li><a href="/docs/secrets-and-variables/">Secrets and variables</a></li>
+<li><a href="/docs/utilities/">Utilities: managed software</a></li>
+<li><a href="/docs/status-and-audit/">Status, attention and the audit trail</a></li>
+</ul>
+<h4>Automation</h4><ul>
+<li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+</ul>
+<h4>Administration</h4><ul>
+<li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
+<li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+</ul></nav>
+<article>
+<div class="stamp"><b>Devices</b> Documentation</div>
+<h1>Installing an operating system</h1>
+<p class="summary">Bring a node into the recovery system, write an OS image to its drive, and boot it back into the new system.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#images">Images</a></li><li><a href="#the-install-cycle-on-one-node">The install cycle on one node</a></li><li><a href="#boot-target">Boot target</a></li><li><a href="#the-bootloader-eeprom">The bootloader (EEPROM)</a></li><li><a href="#what-can-go-wrong">What can go wrong</a></li><li><a href="#backups-and-gold-images">Backups and gold images</a></li></ul></nav>
+<p>Every managed device can be brought into the <b>recovery system</b>: a small Linux that the device boots over the network, signed by your server, running from RAM. From there the server writes an OS image to the device's drive and puts the agent into the new system. Afterwards the device boots that OS from its own disk and the agent keeps it managed. The same cycle serves a first install and a reinstall.</p>
+<p>Before you start: the device must be adopted and approved, and its bootloader must be set up for network boot on this server (see <a href="#the-bootloader-eeprom">The bootloader</a> below).</p>
+<h2 id="images">Images</h2>
+<p>Images live under <b>Operations → Install images</b>. Each row shows the <b>Image</b> title and file name, the <b>Format</b> (for example <code>XZ</code>), <b>Size</b>, <b>Uploaded</b> date, <b>Version</b> and <b>Notes</b>. A row with <code>—</code> in Format and Size has no file yet and cannot be installed.</p>
+<figure><a href="../img/install-an-os/12-install-images.jpg"><img src="../img/install-an-os/12-install-images.jpg" alt="The Install images tab with two images: Raspberry Pi OS Lite without a file, and Ubuntu Server 26.04.1 as a 1.42 GB XZ file" loading="lazy"></a><figcaption>Operations → Install images. The left rail is for setting a unit's default image.</figcaption></figure>
+<p>To add an image, click <b>Upload image</b>. The form asks for a <b>Title</b>, a <b>Version</b>, optional <b>Notes</b>, and the file itself (drag it in, or <b>choose one</b>). There is no field for a URL: the file is uploaded from your computer. <b>Done</b> stays disabled until a file is chosen.</p>
+<figure><a href="../img/install-an-os/13-upload-image.jpg"><img src="../img/install-an-os/13-upload-image.jpg" alt="The Upload image form with Title, Version, Notes and a drop zone listing the supported formats ISO, IMG, XZ, ZST" loading="lazy"></a><figcaption>The upload form. Only a file upload is offered.</figcaption></figure>
+<ul><li>Accepted formats are <code>.img</code> and <code>.iso</code> (written as they are) and <code>.xz</code> and <code>.zst</code> (decompressed on the device while writing). Anything else is refused at upload.</li><li>Vendor <code>.xz</code> files are usually single-block and decompress on one core; <b>Repack to multi-block XZ</b> in the image's settings makes them install about 2.5 times faster.</li><li>Size and count limits are set by whoever runs the server. Details: <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/OS-IMAGES.md">OS-IMAGES.md</a> and <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md">CONFIGURATION.md</a>.</li></ul>
+<p>The example account has <b>Ubuntu Server 26.04.1</b> (the official preinstalled server image for Raspberry Pi) as its account default image. You set a default under <b>Organization → Account defaults → Default image</b>, or per unit by dragging an image onto the unit in the left rail of <b>Install images</b>. The default is used when an install does not name an image, for example from a playbook. The <b>Install OS</b> form on a node does not preselect it: you always pick the image there.</p>
+<h2 id="the-install-cycle-on-one-node">The install cycle on one node</h2>
+<p>The steps below reinstall plasma-rig-01, a Compute Module 4 in the Laboratory.</p>
+<h3 id="1-reboot-to-recovery">1. Reboot to recovery</h3>
+<p>Open the node and go to <b>Actions</b>. An online node offers <b>Terminal</b>, <b>Command history</b>, <b>Change hostname</b>, <b>Run playbook</b>, <b>Reboot</b> and <b>Reboot to recovery</b>, plus the <b>Danger</b> group.</p>
+<p>Click <b>Reboot to recovery</b> and confirm. The confirmation explains that this is one-shot: the node netboots once, and the next reboot returns to its current boot target.</p>
+<p>The node shows <b>RESTARTING</b>, then, after about two minutes on this board, the violet <b>RECOVERY</b> state in the list and the panel. The hostname becomes <code>rpi-&lt;serial&gt;-recovery</code>, <b>OS (recovery)</b> shows the recovery system, and the address may change.</p>
+<figure><a href="../img/install-an-os/04-recovery-state.jpg"><img src="../img/install-an-os/04-recovery-state.jpg" alt="The node list with plasma-rig-01 in violet RECOVERY and the panel showing hostname rpi-5a1e0b02-recovery and OS (recovery) Buildroot" loading="lazy"></a><figcaption>A node in the recovery system. Nothing on its disk is running.</figcaption></figure>
+<h3 id="2-the-provisioning-actions">2. The Provisioning actions</h3>
+<p>In recovery, <b>Actions</b> gains a <b>Provisioning</b> group: <b>Install OS</b>, <b>Restore from backup</b>, <b>Create backup</b>, <b>Install Agent</b> and <b>Provision Access</b>. <b>Reboot to recovery</b> is greyed out because the node is already netbooted.</p>
+<figure><a href="../img/install-an-os/05-actions-recovery.jpg"><img src="../img/install-an-os/05-actions-recovery.jpg" alt="The Actions tab in recovery, with the Provisioning group" loading="lazy"></a><figcaption>Provisioning actions appear only while the node is in recovery.</figcaption></figure>
+<h3 id="3-erase-the-drive-if-it-already-holds-a-system">3. Erase the drive if it already holds a system</h3>
+<p>If you are reinstalling, erase the drive first: <b>Advanced → Storage</b>, pick the drive, then <b>Erase drive</b> under <b>Danger</b>. Type the device path to confirm; this removes all filesystem signatures and cannot be undone.</p>
+<figure><a href="../img/install-an-os/08-erase-drive.jpg"><img src="../img/install-an-os/08-erase-drive.jpg" alt="The Erase drive confirmation with the device path typed in" loading="lazy"></a><figcaption>Erase drive asks you to type the device path.</figcaption></figure>
+<aside class="callout warning"><p><b>Warning:</b> In 0.1.0, <b>Install OS</b> onto a drive that already has partitions fails at once with <code>device validation failed: device /dev/nvme0n1 has partitions and cannot be used for OS installation</code>, although its confirmation says it erases the drive. Nothing is written, but the failure switches the node's boot target to <b>Recovery</b>. Erase the drive first, then install. A fix is coming in 0.1.1.</p></aside>
+<h3 id="4-install-os">4. Install OS</h3>
+<p>Click <b>Install OS</b>, pick the <b>Image</b> and the <b>Target Device</b>. The drive list shows what the agent reported: device path, size and model. A Compute Module 4 with an NVMe drive shows only <code>/dev/nvme0n1</code>; a board with a card or eMMC lists those too, so read the path before you choose. Images are grouped into <b>OS images</b> and <b>Backups &amp; golden images</b>.</p>
+<figure><a href="../img/install-an-os/06-install-os-form.jpg"><img src="../img/install-an-os/06-install-os-form.jpg" alt="The Install OS form with Ubuntu Server 26.04.1 and /dev/nvme0n1 selected" loading="lazy"></a><figcaption>Choose the image and the target drive.</figcaption></figure>
+<p>Click <b>Install OS</b> and confirm. The node stays netbooted afterwards; it does not reboot into the new system on its own.</p>
+<p>Progress shows in <b>Command history</b> ("Downloading OS image: 22%") and as a badge in the panel header. A 1.4 GB XZ image takes a few minutes on a gigabit network; single-block archives and slow links take longer.</p>
+<figure><a href="../img/install-an-os/09-install-progress.jpg"><img src="../img/install-an-os/09-install-progress.jpg" alt="Command history with Install OS in progress at 22%, the successful Erase drive below it, and the earlier failed Install OS" loading="lazy"></a><figcaption>Install OS in progress. The red entry is the attempt over a used drive.</figcaption></figure>
+<h3 id="5-install-the-agent">5. Install the agent</h3>
+<p>A freshly written system has no agent. Click <b>Install Agent</b>, choose the same <b>Target Device</b>, leave <b>Root Partition</b> empty to auto-detect the largest ext4 partition, keep <b>Agent Type</b> on <b>Full — complete management agent</b>, and <b>Agent Version</b> on <code>latest</code>. It finishes in seconds. (<b>Watcher</b> is a telemetry-only agent that runs no commands.)</p>
+<p><b>Provision Access</b> is optional: it writes the users, keys and environment that apply to this node into the new system before its first boot. Without it, the agent applies access once the node is back online.</p>
+<h3 id="6-boot-target-local-os-then-reboot">6. Boot target Local OS, then reboot</h3>
+<p>Open <b>Properties</b> and check <b>Boot behavior</b>. It must read <b>LOCAL OS</b> before you reboot. Then <b>Actions → Reboot</b>. plasma-rig-01 came back <b>ONLINE</b> in Ubuntu 26.04.1 about ninety seconds later.</p>
+<figure><a href="../img/install-an-os/14-online-after-install.jpg"><img src="../img/install-an-os/14-online-after-install.jpg" alt="The node panel after the reboot: ONLINE, hostname ubuntu, OS Ubuntu 26.04.1 LTS" loading="lazy"></a><figcaption>Back online in the new system. The hostname is the image default.</figcaption></figure>
+<p>The hostname is now the image default (<code>ubuntu</code>). Use <b>Actions → Change hostname</b> to set it back.</p>
+<h2 id="boot-target">Boot target</h2>
+<p><b>Local OS</b> means the device boots its installed system from local storage. <b>Recovery (netboot)</b> means it boots the recovery system for install and maintenance. You can set it in three places:</p>
+<ul><li>per node: <b>Properties → Boot behavior</b>, with <b>Inherit</b>, <b>Local OS</b> and <b>Recovery</b>. A click saves immediately;</li><li>per unit: the unit's <b>Policies</b> tab on the <b>Organization</b> page;</li><li>for the account: <b>Organization → Account defaults → Boot → Target</b>.</li></ul>
+<figure><a href="../img/install-an-os/02-boot-behavior-local.jpg"><img src="../img/install-an-os/02-boot-behavior-local.jpg" alt="Boot behavior set to Local OS on a node" loading="lazy"></a><figcaption>A node-level override. Inherit takes the value from the unit chain.</figcaption></figure>
+<p>A node set to <b>Inherit</b> takes its unit's value, then the parent unit's, then the account default (<a href="../organization/">Organizational units and policies</a> explains inheritance). Account defaults left alone show <b>System default (Recovery)</b>, so a node with nothing set anywhere netboots.</p>
+<figure><a href="../img/install-an-os/15-account-defaults-boot.jpg"><img src="../img/install-an-os/15-account-defaults-boot.jpg" alt="Account defaults, Boot section: Target System default (Recovery) and Auto-flash EEPROM on approval System default (on)" loading="lazy"></a><figcaption>Account defaults apply to nodes in no unit and to anything left on inherit.</figcaption></figure>
+<p><b>Reboot to recovery</b> does not change the saved target for good. The server remembers it, forces netboot for one boot, and puts it back as soon as the node reports from recovery, so a later reboot goes to the local OS again. If the netboot never happens, the forced target stays visible in <b>Boot behavior</b>.</p>
+<h2 id="the-bootloader-eeprom">The bootloader (EEPROM)</h2>
+<p>Network boot works because each device's bootloader is flashed with three things from this server: the server's address, the device's own boot path, and the server's public key. The boot order is network, then NVMe, then USB, then SD card (<code>0xf1467</code>). On every boot the device asks the server for the recovery system; the server serves it when the boot target is Recovery and declines when it is Local OS, and the device falls through to its disk.</p>
+<figure><a href="../img/install-an-os/16-bootloader.jpg"><img src="../img/install-an-os/16-bootloader.jpg" alt="The Bootloader / EEPROM view: firmware version Up to date, Flash from OS, Update bootloader, boot order http, nvme, usb_msd, sd, restart" loading="lazy"></a><figcaption>Advanced → Bootloader / EEPROM on plasma-rig-01.</figcaption></figure>
+<p>This flash happens automatically on approval if <b>Auto-flash EEPROM on approval</b> is on (the default). Flash by hand with <b>Update bootloader</b> when the version shows <b>Update available</b>, or when a banner says the bootloader is not set up for network boot on this install. The write does not reboot the node; <b>Reboot to apply</b> does. <b>Flash from OS</b> lets the server flash from the running system without an SD card. <b>Status</b> lists nodes with <b>Bootloader update available</b> and <b>Bootloader flashed, reboot to apply</b>.</p>
+<aside class="callout warning"><p><b>Warning:</b> Do not power off a node while the bootloader is being written. An interrupted write can leave it unbootable until it is recovered over USB.</p></aside>
+<h2 id="what-can-go-wrong">What can go wrong</h2>
+<aside class="callout warning"><p><b>Warning:</b> A node set to <b>Local OS</b> with nothing installed on its disk boots into nothing. This includes a drive you just erased. Set <b>Boot behavior</b> to <b>Recovery</b> and power-cycle it.</p></aside>
+<aside class="callout note"><p><b>Note:</b> <b>Reboot to recovery</b> is refused when the node is offline ("The node is offline, so this command cannot be sent.") and when its reported boot order does not reach network boot ("This node cannot be sent to recovery: its reported boot order does not reach network boot, so it could not come back."). Check the boot order in <b>Bootloader / EEPROM</b>.</p></aside>
+<aside class="callout note"><p><b>Note:</b> A failed <b>Install OS</b> switches the node's boot target to <b>Recovery</b>, so a half-written disk is not booted. Set it back to <b>Local OS</b> after a successful install.</p></aside>
+<aside class="callout warning"><p><b>Warning:</b> If the device loses power or resets while <b>Install OS</b> is writing, the server serves it the recovery system on its next network boot, even with <b>Local OS</b> set. Repeat the install: <b>Install OS</b>, then <b>Install Agent</b>.</p></aside>
+<h2 id="backups-and-gold-images">Backups and gold images</h2>
+<p><b>Create backup</b> (in <b>Provisioning</b>, while in recovery) captures the node's disk into a new image. A <b>backup</b> is byte-exact and restores onto the same node as that node. A <b>gold image</b> (the <b>Golden image</b> checkbox) strips the machine identity so it can be installed on any device, which then adopts as a new node. Captures appear under <b>Operations → Backups</b> and <b>Gold images</b>, and in the <b>Install OS</b> and <b>Restore from backup</b> pickers. Restoring a backup onto a different node strips its identity automatically. Details: <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/OS-IMAGES.md">OS-IMAGES.md</a>.</p>
+<p>Next: <a href="../node-panel/">Working with a node</a>.</p>
+<div class="pager"><a class="prev" href="/docs/add-a-device/"><small>Previous</small>Adding a device</a><a class="next" href="/docs/node-panel/"><small>Next</small>Working with a node</a></div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

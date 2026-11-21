@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hardware profiles, overclocking and the watchdog · Uptime Orchestrator docs</title>
+<meta name="description" content="Declare the carrier board and modules, apply an overclock preset, let a hung device reset itself, and control the board LEDs.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css" rel="stylesheet">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Install</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+      <a href="/subscription/">Pricing</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs wrap">
+<nav class="side" aria-label="Documentation">
+<h4>Start</h4><ul>
+<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+</ul>
+<h4>Devices</h4><ul>
+<li><a href="/docs/add-a-device/">Adding a device</a></li>
+<li><a href="/docs/install-an-os/">Installing an operating system</a></li>
+<li><a href="/docs/node-panel/">Working with a node</a></li>
+<li><a href="/docs/hardware-and-watchdog/" aria-current="page">Hardware profiles, overclocking and the watchdog</a></li>
+</ul>
+<h4>Operating a fleet</h4><ul>
+<li><a href="/docs/organization/">Organizational units and policies</a></li>
+<li><a href="/docs/access-and-credentials/">Access: SSH keys and device users</a></li>
+<li><a href="/docs/secrets-and-variables/">Secrets and variables</a></li>
+<li><a href="/docs/utilities/">Utilities: managed software</a></li>
+<li><a href="/docs/status-and-audit/">Status, attention and the audit trail</a></li>
+</ul>
+<h4>Automation</h4><ul>
+<li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+</ul>
+<h4>Administration</h4><ul>
+<li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
+<li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+</ul></nav>
+<article>
+<div class="stamp"><b>Devices</b> Documentation</div>
+<h1>Hardware profiles, overclocking and the watchdog</h1>
+<p class="summary">Declare the carrier board and modules, apply an overclock preset, let a hung device reset itself, and control the board LEDs.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#hardware-profiles">Hardware profiles</a></li><li><a href="#overclocking">Overclocking</a></li><li><a href="#the-watchdog">The watchdog</a></li><li><a href="#leds">LEDs</a></li></ul></nav>
+<p>The platform can write a board's firmware configuration (<code>/boot/firmware/config.txt</code>) and arm its hardware watchdog for you. This page covers the four controls that do that: <b>Platform</b> and <b>LEDs</b> on a node's <b>Properties</b> tab, <b>Overclock</b> and <b>Watchdog</b> on its <b>Advanced</b> tab. None of them reboots the device on its own.</p>
+<h2 id="hardware-profiles">Hardware profiles</h2>
+<p>The platform detects the compute module, but not the carrier board it sits on, nor a clock or TPM chip that stays invisible until its overlay is loaded. A hardware profile declares them: <b>you declare, the platform applies, a scan confirms</b>.</p>
+<p>A profile has three parts:</p>
+<ul><li><b>Board</b>: the carrier. This release offers <b>Compute Blade</b> (for CM4 and CM5), <b>Generic CM4 carrier</b> and <b>Generic CM5 / Pi 5 board</b>. The picker lists only boards that fit the detected module, which is why rocket-bench-01, a CM5 Lite, is not offered the CM4 carrier.</li><li><b>Variant</b>: a factory option of the board. The Compute Blade has <b>Basic</b>, <b>TPM</b> and <b>Dev</b>; the last two load the TPM overlay.</li><li><b>Modules</b>: add-ons plugged into a port, such as the <b>DS3231 RTC module</b> on the GPIO header. The platform works out whether a module fits a port and refuses conflicts (two modules on the same pins or I2C address, or a bus the board already uses) when you save.</li></ul>
+<p>A profile carries no clock, voltage, fan or PCIe settings. Clock speed is the separate <b>Overclock</b> control below.</p>
+<figure><a href="../img/hardware-and-watchdog/01-platform-picker.jpg"><img src="../img/hardware-and-watchdog/01-platform-picker.jpg" alt="The Platform picker listing Inherit, Compute Blade and Generic CM5 / Pi 5 board" loading="lazy"></a><figcaption>Platform: Inherit, or a board that fits the detected module.</figcaption></figure>
+<h3 id="declaring-and-applying">Declaring and applying</h3>
+<ol><li>Open the node, <b>Properties</b> → <b>Platform</b>.</li><li>Choose a board. <b>Inherit</b> follows the unit's or account's declaration; "Inherit — no board declared" means there is none. A board chosen here overrides the inherited one for this node only. The choice is saved as soon as you pick it, but nothing reaches the device yet.</li><li>Pick the <b>Variant</b> and any <b>Modules</b>.</li><li>Click <b>Apply</b>. The confirmation shows the exact block that "will be written into" config.txt and any setup steps (for an RTC module, reading the system time from it).</li><li>Reboot the node with <b>Reboot</b>. The platform never does it for you.</li><li>Click <b>Scan</b>. It is read-only and probes the device for the declared hardware.</li></ol>
+<p>Each part of the profile carries a badge:</p>
+<div class="table"><table><thead><tr><th>Badge</th><th>Meaning</th></tr></thead><tbody><tr><td><b>declared</b></td><td>Saved, not yet written to the device.</td></tr><tr><td><b>re-apply</b></td><td>The declaration changed since the last apply.</td></tr><tr><td><b>applied</b></td><td>The device confirmed the config is written; reboot, then scan.</td></tr><tr><td><b>confirmed</b></td><td>A scan saw the hardware answering.</td></tr><tr><td><b>works</b></td><td>A scan saw the hardware, and the system is using it (today only real-time clocks).</td></tr><tr><td><b>not found</b></td><td>Applied, but the scan did not see it: wrong variant, module not seated, or no reboot since the apply.</td></tr></tbody></table></div>
+<p>A wrong declaration is harmless: the overlay loads and does nothing, and the badge stays <b>not found</b>.</p>
+<p>An apply to an offline node is queued: "Apply queued — it will land on the node's next connect on its installed OS." An apply also waits while the node runs the recovery system, and <b>Scan</b> is refused there, because the installed system is not running.</p>
+<h3 id="unit-and-account-profiles">Unit and account profiles</h3>
+<p>On the <b>Organization</b> page, a unit's policies have a <b>Hardware</b> section with <b>Platform</b>, the variant, <b>Modules</b> and <b>LED behaviour</b>. Nodes in the unit inherit it, and nodes can override it individually (<a href="../organization/">Organizational units and policies</a>). Saving the policy writes nothing to devices; the unit's <b>Apply hardware profile to N nodes</b> button dispatches it, queues it for offline nodes, and still leaves the reboot to you.</p>
+<p><b>Status</b> → <b>Attention</b> lists <b>Hardware profile not applied</b> and <b>Hardware profile applied, reboot to bring it up</b> for nodes that still need a step (<a href="../status-and-audit/">Status and audit</a>).</p>
+<h2 id="overclocking">Overclocking</h2>
+<figure><a href="../img/hardware-and-watchdog/02-overclock.jpg"><img src="../img/hardware-and-watchdog/02-overclock.jpg" alt="The Overclock view with Stock, Balanced and Performance presets for a CM5" loading="lazy"></a><figcaption>Overclock presets for a CM5, with Balanced selected.</figcaption></figure>
+<p><b>Advanced</b> → <b>Overclock</b> shows <b>Current:</b> (here <b>stock clocks</b>) and the presets for the detected board family. You cannot type your own values:</p>
+<div class="table"><table><thead><tr><th>Board</th><th>Balanced</th><th>Performance</th></tr></thead><tbody><tr><td>Pi 5, CM5</td><td>2.6 GHz at stock voltage (<code>arm_freq=2600</code>)</td><td>2.8 GHz, +50 mV (<code>arm_freq=2800 over_voltage_delta=50000</code>)</td></tr><tr><td>Pi 4, CM4</td><td>1.8 GHz (<code>arm_freq=1800 over_voltage=2</code>)</td><td>2.0 GHz, GPU 600 MHz (<code>arm_freq=2000 over_voltage=6 gpu_freq=600</code>)</td></tr></tbody></table></div>
+<p><b>Stock</b> removes the overclock lines. No preset uses <code>force_turbo</code>, so the board still slows down when idle or hot. Boards without a catalog get "No overclock presets are available for this device model."</p>
+<p>Select a preset and click <b>Apply</b> (for example <b>Apply balanced preset</b>). The platform writes the lines into a managed block at the end of config.txt and answers "config.txt updated — reboot the node to apply". Nothing changes until you reboot. An offline node receives the change when it reconnects.</p>
+<aside class="callout note"><p><b>Note:</b> Before you select a preset, the button may read <b>Sent ✓</b> although nothing was sent. Select a preset and it changes to <b>Apply …</b>.</p></aside>
+<aside class="callout warning"><p><b>Warning:</b> An unstable overclock can stop the board from booting its OS. If the install has the boot-loop failsafe enabled (<code>PROVISIONING_BOOT_FAILSAFE_THRESHOLD</code> in <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md">CONFIGURATION.md</a>, off by default), the node is served the recovery system after repeated failed boots. Open the node, apply <b>Stock</b>, and reboot it to its OS. Without the failsafe you need physical access: boot it from SD or USB media and remove the overclock block from config.txt. Check cooling before you use <b>Performance</b>.</p></aside>
+<h2 id="the-watchdog">The watchdog</h2>
+<p>The watchdog lets a hung device reset itself. When you arm it, the agent installs the Linux <code>watchdog</code> daemon, configures it, and lets it restart the board when a supervised check fails. Nothing is armed until you choose to: a new node is not supervised.</p>
+<figure><a href="../img/hardware-and-watchdog/03-watchdog-status.jpg"><img src="../img/hardware-and-watchdog/03-watchdog-status.jpg" alt="The Watchdog view: Configured and On device not armed, and the probe results" loading="lazy"></a><figcaption>Watchdog status on rocket-bench-01 after Probe the device.</figcaption></figure>
+<p><b>Configured</b> is what the platform stores, <b>On device</b> what the device last reported. <b>Probe the device</b> reads the live state, read-only: the daemon, <code>/dev/watchdog</code>, the config files, the breaker and the agent's last sign of life. It also catches a watchdog stopped by hand on the device.</p>
+<figure><a href="../img/hardware-and-watchdog/04-watchdog-presets.jpg"><img src="../img/hardware-and-watchdog/04-watchdog-presets.jpg" alt="The four watchdog presets and Custom configuration" loading="lazy"></a><figcaption>Presets. Watch the network needs an address.</figcaption></figure>
+<div class="table"><table><thead><tr><th>Preset</th><th>Reboots the node when</th></tr></thead><tbody><tr><td><b>Watch the agent</b></td><td>The agent dies or stops responding for 300 seconds. The safest start.</td></tr><tr><td><b>Watch the OS</b></td><td>The kernel stops responding (hardware watchdog, 15-second timeout). Takes effect after the next reboot.</td></tr><tr><td><b>Watch the OS and agent</b></td><td>Either of the two.</td></tr><tr><td><b>Watch the network</b></td><td>The address you type stops answering 3 pings, for any reason, including a fault at that address.</td></tr></tbody></table></div>
+<p>All presets check every 10 seconds with a 60-second retry timeout. <b>Custom configuration…</b> sets every field yourself:</p>
+<figure><a href="../img/hardware-and-watchdog/05-watchdog-custom.jpg"><img src="../img/hardware-and-watchdog/05-watchdog-custom.jpg" alt="The custom configuration form with Agent health ticked" loading="lazy"></a><figcaption>Custom configuration. The defaults match Watch the agent.</figcaption></figure>
+<div class="table"><table><thead><tr><th>Field</th><th>Allowed values</th></tr></thead><tbody><tr><td><b>Agent health</b> + <b>Agent health window (s)</b></td><td>120–3600 seconds.</td></tr><tr><td><b>OS hang</b> + <b>Hardware timeout (s)</b></td><td>5–15 seconds.</td></tr><tr><td><b>Network</b> + ping targets, <b>Pings per check</b>, <b>Interface (optional)</b></td><td>1–4 IP addresses (not loopback or multicast), 1–10 pings.</td></tr><tr><td><b>1-min</b>, <b>5-min</b>, <b>15-min load limit</b></td><td>0 (off) or at least 2.</td></tr><tr><td><b>Temperature limit (°C)</b></td><td>0 (off) or 60–110.</td></tr><tr><td><b>Min free memory (pages)</b></td><td>0–131072 (512 MiB).</td></tr><tr><td><b>Check interval (s)</b></td><td>1–60, and shorter than the hardware timeout.</td></tr><tr><td><b>Retry timeout (s)</b></td><td>30–600.</td></tr></tbody></table></div>
+<p>Click <b>Arm this configuration</b> and confirm. Before arming, the device checks the configuration against its live state and refuses anything that would reboot it immediately: an unreachable ping target, load or temperature already above the limit, no temperature sensor, no hardware watchdog. The panel then shows "Device refused to arm: …". A public ping target gets a warning, because an internet outage would reboot every node watching it at once.</p>
+<p><b>Disarm the watchdog</b> stops supervision.</p>
+<h3 id="when-the-device-disarms-itself">When the device disarms itself</h3>
+<p>If a node reboots three times with the watchdog armed, each time within 20 minutes of the last boot, the agent assumes the watchdog is the cause and disarms it. The panel then reads <b>disarmed by the device</b>, the node list shows a <b>WATCHDOG OFF</b> badge, and <b>Status</b> → <b>Attention</b> lists <b>Watchdog disarmed by the device</b>. Find out why the node kept restarting, for example from the terminal or with <b>Send to recovery</b>, then click <b>Re-arm</b>.</p>
+<h3 id="unit-policy">Unit policy</h3>
+<p>A unit's policies have a <b>Watchdog</b> section (<b>Supervision</b>). Saving it arms nothing: each node shows the inherited configuration and an <b>Arm the inherited configuration</b> button.</p>
+<h3 id="when-not-to-arm-it">When not to arm it</h3>
+<ul><li>During a long package upgrade: arming installs the <code>watchdog</code> package with apt and fails if the package manager is busy.</li><li>With <b>Watch the network</b> pointed at anything you do not control.</li><li>With <b>Watch the OS</b> while a kernel or firmware update is pending: the OS check starts only after the next reboot, so arm it, reboot once while you can watch the node come back, and only then leave it unattended.</li></ul>
+<h2 id="leds">LEDs</h2>
+<figure><a href="../img/hardware-and-watchdog/06-leds.jpg"><img src="../img/hardware-and-watchdog/06-leds.jpg" alt="The LEDs view with Activity LED off and Power LED off" loading="lazy"></a><figcaption>LED settings on a board without digital LEDs.</figcaption></figure>
+<p><b>Properties</b> → <b>LEDs</b> offers <b>Activity LED off</b> and <b>Power LED off</b>. On a board whose profile declares digital LEDs (the Compute Blade), it also offers <b>Stealth mode</b>, which turns off every LED except the digital ones so identify still works, and <b>Digital LED indication</b>: green when cool or idle, red when hot or busy. <b>Apply</b> sends the settings, <b>Reset to defaults</b> removes them. <b>State</b> reads <b>Not configured</b>, <b>Applied on the device</b>, or <b>Queued</b> for an offline node.</p>
+<p>The LED settings are not applied in the recovery system, so a blade in stealth mode lights up while it runs recovery and goes dark again when its OS returns. Identify is described in <a href="../node-panel/">Working with a node</a>.</p>
+<p>Next: <a href="../organization/">Organizational units and policies</a>, to set these once for a whole unit.</p>
+<div class="pager"><a class="prev" href="/docs/node-panel/"><small>Previous</small>Working with a node</a><a class="next" href="/docs/organization/"><small>Next</small>Organizational units and policies</a></div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
