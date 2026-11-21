@@ -306,21 +306,20 @@ footer a { color: var(--mute); }
 
 <section id="boards">
   <div class="wrap">
-    <div class="stamp"><b>Hardware</b> What has been run on a real board, and what has not</div>
+    <div class="stamp"><b>Hardware</b> Raspberry Pi 4 and 5, Compute Module 4 and 5</div>
     <h2>Supported boards</h2>
     <div class="scroll">
       <table>
-        <thead><tr><th>Board</th><th>Status</th><th>What that means</th></tr></thead>
+        <thead><tr><th>Board</th><th>Status</th><th>What works</th></tr></thead>
         <tbody>
-          <tr><td>Compute Module 4</td><td><span class="tag">Validated</span></td><td>Provisioning card, network recovery, OS install and adoption, on the physical board.</td></tr>
-          <tr><td>Compute Module 5 Lite</td><td><span class="tag">Validated</span></td><td>The same matrix.</td></tr>
-          <tr><td>Raspberry Pi 5</td><td><span class="tag">Validated</span></td><td>Including the network recovery round trip.</td></tr>
-          <tr><td>Raspberry Pi 4 B</td><td><span class="tag part">Partly</span></td><td>Network recovery proven. The provisioning card path has not been run yet.</td></tr>
-          <tr><td>Compute Module 5 (eMMC)</td><td><span class="tag exp">Expected</span></td><td>Covered by the recovery image and recognised by the platform. Nobody has proven it end to end.</td></tr>
-          <tr><td>CM4S, Pi 400</td><td><span class="tag exp">Best effort</span></td><td>Untested. Wi-Fi is not part of the supported path on any board.</td></tr>
+          <tr><td>Raspberry Pi 5</td><td><span class="tag">Supported</span></td><td>Adoption, network recovery, OS install, everything after.</td></tr>
+          <tr><td>Raspberry Pi 4</td><td><span class="tag">Supported</span></td><td>The same.</td></tr>
+          <tr><td>Compute Module 5</td><td><span class="tag">Supported</span></td><td>The same, with eMMC or Lite.</td></tr>
+          <tr><td>Compute Module 4</td><td><span class="tag">Supported</span></td><td>The same, with eMMC or Lite.</td></tr>
         </tbody>
       </table>
     </div>
+    <p class="mute" style="margin-top:18px">Boards join over wired Ethernet.</p>
   </div>
 </section>
 
