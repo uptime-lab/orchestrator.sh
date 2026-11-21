@@ -14,6 +14,8 @@ A utility is software from a built-in catalog that the platform installs and kee
 5. Click **Save**.
 6. Click **Apply**.
 
+![With Basement selected in the rail, clicking Assign utility: the dialog says the new assignment starts scoped to Basement, the list scrolls to Security updates and its Assign button, and the dialog is closed with Cancel](img/utilities/v1-assign-utility.mp4 "Pick a utility for a unit")
+
 ![The Security updates assignment on Garage with Enabled, its parameters, and the Save and Apply buttons](img/utilities/08-security-updates-config.jpg)
 
 **Apply** sends what is saved, so save first. Online nodes get it at once and offline nodes when they reconnect. A node you approve later gets its unit's utilities at once.

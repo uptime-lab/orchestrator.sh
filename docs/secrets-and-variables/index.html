@@ -63,7 +63,7 @@
 <p>A variable stays readable and editable, so use it for URLs, time zones and settings. A secret can't be read back by anyone after you save it, so use it for passwords and keys. Where an attached value reaches follows the unit rules on <a href="../organization/">Organizational units and policies</a>.</p>
 <h2 id="add-a-variable-or-a-secret">Add a variable or a secret</h2>
 <ol><li>Open <b>Secrets</b> and click <b>Create secret</b>.</li><li>Type a <b>Name</b>. It is the name you use in <code>{{secrets.NAME}}</code>.</li><li>Choose the <b>Kind</b>. <b>Env</b> writes the value to the device as an environment variable. <b>Credential</b> and <b>Opaque</b> are used only by playbooks.</li><li>Tick <b>Non-sensitive variable</b> for a variable, or leave it clear for a secret.</li><li>Fill in the ENV name, username or label, and the <b>Value</b>.</li><li>Click <b>Create Secret</b>.</li></ol>
-<figure><a href="../img/secrets-and-variables/02-create-variable.jpg"><img src="../img/secrets-and-variables/02-create-variable.jpg" alt="The Create Secret panel filled in for a variable named SITE_LABEL with Kind Env and Non-sensitive variable ticked" loading="lazy"></a></figure>
+<figure><video data-src="../img/secrets-and-variables/v1-add-variable.mp4" aria-label="Clicking Create secret, typing the name SITE_LABEL, ticking Non-sensitive variable with Kind Env, typing the value garage-east, then closing the panel without saving" muted loop playsinline preload="none"></video><figcaption>Fill in a variable</figcaption></figure>
 <p><b>Convert to secret</b> turns a variable into a secret and can't be undone.</p>
 <h2 id="attach-it-to-a-unit-a-node-or-a-tag">Attach it to a unit, a node or a tag</h2>
 <p>A new entry goes nowhere until you attach it. Pick one way:</p>

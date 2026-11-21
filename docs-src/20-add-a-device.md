@@ -13,6 +13,8 @@ Adopt a device so it shows up in **Nodes** and you can manage it. Open **Nodes**
 
 The device needs Ethernet and outbound access to the server on ports 443 and 50051. The USB and card ways bring their own recovery system, so you install an OS afterwards ([Installing an operating system](../install-an-os/)).
 
+![Clicking Add node on the Nodes page and stepping through the One command, USB flash and Master image tabs of the panel that opens](img/add-a-device/v1-add-node-tabs.mp4 "The three ways to add a device")
+
 ## Run one command on a device that already runs Linux
 
 ![The One command tab with an empty Token name field, the Credentials users box, the collapsed Console login section and the Generate command button.](img/add-a-device/03-one-command.jpg)

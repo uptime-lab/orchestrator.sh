@@ -7,7 +7,7 @@ Open **Status** → **Attention** to see every node that needs you. The number n
 
 ## What needs you
 
-![The Attention tab: the row of condition chips, Select all, and the table of nodes that need attention](img/status-and-audit/01-attention.jpg)
+![On the Attention tab, clicking the Offline chip leaves welding-bot and secret-lair-door, adding Agent update available keeps the same two nodes with both conditions, and Clear shows every node again](img/status-and-audit/v1-attention-filter.mp4 "Filter by condition")
 
 Click a chip to show only the nodes with that condition. To fix several at once:
 

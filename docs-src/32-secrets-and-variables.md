@@ -16,7 +16,7 @@ A variable stays readable and editable, so use it for URLs, time zones and setti
 5. Fill in the ENV name, username or label, and the **Value**.
 6. Click **Create Secret**.
 
-![The Create Secret panel filled in for a variable named SITE_LABEL with Kind Env and Non-sensitive variable ticked](img/secrets-and-variables/02-create-variable.jpg)
+![Clicking Create secret, typing the name SITE_LABEL, ticking Non-sensitive variable with Kind Env, typing the value garage-east, then closing the panel without saving](img/secrets-and-variables/v1-add-variable.mp4 "Fill in a variable")
 
 **Convert to secret** turns a variable into a secret and can't be undone.
 

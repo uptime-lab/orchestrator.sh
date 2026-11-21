@@ -41,7 +41,7 @@ Hover over a badge next to a name, such as **REBOOT PENDING** or **UNDER-VOLTAGE
 
 Type in the search box to match a name, IP address, serial, OS or notes. The dropdowns narrow by status, board, RAM and disk, and they combine with the unit selected in the sidebar.
 
-![The search box and the four filter dropdowns above the Nodes table](img/interface-tour/02-filters.jpg)
+![Typing rocket into the search box leaves rocket-bench-01 and rocket-bench-02; after clearing it, choosing Offline in the status filter leaves secret-lair-door and welding-bot, then the filter goes back to All statuses](img/interface-tour/v1-filter-nodes.mp4 "Search and filter the node list")
 
 Every live node falls under one of **Online**, **Recovery**, **Maintenance** or **Offline**, so if a node seems missing, step through them.
 

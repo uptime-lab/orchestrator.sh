@@ -66,7 +66,7 @@ The editor warns when a block needs a boot state the steps before it do not reac
 3. If the playbook reboots or contains a destructive block, tick **I understand what this will do to the selected nodes**.
 4. Click **Run on N nodes**.
 
-![The run dialog for Check NTP sync with rocket-bench-01 selected and the destructive-block acknowledgement ticked](img/playbooks/05-run-dialog.jpg "Pick the target nodes")
+![Clicking the run icon on the Collect diagnostics row, ticking rocket-bench-01, ticking the acknowledgement and clicking Run on 1 node; the Runs tab opens with Run details showing the run Completed](img/playbooks/v1-run-playbook.mp4 "Run a playbook on one node")
 
 Each node runs its own copy in parallel, so one failing node does not stop the others. A run uses the playbook as it was when the run started.
 
@@ -79,6 +79,8 @@ On an offline node, scripts, reboots and file reads fail at once, while **Set ho
 3. Click **Show output** to see each step's result, with `EXIT_CODE`, `STDERR` and `STDOUT` for scripts.
 
 Each node has a bar with one segment per step. Green succeeded, orange is running, red failed.
+
+![Opening the newest Collect diagnostics run on the Runs tab, clicking Show output and scrolling through the four Run script steps with their exit codes and output](img/playbooks/v2-read-run.mp4 "Read a run's output")
 
 ![The output of the failed run: two successful Run script steps and a failed one with exit code 3 and its stderr](img/playbooks/10-failed-step-output.jpg "A failed step")
 

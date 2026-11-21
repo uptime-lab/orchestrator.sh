@@ -16,9 +16,9 @@ Install or reinstall an OS on an approved node. The node boots a small recovery 
 7. Open **Properties** and set **Boot behavior** to **Local OS**.
 8. Click **Actions** → **Reboot**.
 
-![Opening Actions on plasma-rig-01, clicking Reboot to recovery, and the confirmation that appears](img/install-an-os/g1-reboot-to-recovery.gif "Reboot to recovery")
+![On the Actions tab of plasma-rig-01, clicking Reboot to recovery, reading the confirmation and clicking Reboot to recovery again; the node turns RESTARTING and Command history shows the reboot in progress](img/install-an-os/v1-reboot-to-recovery.mp4 "Reboot to recovery")
 
-![Opening Install OS on a node in recovery: the default image Ubuntu Server 26.04.1 is preselected, then /dev/nvme0n1 is chosen as the target device](img/install-an-os/g2-install-os.gif "Install OS")
+![Opening Install OS on a node in recovery: Ubuntu Server 26.04.1 is preselected as the default image, /dev/nvme0n1 is chosen as the target device, and Install OS opens the confirmation that the drive will be erased, which is cancelled here](img/install-an-os/v2-install-os.mp4 "Install OS")
 
 The node comes back **ONLINE** in the new system with the image's default hostname, which you can change with **Actions** → **Change hostname**. If an install fails, the node's boot target switches to **Recovery** so it doesn't boot a half-written disk. Run **Install OS** and **Install Agent** again.
 

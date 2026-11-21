@@ -29,7 +29,7 @@ Paste one key per entry. A value with several lines saves, but the device refuse
 6. Pick your key under **SSH keys** and click **Attach**.
 7. Click **Create user**.
 
-![The Add user panel for Garage with username fieldtech, Grant sudo ticked and the key Field tablet attached](img/access-and-credentials/05-add-user.jpg)
+![With Basement selected in the rail, clicking Add user, typing fieldtech, keeping Grant sudo ticked, attaching the key Workshop laptop, then closing the panel without creating the user](img/access-and-credentials/v1-add-user.mp4 "Fill in a new user")
 
 A sudo user with no password gets `sudo` without a prompt on every node in its scope. Set a **Password** if you want one. The device only ever receives a salted hash of it.
 

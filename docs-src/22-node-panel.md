@@ -48,7 +48,7 @@ Reboot, shutdown, scripts, file reads and installs fail at once on an offline no
 
 ## Open a terminal
 
-![The terminal running uname, uptime, df, systemctl and whoami](img/node-panel/06-terminal.jpg)
+![On the Actions tab of rocket-bench-01, clicking Terminal, typing uptime at the root prompt and pressing Enter](img/node-panel/v1-open-terminal.mp4 "Open a terminal")
 
 Click **Terminal** for a root shell. It runs over the agent's connection, so the device needs no open SSH port, and it works in the recovery system too. Type `exit` or click **← Back** to close it.
 

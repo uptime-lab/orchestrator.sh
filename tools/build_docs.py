@@ -15,7 +15,8 @@ A page is docs-src/<order>-<slug>.md with a front matter block:
 The Markdown subset: ## and ### headings, paragraphs, - and 1. lists (one
 level), fenced code, tables, > blockquotes (a callout; start it with
 **Note:**, **Warning:** or **Tip:**), images on their own line as
-![alt text](img/<slug>/<file>.jpg "caption"), and inline `code`, **bold**,
+![alt text](img/<slug>/<file>.jpg "caption") (a file ending in .mp4 becomes
+a looping silent clip), and inline `code`, **bold**,
 *emphasis*, [links](url). Link to another page as [text](../<slug>/).
 Images live in docs/img/<slug>/ and are referenced relative to docs/.
 """
@@ -117,8 +118,13 @@ def render(md, page):
                 problems.append("%s: image %s has no alt text" % (page, src))
             if not os.path.isfile(os.path.join(OUT, src)):
                 problems.append("%s: missing image %s" % (page, src))
-            fig = '<figure><a href="../%s"><img src="../%s" alt="%s" loading="lazy"></a>' % (
-                html.escape(src), html.escape(src), html.escape(alt))
+            if src.endswith(".mp4"):
+                # A screen clip: loads and plays when scrolled into view (search.js), loops, no sound.
+                fig = '<figure><video data-src="../%s" aria-label="%s" muted loop playsinline preload="none"></video>' % (
+                    html.escape(src), html.escape(alt))
+            else:
+                fig = '<figure><a href="../%s"><img src="../%s" alt="%s" loading="lazy"></a>' % (
+                    html.escape(src), html.escape(src), html.escape(alt))
             if caption:
                 fig += "<figcaption>%s</figcaption>" % inline(caption)
             out.append(fig + "</figure>")
