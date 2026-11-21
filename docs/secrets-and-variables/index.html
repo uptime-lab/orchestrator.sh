@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Secrets and variables · Uptime Orchestrator docs</title>
-<meta name="description" content="Store configuration values and credentials once, deliver them to units, nodes or tagged groups, and reference them from playbooks and utilities.">
+<meta name="description" content="Store values once and use them on your nodes and in playbooks.">
 <link href="/fonts/fonts.css" rel="stylesheet">
 <link href="/docs/docs.css" rel="stylesheet">
+<script src="/docs/search.js" defer></script>
 </head>
 <body>
 
@@ -25,6 +26,7 @@
 
 <main class="docs wrap">
 <nav class="side" aria-label="Documentation">
+<div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
 <h4>Start</h4><ul>
 <li><a href="/docs/quick-start/">Quick start</a></li>
 <li><a href="/docs/interface-tour/">A tour of the interface</a></li>
@@ -52,64 +54,28 @@
 <article>
 <div class="stamp"><b>Operating a fleet</b> Documentation</div>
 <h1>Secrets and variables</h1>
-<p class="summary">Store configuration values and credentials once, deliver them to units, nodes or tagged groups, and reference them from playbooks and utilities.</p>
-<nav class="toc" aria-label="On this page"><ul><li><a href="#secrets-and-variables">Secrets and variables</a></li><li><a href="#attaching-to-units-and-nodes">Attaching to units and nodes</a></li><li><a href="#tags">Tags</a></li><li><a href="#how-a-node-receives-its-values">How a node receives its values</a></li><li><a href="#using-values-in-playbooks-and-utilities">Using values in playbooks and utilities</a></li><li><a href="#changing-a-value">Changing a value</a></li><li><a href="#tokens">Tokens</a></li></ul></nav>
-<p>The <b>Secrets</b> page holds named values your devices and automation need: a dashboard URL, a time zone, a Wi-Fi password, a registry login. You store each value once, attach it where it is needed, and refer to it by name as <code>{{secrets.NAME}}</code>. The page also holds the <b>Tokens</b> that let new devices join the account.</p>
-<p>Attaching follows the unit model described in <a href="../organization/">Organizational units and policies</a>: a node receives what is attached to itself, its unit and its parent unit, and the nearest level wins when two define the same name.</p>
-<aside class="callout note"><p><b>Note:</b> The Secrets page is available to account admins and super admins. Other roles do not see secret names or values.</p></aside>
-<h2 id="secrets-and-variables">Secrets and variables</h2>
-<figure><a href="../img/secrets-and-variables/01-secrets-list.jpg"><img src="../img/secrets-and-variables/01-secrets-list.jpg" alt="The Secrets tab listing API_TOKEN, KIOSK_URL, REGISTRY_PASSWORD, TIMEZONE and WIFI_PASSWORD with kind, value, attachment and dates" loading="lazy"></a><figcaption>Variables show their value; secrets show a lock and dots.</figcaption></figure>
-<p>Every entry is one of two things:</p>
-<ul><li>A <b>variable</b> (blue <b>VARIABLE</b> badge) is plain configuration. Its value stays visible and editable, for example <code>TIMEZONE</code> = <code>Europe/Berlin</code> or <code>KIOSK_URL</code>. Use variables for hostnames, URLs and settings — never for passwords or tokens.</li><li>A <b>secret</b> (lock and dots in <b>Value</b>) is write-only. After you save it, nobody can read the value back in the UI or the API, including you; you can only replace or clear it.</li></ul>
-<p>All values are stored encrypted on the server. Reading a variable's value is limited to admins, and each read is recorded in the account's audit trail.</p>
-<p>Each entry also has a <b>kind</b>:</p>
-<div class="table"><table><thead><tr><th>Kind</th><th>Second field</th><th>Used for</th></tr></thead><tbody><tr><td><b>Env</b></td><td><b>ENV name</b> — the environment variable name on the device (letters, digits and <code>_</code>, not starting with a digit)</td><td>Values a service on the node reads from its environment. <code>API_TOKEN</code> is delivered as <code>STATUS_API_TOKEN</code>.</td></tr><tr><td><b>Credential</b></td><td><b>Username</b></td><td>A login pair for playbooks, such as <code>REGISTRY_PASSWORD</code> with user <code>uptime-ci</code>.</td></tr><tr><td><b>Opaque</b></td><td><b>Label</b></td><td>Any other value you only use in playbooks.</td></tr></tbody></table></div>
-<p>Only <b>Env</b> entries are written to the device as environment variables. Credential and opaque values reach a device only when a playbook uses them.</p>
-<p>The columns show the entry's <b>Name</b> (with its ENV name, username or label below and its tags), <b>Kind</b>, <b>Value</b>, <b>Attached</b> (for example <b>3 OUs</b>, <b>1 node</b> or <b>via #kiosk</b>), <b>Last used</b> and <b>Updated</b>. Use the search box, the <b>All / Variables / Secrets</b> switch and the <b>All kinds</b> filter to narrow the list. <b>Not attached</b> in the rail lists entries that are delivered nowhere.</p>
-<h3 id="create-a-variable-or-secret">Create a variable or secret</h3>
-<ol><li>Click <b>Create secret</b>.</li><li>Enter a <b>Name</b>. It is the name you use in <code>{{secrets.NAME}}</code>, unique in the account, and must not contain <code>}</code>.</li><li>Choose the <b>Kind</b>.</li><li>Tick <b>Non-sensitive variable</b> for a variable. Leave it clear for a secret.</li><li>Optionally add <b>Tags</b> (press Enter after each, up to 10).</li><li>Fill in the ENV name, username or label, and the <b>Value</b>. An env value must be a single line.</li><li>Click <b>Create Secret</b>.</li></ol>
-<figure><a href="../img/secrets-and-variables/02-create-variable.jpg"><img src="../img/secrets-and-variables/02-create-variable.jpg" alt="The Create Secret panel filled in for a variable: Name SITE_LABEL, Kind Env, Non-sensitive variable ticked, tag #site, ENV name SITE_LABEL and value &quot;Garage, bay 2&quot;" loading="lazy"></a><figcaption>A variable for the site label. With the checkbox cleared, the same form creates a write-only secret.</figcaption></figure>
-<p>A new entry is not delivered anywhere until you attach it, or give it a tag that is attached somewhere. If a tag you add is already attached, the form says where the entry will be delivered when you save.</p>
-<h3 id="edit-convert-and-delete">Edit, convert and delete</h3>
-<p>Click a row to open it. You can rename it, change tags, ENV name and value, and see <b>Attached to</b>.</p>
-<figure><a href="../img/secrets-and-variables/03-secret-details.jpg"><img src="../img/secrets-and-variables/03-secret-details.jpg" alt="Secret Details for WIFI_PASSWORD: Kind ENV, tag #network with the note that #network is already attached to 1 unit, ENV name and the value shown only as &quot;•••• (set)&quot; with Clear value" loading="lazy"></a><figcaption>A secret's value is shown as set or unset, never in clear. Type a new value to replace it.</figcaption></figure>
-<ul><li>For a secret, the <b>Value</b> field shows <code>•••• (set)</code>. Typing a new value replaces it; <b>Clear value</b> empties it.</li><li>A variable has <b>Convert to secret</b>. This makes the value write-only and cannot be undone. To turn a secret back into a variable, create a new variable and delete the secret.</li><li><b>Delete</b> asks for confirmation and removes the entry and its attachments.</li></ul>
-<aside class="callout note"><p><b>Note:</b> The <b>Attached to</b> list in this panel shows only direct attachments. An entry delivered through a tag, such as <code>WIFI_PASSWORD</code> through <code>#network</code>, can read "Not attached anywhere yet" here although it reaches Garage. The <b>Attached</b> column of the list and the tag notice above it are accurate.</p></aside>
-<h2 id="attaching-to-units-and-nodes">Attaching to units and nodes</h2>
-<p>You can attach an entry in any of these ways:</p>
-<ul><li>Drag its row onto a unit in the left rail.</li><li>On a unit's <b>Contents</b> tab (<a href="../organization/">Organization</a>), type in <b>Search secrets or tags to attach…</b> under <b>Secrets</b>.</li><li>In a node's panel, <b>Properties → Secrets</b>, use the same search box to attach directly to that one node.</li></ul>
-<p>The precedence when two entries with the same name reach one node: node beats unit, unit beats parent unit, and within one level a direct attachment beats one through a tag.</p>
-<p>The node's <b>Secrets</b> view shows exactly what it receives and from where:</p>
-<figure><a href="../img/secrets-and-variables/06-node-secrets.jpg"><img src="../img/secrets-and-variables/06-node-secrets.jpg" alt="The Secrets view of rocket-bench-01: API_TOKEN attached directly as ENV STATUS_API_TOKEN, and inherited WIFI_PASSWORD via #network, TIMEZONE and REGISTRY_PASSWORD" loading="lazy"></a><figcaption>rocket-bench-01 gets API_TOKEN directly and three entries from its unit.</figcaption></figure>
-<p>Entries under <b>Inherited</b> come from the unit or a tag; the badge says which. For a value that must differ from node to node under the same name, use the node's <b>Attributes</b> instead (also under <b>Properties</b>): attributes are per-node env values, referenced as <code>{{node.attributes.KEY}}</code>. They count toward the account's secret quota.</p>
-<h2 id="tags">Tags</h2>
-<p>The <b>Tags</b> tab groups entries for delivery in bulk. Attach a tag to a unit or node and every entry carrying that tag is delivered there — including entries you tag later.</p>
-<figure><a href="../img/secrets-and-variables/04-tags.jpg"><img src="../img/secrets-and-variables/04-tags.jpg" alt="The Tags tab with the Create tag form and color swatches, and the tags kiosk (2 secrets, delivered to one node, paint-booth-display), network (1 secret, one unit) and registry (1 secret, not delivered)" loading="lazy"></a><figcaption>Click the delivery summary of a tag to list where it is attached, with Detach.</figcaption></figure>
-<ul><li><b>Create tag</b>: type a name (1–40 characters of <code>a–z</code>, <code>0–9</code>, <code>.</code>, <code>_</code>, <code>-</code>), pick a color, and either <b>Create without attaching</b> or choose a unit in the drop-down.</li><li>Each tag row shows how many entries carry it and where it is delivered (<b>OUs: N · nodes: N</b>). Click that summary to list the targets, each with <b>Detach</b>.</li><li>To attach an existing tag, drag it from the <b>Tags</b> list in the rail onto a unit.</li></ul>
-<p>The example account uses <code>#network</code> (attached to Garage, carries <code>WIFI_PASSWORD</code>), <code>#kiosk</code> (attached to the node paint-booth-display, carries <code>KIOSK_URL</code> and <code>API_TOKEN</code>) and <code>#registry</code> (attached nowhere).</p>
-<h2 id="how-a-node-receives-its-values">How a node receives its values</h2>
-<p><b>Env</b> entries are written to the node in a file only root can read, <code>/etc/orchestrator/env</code>, under their ENV names. A systemd service loads them with:</p>
-<pre><code>[Service]
-EnvironmentFile=/etc/orchestrator/env</code></pre>
-<p>The page itself warns about older agents: "On nodes below agent 0.8.5, env variables are readable in every login session until the agent is updated." Agents before 0.8.5 write the values to <code>/etc/environment</code>, which every login session reads. Update those nodes' agents before you attach secrets to them.</p>
-<p>The file is written when the node's access is provisioned into its installed system, which happens during an OS install (the <b>Provision access</b> step). Detaching an entry removes it from the file at the next provisioning.</p>
-<h2 id="using-values-in-playbooks-and-utilities">Using values in playbooks and utilities</h2>
-<p>In a <a href="../playbooks/">playbook</a> step, write <code>{{secrets.NAME}}</code> wherever a parameter accepts text. The value is filled in on the server when the step runs, from the entries that reach that node, so a node that does not receive the entry cannot use it. The <b>Rotate Wi-Fi password</b> playbook in Garage uses <code>{{secrets.WIFI_PASSWORD}}</code>.</p>
-<p>In a <a href="../utilities/">utility</a> parameter, you can use <code>{{secrets.NAME}}</code> for <b>variables only</b> and <code>{{node.attributes.KEY}}</code>. A secret is refused there. The kiosk on paint-booth-display shows the URL <code>{{secrets.KIOSK_URL}}</code>.</p>
-<h2 id="changing-a-value">Changing a value</h2>
-<p>Edit the entry and click <b>Save</b>. When devices see the new value depends on where it is used:</p>
-<div class="table"><table><thead><tr><th>Used in</th><th>New value takes effect</th></tr></thead><tbody><tr><td>A playbook</td><td>At the next run.</td></tr><tr><td>A utility parameter</td><td>At the next apply of that utility to the node.</td></tr><tr><td>The env file on the device</td><td>At the next provisioning of the node's access (an OS install).</td></tr></tbody></table></div>
-<aside class="callout warning"><p><b>Warning:</b> A changed value is not pushed to devices that are already running: it reaches a device's <code>/etc/orchestrator/env</code> only when the node's access is provisioned. If a service on a node reads a rotated credential from that file, plan how the node gets it: by a playbook that writes it, or by reinstalling. Keep the old credential valid until every node has the new one.</p></aside>
-<h2 id="tokens">Tokens</h2>
-<p>The <b>Tokens</b> tab holds <b>master tokens</b>: the credentials new devices present to join your account. They are not API keys.</p>
-<figure><a href="../img/secrets-and-variables/05-tokens.jpg"><img src="../img/secrets-and-variables/05-tokens.jpg" alt="The Tokens tab listing two active master tokens, one-command adopt and sd-provisioning, each with creation, expiry and last-used dates" loading="lazy"></a><figcaption>Two adoption tokens, both active and expiring seven days after creation.</figcaption></figure>
-<p>Each token shows its name, status (<b>ACTIVE</b>, <b>INACTIVE</b> or <b>EXPIRED</b>), when it was created, when it expires and when it was last used. A device that adopts with a token appears as <b>Pending Approval</b> until you approve it (<a href="../add-a-device/">Add a device</a>).</p>
-<p>Where tokens come from:</p>
-<ul><li><b>Create token</b> on this tab. The form asks for a <b>Token Name</b>, the <b>SSH Key</b> given to nodes created with it, an <b>Adoption OU</b> (devices adopted with the token are placed in that unit; <b>None</b> leaves them unassigned) and <b>Default Username</b> and <b>Default Password</b>.</li><li>Downloading an SD provisioning bundle (<b>Nodes → Add node → Master image</b>) creates a token, named <code>sd-provisioning</code> by default, and puts it inside the bundle. <b>One command</b> on the same panel creates one too.</li></ul>
-<figure><a href="../img/secrets-and-variables/07-create-token.jpg"><img src="../img/secrets-and-variables/07-create-token.jpg" alt="The Create Master Token panel with name &quot;Basement spares&quot;, SSH key Workshop laptop (Default), Adoption OU Basement and default username orchestrator" loading="lazy"></a><figcaption>A token that drops every device adopted with it into the Basement unit.</figcaption></figure>
-<p>Tokens expire <b>7 days</b> after creation unless you set another expiry afterwards. The token value is shown once, right after <b>Create Token</b>, together with <b>Download Adoption File</b>; it is never shown again, and the adoption file can only be downloaded at that moment.</p>
-<p>Click a token to see its details. <b>Deactivate</b> stops new adoptions with it immediately (<b>Activate</b> reverses that); <b>Delete</b> removes it. You can also drag a token onto a unit in the rail to set its adoption unit. Devices already adopted keep working either way: a token is only used to join.</p>
-<aside class="callout warning"><p><b>Warning:</b> Anyone holding a token, or an SD card built with one, can join devices to your account until it expires. Deactivate tokens you no longer need, and treat provisioning SD cards as secrets.</p></aside>
+<p class="summary">Store values once and use them on your nodes and in playbooks.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#add-a-variable-or-a-secret">Add a variable or a secret</a></li><li><a href="#attach-it-to-a-unit-a-node-or-a-tag">Attach it to a unit, a node or a tag</a></li><li><a href="#use-a-value-in-a-playbook">Use a value in a playbook</a></li><li><a href="#manage-tokens-for-new-devices">Manage tokens for new devices</a></li></ul></nav>
+<p>On <b>Secrets</b> you store a value once, attach it where it is needed and use it as <code>{{secrets.NAME}}</code>. Only account admins and super admins see this page.</p>
+<p>A variable stays readable and editable, so use it for URLs, time zones and settings. A secret can't be read back by anyone after you save it, so use it for passwords and keys. Where an attached value reaches follows the unit rules on <a href="../organization/">Organizational units and policies</a>.</p>
+<h2 id="add-a-variable-or-a-secret">Add a variable or a secret</h2>
+<ol><li>Open <b>Secrets</b> and click <b>Create secret</b>.</li><li>Type a <b>Name</b>. It is the name you use in <code>{{secrets.NAME}}</code>.</li><li>Choose the <b>Kind</b>. <b>Env</b> writes the value to the device as an environment variable. <b>Credential</b> and <b>Opaque</b> are used only by playbooks.</li><li>Tick <b>Non-sensitive variable</b> for a variable, or leave it clear for a secret.</li><li>Fill in the ENV name, username or label, and the <b>Value</b>.</li><li>Click <b>Create Secret</b>.</li></ol>
+<figure><a href="../img/secrets-and-variables/02-create-variable.jpg"><img src="../img/secrets-and-variables/02-create-variable.jpg" alt="The Create Secret panel filled in for a variable named SITE_LABEL with Kind Env and Non-sensitive variable ticked" loading="lazy"></a></figure>
+<p><b>Convert to secret</b> turns a variable into a secret and can't be undone.</p>
+<h2 id="attach-it-to-a-unit-a-node-or-a-tag">Attach it to a unit, a node or a tag</h2>
+<p>A new entry goes nowhere until you attach it. Pick one way:</p>
+<ul><li>Drag its row onto a unit in the left rail.</li><li>On a node, open <b>Properties → Secrets</b> and search for it.</li><li>Give it a tag on the <b>Tags</b> tab, then attach the tag to a unit or node. Everything carrying the tag goes there, including entries you tag later.</li></ul>
+<p>When two entries with the same name reach one node, the nearer level wins. Within one level, a direct attachment beats a tag.</p>
+<p>The node's <b>Secrets</b> view shows what it receives and from where.</p>
+<figure><a href="../img/secrets-and-variables/06-node-secrets.jpg"><img src="../img/secrets-and-variables/06-node-secrets.jpg" alt="The Secrets view of a node: API_TOKEN attached directly, and WIFI_PASSWORD, TIMEZONE and REGISTRY_PASSWORD inherited from its unit" loading="lazy"></a></figure>
+<p><b>Env</b> entries land in <code>/etc/orchestrator/env</code>, which only root can read. Load them in a systemd service with <code>EnvironmentFile=/etc/orchestrator/env</code>. Agents older than 0.8.5 write them to <code>/etc/environment</code>, where every login session can read them, so update those agents before you attach secrets.</p>
+<h2 id="use-a-value-in-a-playbook">Use a value in a playbook</h2>
+<p>Write <code>{{secrets.NAME}}</code> in any text parameter of a <a href="../playbooks/">playbook</a> step. The server fills it in when the step runs, from the entries that reach that node.</p>
+<p><a href="../utilities/">Utility</a> parameters accept variables only. A secret is refused there.</p>
+<aside class="callout warning"><p><b>Warning:</b> A changed value reaches a device's env file only when the node's access is provisioned again, which happens at an OS install. Playbooks use the new value from their next run. Keep an old credential valid until every node has the new one.</p></aside>
+<h2 id="manage-tokens-for-new-devices">Manage tokens for new devices</h2>
+<p>The <b>Tokens</b> tab holds master tokens, which new devices present to join your account. One is created for you when you generate a one-command install or download the master image bundle, and <b>Create token</b> makes one by hand.</p>
+<p>A token is a secret. Anyone holding it, or an SD card built with it, can join devices to your account until it expires, so <b>Deactivate</b> tokens you no longer need.</p>
 <p>Next: <a href="../utilities/">Utilities: managed software</a>.</p>
 <div class="pager"><a class="prev" href="/docs/access-and-credentials/"><small>Previous</small>Access: SSH keys and device users</a><a class="next" href="/docs/utilities/"><small>Next</small>Utilities: managed software</a></div>
 </article>

@@ -138,3 +138,20 @@ h1, h2, h3 { overflow-wrap: break-word; hyphens: auto; }
 /* panel screenshots are portrait (about 920x1290); at full column width they filled more than a screen.
    Cap the height and let the width follow; landscape screenshots are unaffected. */
 figure img { width: auto; max-width: 100%; max-height: 640px; }
+
+/* search */
+.search { position: relative; margin: 0 0 18px; }
+.search input { width: 100%; font: inherit; font-size: 13px; color: var(--text); background: var(--panel); border: 1px solid var(--line); padding: 8px 30px 8px 10px; border-radius: 0; -webkit-appearance: none; appearance: none; }
+.search input:focus { outline: none; border-color: var(--lime); }
+.search input::placeholder { color: var(--mute); }
+.search kbd { position: absolute; right: 8px; top: 7px; font: 500 11px var(--mono); color: var(--mute); border: 1px solid var(--line); padding: 1px 5px; pointer-events: none; }
+.search input:focus + kbd { display: none; }
+.search ol { position: absolute; z-index: 6; left: 0; top: calc(100% + 4px); width: min(520px, 86vw); max-height: 70vh; overflow: auto; list-style: none; margin: 0; padding: 4px; background: var(--ink); border: 1px solid var(--lime-deep); display: grid; gap: 2px; }
+.search ol[hidden] { display: none; }
+.search li a { display: block; padding: 8px 10px; text-decoration: none; color: var(--text); border-left: 0; }
+.search li a:hover, .search li a.on { background: var(--panel); outline: 1px solid var(--line); }
+.search li b { display: block; color: var(--lime); font-weight: 500; font-size: 13px; }
+.search li span { display: block; margin-top: 3px; color: var(--mute); font-size: 12px; line-height: 1.45; }
+.search li.none { padding: 10px; color: var(--mute); font-size: 13px; }
+.docs-index .search { max-width: 520px; margin-top: 22px; }
+.side { overflow: visible; }

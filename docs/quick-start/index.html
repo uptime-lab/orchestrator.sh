@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Quick start · Uptime Orchestrator docs</title>
-<meta name="description" content="Install the server with one command, sign in as the owner and change the generated password.">
+<meta name="description" content="Install the server with one command and sign in.">
 <link href="/fonts/fonts.css" rel="stylesheet">
 <link href="/docs/docs.css" rel="stylesheet">
+<script src="/docs/search.js" defer></script>
 </head>
 <body>
 
@@ -25,6 +26,7 @@
 
 <main class="docs wrap">
 <nav class="side" aria-label="Documentation">
+<div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
 <h4>Start</h4><ul>
 <li><a href="/docs/quick-start/" aria-current="page">Quick start</a></li>
 <li><a href="/docs/interface-tour/">A tour of the interface</a></li>
@@ -52,65 +54,33 @@
 <article>
 <div class="stamp"><b>Start</b> Documentation</div>
 <h1>Quick start</h1>
-<p class="summary">Install the server with one command, sign in as the owner and change the generated password.</p>
-<nav class="toc" aria-label="On this page"><ul><li><a href="#before-you-start">Before you start</a></li><li><a href="#run-the-installer">Run the installer</a></li><li><a href="#what-the-installer-prints">What the installer prints</a></li><li><a href="#sign-in-for-the-first-time">Sign in for the first time</a></li><li><a href="#change-the-generated-password">Change the generated password</a></li><li><a href="#where-to-go-next">Where to go next</a></li></ul></nav>
-<p>Uptime Orchestrator is a control plane for fleets of Raspberry Pi–class devices. You adopt devices into it, install operating systems on them over the network, and manage who can log in, which software runs and which automation fires — from one web UI. This page takes you from an empty machine to a signed-in server; the next pages add devices to it.</p>
-<h2 id="before-you-start">Before you start</h2>
-<p>You need a machine for the server and a way for your devices to reach it.</p>
-<ul><li><b>The server.</b> The declared platform for the first release is an x86-64 virtual machine or host running Debian or Ubuntu, with <b>4 GB of RAM</b> and disk space for your OS images (a Raspberry Pi OS image is a few gigabytes; a captured disk is the size of the device's disk). The installer installs Docker itself on Ubuntu; on another distribution it tells you to install it first. Run the installer as root or as a user who can use <code>sudo</code>.</li><li><b>A name or address.</b> Decide how devices and browsers will reach the server: - <b>On a local network</b> — a name your router gives the machine, or its LAN address. Plain HTTP, no certificate. Ports <b>80</b> and <b>50051</b> must be free on the machine. - <b>From the internet</b> — a public DNS name that already points at the machine, with ports <b>80</b>, <b>443</b> and <b>50051</b> open to the internet. The server gets a Let's Encrypt certificate.</li><li>The installer also needs the loopback ports <b>8080</b>, <b>8088</b> and <b>50052</b> free; it refuses to start if anything holds them and tells you how to find what does.</li></ul>
-<aside class="callout warning"><p><b>Warning:</b> The name or address you choose is written into every device you adopt, and into the bootloader of every device set up for network boot. Choose one that will not change. On a local network, reserve the machine's address in your router's DHCP settings before you adopt a device — even when you use a name.</p></aside>
-<p>The managed devices are Raspberry Pi family boards with a 64-bit OS, connected over Ethernet. The <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/SUPPORTED-HARDWARE.md">supported hardware list</a> says which boards are validated.</p>
-<p><b>What is free.</b> A self-hosted install manages <b>25 devices free</b>, counted across the whole install. A device is counted once it is admitted (approved and connected); a device still waiting for approval is not. Past 25, a new device waits un-admitted until you apply an entitlement file. Nothing already adopted is ever locked out, and no download is gated. The details are in <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/ENTITLEMENT.md">ENTITLEMENT.md</a>.</p>
+<p class="summary">Install the server with one command and sign in.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#what-you-need">What you need</a></li><li><a href="#run-the-installer">Run the installer</a></li><li><a href="#sign-in">Sign in</a></li><li><a href="#change-the-generated-password">Change the generated password</a></li><li><a href="#add-your-first-device">Add your first device</a></li></ul></nav>
+<p>Install the server with one command, sign in, then add your first device.</p>
+<p>Uptime Orchestrator manages a fleet of Raspberry Pi boards from one web UI. You adopt devices, install operating systems on them over the network, and control who logs in and what runs on them.</p>
+<h2 id="what-you-need">What you need</h2>
+<ul><li>An x86-64 machine or VM running Debian or Ubuntu, with 4 GB of RAM and disk space for your OS images. The installer installs Docker on Ubuntu. On another distribution, install Docker first.</li><li>Root, or a user who can use <code>sudo</code>.</li><li>A name or address for the server. On a local network, ports <b>80</b> and <b>50051</b> must be free. From the internet, you need a public DNS name that points at the machine, with ports <b>80</b>, <b>443</b> and <b>50051</b> open.</li><li>Free loopback ports <b>8080</b>, <b>8088</b> and <b>50052</b>.</li><li>Devices: Raspberry Pi 4, Raspberry Pi 5, Compute Module 4 or Compute Module 5, on Ethernet.</li></ul>
+<aside class="callout warning"><p><b>Warning:</b> The name or address is written into every device you adopt and into the bootloader of every network-booted device. Pick one that won't change, and on a local network reserve the machine's address in your router's DHCP settings first.</p></aside>
+<p>A self-hosted install manages 25 devices free (<a href="../team-and-security/#the-device-limit">the device limit</a>).</p>
 <h2 id="run-the-installer">Run the installer</h2>
 <p>On the server, run:</p>
 <pre><code>curl -fsSL https://get.orchestrator.sh | sh</code></pre>
-<p>It asks four things, checks every answer, the install directory and every port before it changes anything on the machine, and then asks <b>Install now? (y/n)</b>.</p>
-<div class="table"><table><thead><tr><th>Question</th><th>What your answer means</th></tr></thead><tbody><tr><td><b>How will your devices and your browser reach this server?</b> <code>1)</code> On my local network only, <code>2)</code> From the internet</td><td>Picks the shape described above. The default is <code>1</code>.</td></tr><tr><td><b>Name or address the devices should use</b> (local network)</td><td>The installer offers the name your router gives this machine, or its address if there is no such name. A multicast <code>.local</code> name is refused: a laptop resolves it, a Raspberry Pi bootloader does not. An address that does not belong to this machine is refused too.</td></tr><tr><td><b>DNS name that points at this machine</b> (internet)</td><td>For example <code>orchestrator.uptime.example</code>. The installer tells you what the name resolves to; it must be this machine's public address.</td></tr><tr><td><b>Email address for Let's Encrypt expiry notices</b> (internet)</td><td>Where Let's Encrypt writes about the certificate. Leave it empty for none.</td></tr><tr><td><b>Set up network boot? (y/n)</b></td><td>Network boot lets a blank device start from this server and get an OS installed from the web UI, with no card. Answering <code>y</code> downloads a recovery image (about 100 MB) and generates a signing key that never leaves the machine. Without it you can still adopt devices that already run an OS.</td></tr><tr><td><b>Email address the owner signs in with</b></td><td>The first account of the server. The installer creates it itself, before the server is reachable from the network, so nobody else can claim the server meanwhile.</td></tr></tbody></table></div>
-<p>Then it installs Docker if needed, fetches the latest release, writes the credential files and the environment file, starts the stack, creates the owner account, opens the server to the network, imports the latest agent release and — if you asked for it — sets up network boot. Everything goes into <code>./orchestrator</code> under the directory you ran the command from.</p>
-<p>Every question is also a flag, so you can run the installer unattended; <code>install.sh --help</code> lists them, and <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md">INSTALL.md</a> explains each.</p>
-<aside class="callout note"><p><b>Note:</b> If a step fails or the run is interrupted, run the installer again with the same answers. It keeps the credentials it already wrote and skips the finished steps. It never touches a finished install, nor a directory it did not create.</p></aside>
-<h3 id="when-the-certificate-does-not-arrive">When the certificate does not arrive</h3>
-<p>From the internet, Let's Encrypt must reach the machine by its name on port 80. If HTTPS does not answer within about two minutes, the installer restarts the proxy once, then finishes the rest and exits with an error that names what to check: the DNS name resolving to the machine's public address from outside your network, and port 80 open to the internet. Once both are right, run <code>docker restart orchestrator-proxy</code>, or run the installer again.</p>
-<h2 id="what-the-installer-prints">What the installer prints</h2>
-<p>The run ends with a summary like this one, from an internet install with network boot run in <code>/root</code> (the version, address and paths are yours):</p>
-<pre><code> Uptime Orchestrator 0.1.0 is running.
-
- Open:  https://orchestrator.uptime.example
-
- Sign in as inventor@uptime.example with the password in
-   /root/orchestrator/owner-password
- then change it in the web UI and delete that file.
- Sign-up is closed: colleagues join by invitation.
-
- Then add a device: Nodes -&gt; Add node. A Raspberry Pi that already runs
- a 64-bit Debian-based OS (Raspberry Pi OS, Ubuntu) joins with the one
- command shown there; the command needs the board's hardware serial.
- A blank device joins from a provisioning card (Account -&gt; Download
- SD provisioning) and gets its operating system from the web UI.
-
- Keep safe, off this machine:
-   /root/orchestrator/secrets/secrets_encryption_key   (a database backup is unreadable without it)
-   /root/orchestrator/data/eeprom-keys/privkey.pem      (the only key your devices' bootloaders accept)</code></pre>
-<aside class="callout note"><p><b>Note:</b> In this release the provisioning card is downloaded from <b>Nodes</b> → <b>Add node</b>, not from the account page the summary names. <a href="../add-a-device/">Add a device</a> walks through it.</p></aside>
-<ul><li><b>The owner account</b> signs in with the email you gave and a generated password stored in <code>owner-password</code> in the install directory, readable only by you.</li><li><b>Sign-up is closed.</b> The first account owns the server. Colleagues join it by invitation (see <a href="../team-and-security/">Team and security</a>).</li><li><b>Keep two files safe, off this machine.</b> <code>secrets_encryption_key</code> is what makes a database backup readable. <code>privkey.pem</code> exists only if you set up network boot; it is the only key your devices' bootloaders accept. Lose it and devices set up for network boot cannot be signed for again.</li><li>If network boot could not be set up, the summary says <b>NETWORK BOOT IS NOT READY</b>, names the step that failed, and the installer exits with an error; run it again with the same answers to retry. If the certificate is still missing, it says <b>ONE STEP REMAINS</b> (see above).</li><li>On a local network the summary also warns that the server speaks plain HTTP: do not forward its ports to the internet.</li></ul>
-<h2 id="sign-in-for-the-first-time">Sign in for the first time</h2>
-<p>Open the address from the summary in a browser. The sign-in page asks for <b>Your Email</b> and <b>Password</b>; enter the owner's email and the contents of <code>owner-password</code>, then click <b>Sign In</b>.</p>
-<p>The first screen is <b>Nodes</b>, the device list. On a new server it is empty and says so; the page below shows a server with a fleet already added, so you can see where things will appear.</p>
-<figure><a href="../img/quick-start/02-nodes-first-screen.jpg"><img src="../img/quick-start/02-nodes-first-screen.jpg" alt="The Nodes page with twelve devices across the units Laboratory, Garage and Basement" loading="lazy"></a><figcaption>The first screen after sign-in is the Nodes list. The top bar leads to every other section.</figcaption></figure>
-<p>The top bar holds the main sections, the left column lists your organizational units, and the round badge on the right opens your account menu. <a href="../interface-tour/">A tour of the interface</a> explains each part.</p>
-<aside class="callout note"><p><b>Note:</b> An owner created by the installer has the default names: the user is called "User" and the account "My Account". Rename the account in <b>Team Management</b> under <b>Organization</b> → <b>Rename</b>. The web UI has no field for your own display name.</p></aside>
+<p>It asks a few questions, checks everything, and asks <b>Install now? (y/n)</b> before it changes anything.</p>
+<ul><li><b>How will your devices and your browser reach this server?</b> Pick <code>1</code> for a local network or <code>2</code> for the internet.</li><li><b>Name or address the devices should use</b> (local network). Accept the offered name or give the machine's address. A <code>.local</code> name is refused because a Pi bootloader can't resolve it.</li><li><b>DNS name that points at this machine</b> and an email for Let's Encrypt (internet). The email can stay empty.</li><li><b>Set up network boot? (y/n)</b> Answer <code>y</code> if you want to boot blank devices from the server and install their OS from the web UI. It downloads a recovery image of about 100 MB and creates a signing key.</li><li><b>Email address the owner signs in with.</b> This becomes the first account, and it owns the server.</li></ul>
+<p>Everything goes into <code>./orchestrator</code> under the directory you ran the command from. Every question is also a flag for an unattended run (<code>install.sh --help</code>, <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md">INSTALL.md</a>).</p>
+<p>If a step fails, run the installer again with the same answers. It keeps what it already wrote and skips finished steps. If the certificate doesn't arrive, check that the DNS name resolves to the machine's public address from outside and that port 80 is open, then run <code>docker restart orchestrator-proxy</code>.</p>
+<p>The run ends with the address to open and where the owner password is. It also names two files to copy somewhere safe, off the machine.</p>
+<aside class="callout warning"><p><b>Warning:</b> Without <code>secrets/secrets_encryption_key</code> a database backup can't be read. Without <code>data/eeprom-keys/privkey.pem</code> (created with network boot) you can never sign for your network-booted devices again.</p></aside>
+<h2 id="sign-in">Sign in</h2>
+<ol><li>Open the address the installer printed.</li><li>Enter the owner email in <b>Your Email</b> and the contents of <code>./orchestrator/owner-password</code> in <b>Password</b>, then click <b>Sign In</b>.</li></ol>
+<p>You land on <b>Nodes</b>, which is empty on a new server. Sign-up is closed, so colleagues join by invitation (<a href="../team-and-security/">Team and security</a>).</p>
+<figure><a href="../img/quick-start/02-nodes-first-screen.jpg"><img src="../img/quick-start/02-nodes-first-screen.jpg" alt="The Nodes page with twelve devices across the units Laboratory, Garage and Basement" loading="lazy"></a><figcaption>Nodes, with a fleet already added</figcaption></figure>
 <h2 id="change-the-generated-password">Change the generated password</h2>
-<ol><li>Click the round badge with your initials at the top right. The account menu opens.</li></ol>
-<p>![The account menu with the user's name, email and Active badge, Team Management, Account Settings and Sign out](img/quick-start/03-account-menu.jpg "The account menu: Team Management, Account Settings and Sign out.")</p>
-<ol><li>Click <b>Account Settings</b>. The <b>Account</b> tab opens.</li><li>Scroll to <b>Password</b> and click the heading to expand it.</li></ol>
-<p>![The Password section with New password and Confirm password fields and a Save password button](img/quick-start/04-change-password.jpg "The Password section on the Account tab of Account Settings.")</p>
-<ol><li>Type the new password into <b>New password</b> and again into <b>Confirm password</b>. It must be at least 8 characters.</li><li>Click <b>Save password</b>. Because this changes how the account signs in, a <b>Confirm it's you</b> dialog asks for your <b>Current password</b> — paste the generated one — and <b>Confirm</b>.</li><li>The section reports <b>Password saved. Other sessions were signed out.</b></li></ol>
-<p>Then delete the generated password from the server:</p>
-<pre><code>rm ./orchestrator/owner-password</code></pre>
-<aside class="callout tip"><p><b>Tip:</b> While you are on this page, consider <b>Two-step verification</b> and <b>Passkeys</b> at the top of the same tab.</p></aside>
-<p><b>If you lose the password later</b>, an install without a mail relay has no self-service reset: the sign-in page tells you to ask the operator. As the operator, reset it from the server with the <code>--reset-password</code> command described in <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#recover-a-lost-password-or-authenticator">INSTALL.md</a>.</p>
-<h2 id="where-to-go-next">Where to go next</h2>
-<ul><li><a href="../add-a-device/">Add a device</a> — the installer's summary points at the same place: <b>Nodes</b> → <b>Add node</b>.</li><li><a href="../interface-tour/">A tour of the interface</a> — what each section is for, and how the Nodes table, filters and units work.</li></ul>
+<ol><li>Click the round badge with your initials at the top right, then <b>Account Settings</b>.</li><li>Expand <b>Password</b>.</li><li>Type the new password in <b>New password</b> and <b>Confirm password</b>. It needs at least 8 characters.</li><li>Click <b>Save password</b>, paste the generated password into <b>Current password</b>, and click <b>Confirm</b>.</li><li>Delete the file on the server with <code>rm ./orchestrator/owner-password</code>.</li></ol>
+<figure><a href="../img/quick-start/04-change-password.jpg"><img src="../img/quick-start/04-change-password.jpg" alt="The Password section with New password and Confirm password fields and a Save password button" loading="lazy"></a></figure>
+<p><b>Two-step verification</b> and <b>Passkeys</b> are on the same tab. If you lose the password and the server has no mail relay, reset it from the server with <code>--reset-password</code> (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#recover-a-lost-password-or-authenticator">INSTALL.md</a>).</p>
+<h2 id="add-your-first-device">Add your first device</h2>
+<p>Go to <b>Nodes</b> → <b>Add node</b>, as the installer's final message says. <a href="../add-a-device/">Add a device</a> covers each way in.</p>
 <div class="pager"><a class="next" href="/docs/interface-tour/"><small>Next</small>A tour of the interface</a></div>
 </article>
 </main>

@@ -20,6 +20,7 @@ level), fenced code, tables, > blockquotes (a callout; start it with
 Images live in docs/img/<slug>/ and are referenced relative to docs/.
 """
 import html
+import json
 import os
 import re
 import sys
@@ -27,6 +28,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "docs-src")
 OUT = os.path.join(ROOT, "docs")
+SEARCH = '<div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>'
 SECTION_ORDER = ["Start", "Devices", "Operating a fleet", "Automation", "Administration"]
 
 problems = []
@@ -55,6 +57,31 @@ def slugify(text):
 
 
 IMAGE = re.compile(r'^!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)\s*$')
+
+
+def plain(text):
+    """Markdown inline text reduced to words, for the search index."""
+    text = re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", text)
+    text = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"[`*>|#]", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def sections(md):
+    """(anchor, heading, text) per ## section; the text before the first heading has an empty anchor."""
+    out, anchor, heading, buf, fence = [], "", "", [], False
+    for line in md.split("\n"):
+        if line.startswith("```"):
+            fence = not fence
+            continue
+        if not fence and line.startswith("## "):
+            out.append((anchor, heading, plain(" ".join(buf))))
+            heading = line[3:].strip()
+            anchor, buf = slugify(heading), []
+        elif not (line.startswith("|") and set(line) <= set("|-: ")):
+            buf.append(line[4:] if line.startswith("### ") else line)
+    out.append((anchor, heading, plain(" ".join(buf))))
+    return [x for x in out if x[1] or x[2]]
 
 
 def render(md, page):
@@ -173,6 +200,7 @@ HEAD = """<!DOCTYPE html>
 <meta name="description" content="{summary}">
 <link href="/fonts/fonts.css" rel="stylesheet">
 <link href="/docs/docs.css" rel="stylesheet">
+<script src="/docs/search.js" defer></script>
 </head>
 <body>
 
@@ -204,7 +232,7 @@ FOOT = """
 
 
 def sidebar(pages, current):
-    out, section = ['<nav class="side" aria-label="Documentation">'], None
+    out, section = ['<nav class="side" aria-label="Documentation">', SEARCH], None
     for p in pages:
         if p["meta"]["section"] != section:
             if section is not None:
@@ -221,12 +249,15 @@ def main():
     check = "--check" in sys.argv
     pages = load()
     slugs = set(p["slug"] for p in pages)
+    anchors = dict((p["slug"], set(slugify(h) for h in re.findall(r"^#{2,3} (.+)$", p["body"], re.M))) for p in pages)
     written = {}
     for n, p in enumerate(pages):
         body, toc = render(p["body"], p["name"])
-        for target in re.findall(r'href="\.\./([a-z0-9-]+)/(?:#[a-z0-9-]*)?"', body):
+        for target, anchor in re.findall(r'href="\.\./([a-z0-9-]+)/(?:#([a-z0-9-]*))?"', body):
             if target not in slugs:
                 problems.append("%s: link to unknown page ../%s/" % (p["name"], target))
+            elif anchor and anchor not in anchors[target]:
+                problems.append("%s: link to ../%s/#%s, a heading that page does not have" % (p["name"], target, anchor))
         meta = p["meta"]
         doc = HEAD.format(title=html.escape(meta["title"]), summary=html.escape(meta["summary"], quote=True))
         doc += '\n<main class="docs wrap">\n' + sidebar(pages, p["slug"])
@@ -245,6 +276,7 @@ def main():
 
     index = HEAD.format(title="Documentation", summary="How to install Uptime Orchestrator, add devices and run a fleet.")
     index += '\n<main class="docs-index wrap">\n<div class="stamp"><b>Docs</b> Uptime Orchestrator 0.1</div>\n<h1>Documentation</h1>\n'
+    index += SEARCH + "\n"
     index += '<p class="summary">From an empty server to a managed fleet. The reference pages for self-hosting live with the source, in <a href="https://github.com/uptime-lab/orchestrator/tree/main/docs">the repository</a>.</p>\n'
     section = None
     for p in pages:
@@ -260,6 +292,14 @@ def main():
     index += "</main>\n" + FOOT
     written[os.path.join(OUT, "index.html")] = index
 
+    entries = []
+    for p in pages:
+        for anchor, heading, text in sections(p["body"]):
+            entries.append({"u": "/docs/%s/%s" % (p["slug"], "#" + anchor if anchor else ""),
+                            "p": p["meta"]["title"], "h": heading,
+                            "t": (p["meta"]["summary"] + " " + text) if not anchor else text})
+    written[os.path.join(OUT, "search.json")] = json.dumps(entries, ensure_ascii=False, separators=(",", ":"))
+
     if problems:
         print("\n".join(problems), file=sys.stderr)
     if check:
@@ -267,7 +307,7 @@ def main():
     for path, doc in written.items():
         os.makedirs(os.path.dirname(path), exist_ok=True)
         open(path, "w", encoding="utf-8").write(doc)
-    print("%d pages written, %d problems" % (len(written), len(problems)))
+    print("%d pages written, %d search entries, %d problems" % (len(written) - 1, len(entries), len(problems)))
     sys.exit(1 if problems else 0)
 
 
