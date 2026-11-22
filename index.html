@@ -171,6 +171,7 @@ td { color: var(--mute); }
 .ways > div:first-child { border-right: 1px solid var(--lime-deep); background: var(--panel); }
 .ways .big { font-family: var(--display); font-stretch: 125%; font-weight: 900; font-size: clamp(44px, 7vw, 96px); line-height: .9; color: var(--lime); margin: 14px 0 6px; }
 .ways .big.out { color: transparent; }
+.ways .big span { display: inline-block; vertical-align: baseline; margin-left: .5em; font-family: var(--mono, ui-monospace, monospace); font-stretch: 100%; font-weight: 500; font-size: 14px; line-height: 1.3; letter-spacing: .08em; color: var(--text); -webkit-text-stroke: 0; }
 .ways p { color: var(--mute); font-size: 14px; margin-top: 12px; }
 .ways p b { color: var(--text); font-weight: 500; }
 .ways .btn { margin-top: 22px; }
@@ -331,15 +332,15 @@ footer a { color: var(--mute); }
     <div class="ways">
       <div>
         <h3>On your own machine</h3>
-        <div class="big">25</div>
-        <p><b>devices free per server, with every feature.</b> Above that a server needs a subscription. Nothing already adopted is ever locked out. <a href="subscription/">Subscriptions are not on sale yet: ask about pricing</a>.</p>
+        <div class="big">25 <span>devices free<br>per server</span></div>
+        <p><b>Every feature is included.</b> Above 25 devices a server needs a subscription. Nothing already adopted is ever locked out. <a href="subscription/">Subscriptions are not on sale yet: ask about pricing</a>.</p>
         <p>The source is public under the Fair Core License, and <b>each version becomes Apache-2.0 two years after its release</b>. The agent that runs on your boards is Apache-2.0 today.</p>
         <a class="btn solid" href="#install">Install the server</a>
       </div>
       <div>
         <h3>Hosted by us</h3>
-        <div class="big out">0</div>
-        <p><b>servers to run.</b> The same software at app.orchestrator.sh: point a board at it with one command and manage it from the browser.</p>
+        <div class="big out">0 <span>servers for you<br>to run</span></div>
+        <p><b>We run the server.</b> The same software at app.orchestrator.sh: point a board at it with one command and manage it from the browser.</p>
         <p>The hosted service is in an invite-only beta. Boards reach it over TLS on ports 443 and 50051. Network boot works across the internet over plain HTTP on port 80, and a board runs the recovery system only if its signature checks out.</p>
         <a class="btn" href="https://app.orchestrator.sh">Ask for an invite</a>
       </div>
