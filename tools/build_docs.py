@@ -214,10 +214,12 @@ HEAD = """<!DOCTYPE html>
   <div class="wrap">
     <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
     <nav aria-label="Site">
+      <a href="/#start">Start</a>
       <a href="/#four-minutes">How it works</a>
-      <a href="/#install">Install</a>
+      <a href="/#install">Self-host</a>
+      <a href="/#after">Features</a>
+      <a href="/#run">Pricing</a>
       <a href="/docs/" aria-current="page">Docs</a>
-      <a href="/subscription/">Pricing</a>
     </nav>
     <span class="proto">Public beta</span>
   </div>
