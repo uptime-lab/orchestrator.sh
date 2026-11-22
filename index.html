@@ -201,6 +201,46 @@ footer { margin-top: clamp(64px, 10vw, 140px); border-top: 1px solid var(--line)
 footer .wrap { display: flex; gap: 14px 40px; flex-wrap: wrap; justify-content: space-between; }
 footer a { color: var(--mute); }
 .proto { border: 1px dashed var(--mute); padding: 2px 8px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+
+/* architecture animation */
+.arch { margin-top: 30px; border: 1px solid var(--lime-deep); background: color-mix(in srgb, var(--panel) 80%, transparent); }
+.arch-stage { overflow-x: auto; }
+.arch svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.arch text { font-family: var(--mono); fill: var(--mute); font-size: 11px; letter-spacing: .12em; }
+.arch .t-head { fill: var(--text); font-weight: 700; font-size: 12px; }
+.arch .t-chip { fill: var(--text); font-weight: 700; font-size: 12.5px; letter-spacing: .06em; }
+.arch .t-sub { font-size: 11px; letter-spacing: .02em; }
+.arch .box { fill: var(--ink); stroke: var(--line); }
+.arch .chip { fill: var(--panel); stroke: var(--lime-deep); transition: stroke .4s, fill .4s; }
+.arch .link { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 5; transition: stroke .4s; }
+.arch .link.on { stroke: var(--lime); stroke-dasharray: none; }
+.arch .link.v { stroke: var(--violet); stroke-dasharray: none; }
+.arch .net { stroke: var(--line); stroke-dasharray: 2 6; }
+.arch .pk { fill: var(--lime); }
+.arch .pk.v { fill: var(--violet); }
+.arch [data-on="lime"] .chip { stroke: var(--lime); }
+.arch [data-on="violet"] .chip { stroke: var(--violet); fill: color-mix(in srgb, var(--violet) 14%, var(--panel)); }
+.arch [data-on="bad"] .chip { stroke: var(--mute); stroke-dasharray: 4 4; }
+.arch [data-on="lime"] .t-sub { fill: var(--lime); }
+.arch [data-on="violet"] .t-sub { fill: var(--violet); }
+.arch .fill { fill: var(--lime); transform-box: fill-box; transform-origin: left center; transform: scaleX(0); transition: transform .5s linear; }
+.arch .pill { fill: none; stroke: var(--line); transition: stroke .3s; }
+.arch .pill-t { font-size: 10px; text-anchor: middle; transition: fill .3s; }
+.arch [data-pill="lime"] .pill { stroke: var(--lime); } .arch [data-pill="lime"] .pill-t { fill: var(--lime); }
+.arch [data-pill="violet"] .pill { stroke: var(--violet); } .arch [data-pill="violet"] .pill-t { fill: var(--violet); }
+.arch .abtn { fill: var(--lime); transition: opacity .3s; } .arch .abtn-t { fill: var(--ink); font-weight: 700; font-size: 10.5px; text-anchor: middle; transition: opacity .3s; }
+.arch .hide { opacity: 0; }
+.arch .pulse { animation: arch-pulse .5s ease-out 2; }
+@keyframes arch-pulse { 50% { opacity: .35; } }
+.arch-cap { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px; align-items: center; border-top: 1px solid var(--line); padding: 14px 18px; }
+.arch-cap b { font-family: var(--display); font-stretch: 125%; font-weight: 900; font-size: 22px; color: var(--lime); font-variant-numeric: tabular-nums; }
+.arch-cap p { color: var(--text); font-size: 14px; max-width: none; min-height: 2.9em; display: flex; align-items: center; }
+.arch-dots { display: flex; gap: 6px; }
+.arch-dots button { width: 22px; height: 22px; padding: 0; background: none; border: 0; cursor: pointer; position: relative; }
+.arch-dots button::after { content: ""; position: absolute; inset: 8px; background: var(--lime-deep); }
+.arch-dots button[aria-current="true"]::after { background: var(--lime); inset: 6px; }
+@media (max-width: 620px) { .arch-cap { grid-template-columns: auto minmax(0, 1fr); } .arch-dots { grid-column: 1 / -1; } }
+@media (prefers-reduced-motion: reduce) { .arch .fill, .arch .chip, .arch .link { transition: none; } .arch .pulse { animation: none; } }
 </style>
 </head>
 <body>
@@ -369,6 +409,72 @@ footer a { color: var(--mute); }
   <div class="wrap">
     <div class="stamp"><b>Architecture</b> What checks what</div>
     <h2>Every step checks the next one</h2>
+
+    <div class="arch" id="arch" aria-label="Animated diagram: a board boots from the server over the internet, gets its operating system and comes online">
+      <div class="arch-stage">
+        <svg viewBox="0 0 1120 372" role="img" aria-hidden="true">
+          <!-- panels -->
+          <text class="t-head" x="14" y="24">YOUR BROWSER</text>
+          <rect class="box" x="10" y="36" width="250" height="316"/>
+          <text class="t-head" x="404" y="24">SERVER</text><text x="474" y="24">OURS OR YOURS</text>
+          <rect class="box" x="400" y="36" width="260" height="316"/>
+          <text x="750" y="24" text-anchor="middle">INTERNET</text>
+          <line class="net" x1="750" y1="36" x2="750" y2="352"/>
+          <text class="t-head" x="844" y="24">BOARD</text><text x="902" y="24">BEHIND ANY ROUTER</text>
+          <rect class="box" x="840" y="36" width="260" height="316"/>
+
+          <!-- links -->
+          <line class="link" id="a-lweb" x1="260" y1="194" x2="420" y2="194"/>
+          <text x="330" y="184" text-anchor="middle">HTTPS</text>
+          <line class="link" id="a-l80" x1="640" y1="104" x2="860" y2="104"/>
+          <text x="750" y="94" text-anchor="middle">HTTP :80</text>
+          <line class="link" id="a-ltls" x1="640" y1="194" x2="860" y2="194"/>
+          <text x="750" y="184" text-anchor="middle">TLS :50051</text>
+          <line class="link" id="a-limg" x1="640" y1="284" x2="860" y2="284"/>
+          <text x="750" y="274" text-anchor="middle">IMAGE</text>
+
+          <!-- browser -->
+          <g id="a-browser">
+            <circle cx="26" cy="52" r="3" fill="var(--line)"/><circle cx="38" cy="52" r="3" fill="var(--line)"/><circle cx="50" cy="52" r="3" fill="var(--line)"/>
+            <line x1="10" y1="66" x2="260" y2="66" stroke="var(--line)"/>
+            <text x="26" y="96">NODES</text>
+            <g id="a-row">
+              <rect x="26" y="110" width="218" height="40" fill="var(--panel)" stroke="var(--line)"/>
+              <text class="t-chip" x="38" y="135">board-01</text>
+              <rect class="pill" x="150" y="120" width="84" height="20"/>
+              <text class="pill-t" id="a-status" x="192" y="134">—</text>
+            </g>
+            <rect class="abtn hide" id="a-btn" x="26" y="166" width="118" height="30"/>
+            <text class="abtn-t hide" id="a-btn-t" x="85" y="185">APPROVE</text>
+            <g id="a-term" class="hide">
+              <rect x="26" y="216" width="218" height="112" fill="var(--panel)" stroke="var(--line)"/>
+              <text class="t-sub" x="38" y="240" fill="var(--lime)" style="fill:var(--lime)">root@board-01:~#</text>
+              <text class="t-sub" x="38" y="262" style="fill:var(--text)">uptime</text>
+              <text class="t-sub" x="38" y="284">up 3 min, load 0.08</text>
+              <text class="t-sub" x="38" y="306" style="fill:var(--lime)">root@board-01:~# _</text>
+            </g>
+          </g>
+
+          <!-- server chips -->
+          <g id="a-s-sign"><rect class="chip" x="420" y="72" width="220" height="64"/><text class="t-chip" x="436" y="100">RECOVERY IMAGE</text><text class="t-sub" x="436" y="120">signed with the server's key</text></g>
+          <g id="a-s-api"><rect class="chip" x="420" y="162" width="220" height="64"/><text class="t-chip" x="436" y="190">WEB UI + API</text><text class="t-sub" x="436" y="210">boards connect out to it</text></g>
+          <g id="a-s-img"><rect class="chip" x="420" y="252" width="220" height="64"/><text class="t-chip" x="436" y="280">OS IMAGES</text><text class="t-sub" x="436" y="300">Ubuntu, Raspberry Pi OS</text></g>
+
+          <!-- board chips -->
+          <g id="a-b-boot"><rect class="chip" x="860" y="72" width="220" height="64"/><text class="t-chip" x="876" y="100">BOOTLOADER</text><text class="t-sub" id="a-boot-t" x="876" y="120">server name + public key</text></g>
+          <g id="a-b-ram"><rect class="chip" x="860" y="162" width="220" height="64"/><text class="t-chip" x="876" y="190">RAM</text><text class="t-sub" id="a-ram-t" x="876" y="210">empty</text></g>
+          <g id="a-b-drive"><rect class="chip" x="860" y="252" width="220" height="64"/><text class="t-chip" x="876" y="280">DRIVE</text><text class="t-sub" id="a-drive-t" x="876" y="300">empty</text>
+            <rect x="860" y="312" width="220" height="4" fill="var(--line)"/><rect class="fill" id="a-fill" x="860" y="312" width="220" height="4"/></g>
+
+          <g id="a-pk"></g>
+        </svg>
+      </div>
+      <div class="arch-cap">
+        <b id="a-n">01</b>
+        <p id="a-cap" aria-live="off">Power on. The bootloader asks the server first.</p>
+        <div class="arch-dots" id="a-dots" role="group" aria-label="Steps"></div>
+      </div>
+    </div>
     <div class="chain">
       <div><span>Bootloader</span><h3>Checks the recovery image</h3><p>Each server has its own signing key. The bootloader refuses an image signed by another.</p></div>
       <div><span>Recovery image</span><h3>Carries the agent</h3><p>The agent is inside the signed image.</p></div>
@@ -558,6 +664,122 @@ footer a { color: var(--mute); }
     var done = function (ok) { copy.textContent = ok ? "Copied" : "Select it"; setTimeout(function () { copy.textContent = "Copy command"; }, 1600); };
     try { navigator.clipboard.writeText(CMD).then(function () { done(true); }, function () { done(false); }); } catch (e) { done(false); }
   });
+})();
+</script>
+
+<script>
+(function () {
+  var root = document.getElementById("arch");
+  if (!root) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var NS = "http://www.w3.org/2000/svg";
+  var L = { web: [260, 420, 194], l80: [640, 860, 104], tls: [640, 860, 194], img: [640, 860, 284] };
+
+  // One entry is the whole picture at that step, so any step can be shown on its own.
+  var STEPS = [
+    { cap: "Power on. The bootloader asks the server first.", ms: 3000,
+      boot: "lime", bootT: "asking the server", l80: "on", pk: [["l80", -1, "", 2]] },
+    { cap: "The server answers with a signed recovery image.", ms: 3200,
+      sign: "violet", boot: "lime", bootT: "receiving", l80: "v", pk: [["l80", 1, "v", 6]] },
+    { cap: "The bootloader checks the signature. Recovery runs from RAM.", ms: 3200,
+      boot: "lime", bootT: "signature ok", ram: "violet", ramT: "recovery + agent", l80: "v" },
+    { cap: "The agent calls home over TLS. The board shows up in your browser.", ms: 3600,
+      api: "lime", ram: "violet", ramT: "recovery + agent", tls: "on", web: "on",
+      status: ["PENDING", ""], btn: "APPROVE", pk: [["tls", -1, "", 3], ["web", -1, "", 2]] },
+    { cap: "You approve it and pick an image. It streams onto the drive.", ms: 4600,
+      api: "lime", img: "lime", ram: "violet", ramT: "recovery + agent", tls: "on", web: "on", limg: "on",
+      status: ["INSTALLING", "lime"], btn: "INSTALL OS", pulse: true, drive: "lime", driveT: "writing", fill: 1,
+      pk: [["web", 1, "", 1], ["img", 1, "", 14]] },
+    { cap: "The checksum matches. The drive becomes bootable.", ms: 3000,
+      api: "lime", ram: "violet", ramT: "recovery + agent", tls: "on", web: "on",
+      status: ["INSTALLING", "lime"], drive: "lime", driveT: "sha-256 ok", fill: 1 },
+    { cap: "The board boots from its drive. Online.", ms: 4200,
+      api: "lime", ram: "lime", ramT: "your OS + agent", tls: "on", web: "on",
+      status: ["ONLINE", "lime"], drive: "lime", driveT: "your OS", fill: 1, term: true,
+      pk: [["tls", -1, "", 2], ["tls", 1, "", 2], ["web", -1, "", 2]] },
+    { cap: "OS broken? The board still asks the server first.", ms: 4200,
+      sign: "violet", boot: "lime", bootT: "asking the server", ram: "violet", ramT: "recovery + agent",
+      l80: "v", tls: "on", web: "on", status: ["RECOVERY", "violet"], drive: "bad", driveT: "will not boot", fill: 1,
+      pk: [["l80", -1, "", 2], ["l80", 1, "v", 5], ["tls", -1, "v", 2]] }
+  ];
+
+  var dots = $("a-dots"), cur = -1, timer = null, visible = false, anims = [];
+  STEPS.forEach(function (_, i) {
+    var b = document.createElement("button");
+    b.type = "button"; b.setAttribute("aria-label", "Step " + (i + 1));
+    b.addEventListener("click", function () { show(i); schedule(); });
+    dots.appendChild(b);
+  });
+
+  function on(id, v) { var e = $(id); if (v) e.setAttribute("data-on", v); else e.removeAttribute("data-on"); }
+  function link(id, v) { $(id).setAttribute("class", "link" + (v ? " " + v : "")); }
+  function vis(id, yes) { $(id).classList.toggle("hide", !yes); }
+
+  function clearPackets() {
+    anims.forEach(function (a) { try { a.cancel(); } catch (e) {} });
+    anims = []; $("a-pk").textContent = "";
+  }
+  function packets(list) {
+    clearPackets();
+    if (reduce || !list) return;
+    list.forEach(function (p) {
+      var g = L[p[0]], dir = p[1], n = p[3];
+      var from = dir > 0 ? g[0] : g[1], to = dir > 0 ? g[1] : g[0];
+      for (var i = 0; i < n; i++) {
+        var r = document.createElementNS(NS, "rect");
+        r.setAttribute("width", 8); r.setAttribute("height", 8); r.setAttribute("y", g[2] - 4); r.setAttribute("x", -4);
+        r.setAttribute("class", "pk" + (p[2] ? " " + p[2] : "")); r.style.opacity = 0;
+        $("a-pk").appendChild(r);
+        if (!r.animate) continue;
+        anims.push(r.animate(
+          [{ transform: "translateX(" + from + "px)", opacity: 1 }, { transform: "translateX(" + to + "px)", opacity: 1 }],
+          { duration: 900, delay: 250 + i * (n > 8 ? 230 : 420), easing: "linear", fill: "none" }));
+      }
+    });
+  }
+
+  function show(i) {
+    var s = STEPS[i], fresh = i !== cur; cur = i;
+    $("a-n").textContent = (i < 9 ? "0" : "") + (i + 1);
+    $("a-cap").textContent = s.cap;
+    [].forEach.call(dots.children, function (b, k) { b.setAttribute("aria-current", k === i ? "true" : "false"); });
+    on("a-s-sign", s.sign); on("a-s-api", s.api); on("a-s-img", s.img);
+    on("a-b-boot", s.boot); on("a-b-ram", s.ram); on("a-b-drive", s.drive);
+    $("a-boot-t").textContent = s.bootT || "server name + public key";
+    $("a-ram-t").textContent = s.ramT || "empty";
+    $("a-drive-t").textContent = s.driveT || "empty";
+    link("a-l80", s.l80); link("a-ltls", s.tls); link("a-lweb", s.web); link("a-limg", s.limg);
+    var st = s.status || ["—", ""];
+    $("a-status").textContent = st[0];
+    if (st[1]) $("a-row").setAttribute("data-pill", st[1]); else $("a-row").removeAttribute("data-pill");
+    vis("a-btn", !!s.btn); vis("a-btn-t", !!s.btn);
+    if (s.btn) $("a-btn-t").textContent = s.btn;
+    $("a-btn").classList.remove("pulse");
+    if (s.pulse && fresh && !reduce) { void $("a-btn").getBoundingClientRect(); $("a-btn").classList.add("pulse"); }
+    vis("a-term", !!s.term);
+    var f = $("a-fill");
+    f.style.transitionDuration = (s.driveT === "writing" && fresh && !reduce) ? "3.4s" : "0s";
+    if (s.driveT === "writing" && fresh && !reduce) { f.style.transitionDuration = "0s"; f.style.transform = "scaleX(0)"; void f.getBoundingClientRect(); f.style.transitionDuration = "3.4s"; }
+    f.style.transform = "scaleX(" + (s.fill || 0) + ")";
+    f.style.fill = s.drive === "bad" ? "var(--mute)" : "";
+    if (fresh) packets(s.pk);
+  }
+
+  function schedule() {
+    clearTimeout(timer);
+    if (reduce || !visible || document.hidden) return;
+    timer = setTimeout(function () { show((cur + 1) % STEPS.length); schedule(); }, STEPS[cur].ms);
+  }
+
+  show(reduce ? 6 : 0);
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) {
+      visible = es[0].isIntersecting;
+      if (visible) schedule(); else { clearTimeout(timer); clearPackets(); }
+    }, { threshold: 0.35 }).observe(root);
+  } else { visible = true; schedule(); }
+  document.addEventListener("visibilitychange", schedule);
 })();
 </script>
 </body>
