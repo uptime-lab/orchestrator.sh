@@ -49,7 +49,7 @@ Over the internet this takes about six minutes on a Compute Module 4 or 5 ([Inst
 | Agent package | Server, then agent | Signature made on hardware keys kept offline. The server checks a release on import, the agent checks the package before installing it |
 | Commands and secrets | TLS | The device channel uses TLS whenever the server has an `https` address |
 
-The agent carries the keys that sign agent packages, so a board installs only agents signed by the keys of the build it runs. A fork built from source replaces that key set and signs its own releases ([ARTIFACT-SIGNING.md](https://github.com/uptime-lab/orchestrator/blob/main/docs/ARTIFACT-SIGNING.md)).
+The agent carries the public keys that verify agent packages, so a board installs only agents signed for the build it runs. A fork built from source replaces that key set and signs its own releases ([ARTIFACT-SIGNING.md](https://github.com/uptime-lab/orchestrator/blob/main/docs/ARTIFACT-SIGNING.md)).
 
 ## Where the chain stops
 

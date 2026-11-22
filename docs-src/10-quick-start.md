@@ -1,5 +1,5 @@
 ---
-title: Quick start
+title: Quick start on your own server
 summary: Install the server with one command and sign in.
 section: Start
 ---

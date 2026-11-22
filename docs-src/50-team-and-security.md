@@ -54,7 +54,7 @@ Click **Sign out** on a row to end that session, or **Sign out of my other sessi
 
 ## The device limit
 
-A server admits 25 devices free. The count is on **Account** → **Subscription**. To raise the limit, get an entitlement file at [orchestrator.sh/subscription](https://orchestrator.sh/subscription/) and apply it there.
+Your own server admits 25 devices free, and a hosted account 10. The count is on **Account** → **Subscription**. To raise it on your own server, get an entitlement file at [orchestrator.sh/subscription](https://orchestrator.sh/subscription/) and apply it there. On the hosted service, write to [sales@orchestrator.sh](mailto:sales@orchestrator.sh).
 
 ## Lost passwords and single sign-on
 

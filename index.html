@@ -296,11 +296,11 @@ footer a { color: var(--mute); }
 <section id="start">
   <div class="wrap">
     <div class="stamp"><b>Hosted</b> No server to set up</div>
-    <h2>Your first board in two minutes</h2>
+    <h2>Add your first board</h2>
     <ol class="steps">
       <li><b>1</b><h3>Sign up</h3><p>Create an account at <a href="https://app.orchestrator.sh" target="_blank" rel="noopener">app.orchestrator.sh</a>. Free for 10 boards.</p></li>
-      <li><b>2</b><h3>Run one command</h3><p>Click <i>Add node</i> and run the command on a board with 64-bit Raspberry Pi OS or Ubuntu.</p></li>
-      <li><b>3</b><h3>Approve it</h3><p>The board appears in your browser. Approve it.</p></li>
+      <li><b>2</b><h3>Run one command</h3><p>Click <i>Add node</i> and run the command on a board with 64-bit Raspberry Pi OS, Debian or Ubuntu.</p></li>
+      <li><b>3</b><h3>Approve it</h3><p>The board appears in your browser. Approve it, then update its bootloader there so it boots from the network.</p></li>
     </ol>
     <p class="mute" style="margin-top:22px">Empty board? <a href="docs/add-a-device/">Set up its bootloader over USB or from a card</a> and it boots from the network.</p>
     <a class="btn solid" href="https://app.orchestrator.sh" style="margin-top:22px" target="_blank" rel="noopener">Start free</a>
@@ -311,105 +311,7 @@ footer a { color: var(--mute); }
   <div class="wrap">
     <div class="stamp"><b>Network boot</b> Over HTTP, from any network</div>
     <h2>No PXE. No boot server on site.</h2>
-    <p class="lede">The board's own bootloader fetches a signed recovery system from your server over HTTP. The server can be anywhere on the internet, or you use ours.</p>
-    <div class="chain">
-      <div><span>Network</span><h3>Any network with DHCP</h3><p>An Ethernet cable and an ordinary address. Nothing changes on the router.</p></div>
-      <div><span>Drive</span><h3>Not needed</h3><p>Recovery runs from RAM. The board joins with an empty drive or none at all.</p></div>
-      <div><span>Transport</span><h3>Plain HTTP, port 80</h3><p>The board checks the signature. An image signed by another key does not boot.</p></div>
-      <div><span>Setup</span><h3>Once per board</h3><p>The bootloader learns the server's name and key over USB, from a card, or with one command.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="timeline">
-  <div class="wrap trace">
-    <div>
-      <div class="stamp"><b>T+0 to T+6</b> Minutes, from recorded runs</div>
-      <h2>Blank to managed in about six minutes</h2>
-      <p class="note">Over the internet, a CM5 Lite went from approval to a managed Ubuntu in 5 min 42 s and a CM4 in 6 min 9 s.</p>
-    </div>
-    <ol>
-      <li><time>T+0</time><div><h3>Approved</h3><p>You approve the board by its serial.</p></div></li>
-      <li><time>T+0</time><div><h3>Bootloader flashed</h3><p>From now on the board asks the server first.</p></div></li>
-      <li class="v"><time>T+2</time><div><h3>Recovery booted</h3><p>98 MB, signed, running from RAM.</p></div></li>
-      <li><time>T+3</time><div><h3>OS written</h3><p>Ubuntu took 81 seconds on a CM4.</p></div></li>
-      <li><time>T+4</time><div><h3>Agent installed</h3><p>The signed agent goes into the new system.</p></div></li>
-      <li class="done"><time>T+6</time><div><h3>Online</h3><p>The board boots from its drive and reports in.</p></div></li>
-    </ol>
-  </div>
-</section>
-
-<section id="recovery">
-  <div class="wrap">
-    <div class="stamp"><b>Recovery</b> No rescue partition</div>
-    <h2>Recovery without A/B partitions</h2>
-    <p class="lede">Forget rescue partitions and A/B update schemes. On every boot the board asks the server first, so it can always boot recovery from the network, even when its OS is completely broken. A remote board stays reachable.</p>
-    <ol class="steps">
-      <li><b>1</b><h3>Set the boot target</h3><p>Switch the board to Recovery in the browser.</p></li>
-      <li><b>2</b><h3>Reboot it</h3><p>On the next power-up or reboot it boots recovery into RAM. The hardware watchdog can reboot a hung board for you.</p></li>
-      <li><b>3</b><h3>Fix it</h3><p>Open a root terminal, reinstall the OS or restore a backup.</p></li>
-    </ol>
-  </div>
-</section>
-
-<section id="install">
-  <div class="wrap">
-    <div class="stamp"><b>Self-hosted</b> Same software, on your machine</div>
-    <h2>Or run the server yourself</h2>
-    <div class="cmdbar">
-      <code><span class="p">$</span> curl -fsSL https://get.orchestrator.sh | sh</code>
-      <button type="button" class="copy" id="copy">Copy command</button>
-    </div>
-    <p class="cmdnote">On a fresh Ubuntu or Debian machine, x86-64 or arm64. The installer asks which setup you want.</p>
-    <div class="install-grid">
-      <div class="cases">
-        <div>
-          <h3>On your local network</h3>
-          <p>For a lab, an office or a home rack. No domain or certificate needed.</p>
-        </div>
-        <div>
-          <h3>From the internet</h3>
-          <p>For boards in other places. Point a DNS name at the machine and the installer gets a Let's Encrypt certificate.</p>
-        </div>
-        <ul>
-          <li><b>The name must not change</b>: every adopted board stores it.</li>
-          <li><b>Network boot</b> is one more yes in the installer.</li>
-          <li><b>By hand</b>, follow <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md" target="_blank" rel="noopener">the install guide</a>.</li>
-        </ul>
-      </div>
-      <div class="term" role="group" aria-label="Installer transcript">
-        <div class="term-bar" role="tablist">
-          <span class="term-label">What it asks</span>
-          <button type="button" role="tab" id="tab-lan" aria-selected="true" aria-controls="transcript">Local network</button>
-          <button type="button" role="tab" id="tab-public" aria-selected="false" aria-controls="transcript">From the internet</button>
-        </div>
-        <pre id="transcript" tabindex="0"></pre>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="after">
-  <div class="wrap">
-    <div class="stamp"><b>T+6</b> The board is online</div>
-    <h2>What you do with it next</h2>
-    <dl class="spec">
-      <div><dt><h3>Users and keys</h3></dt><dd><p>Linux users, <b>SSH keys and sudo</b> for one board, a unit or the whole account.</p></dd></div>
-      <div><dt><h3>Images and backups</h3></dt><dd><p><b>Capture a configured board as a golden image</b> and install it on the next ten. Back up a drive and restore it later.</p></dd></div>
-      <div><dt><h3>Terminal and recovery</h3></dt><dd><p>A root terminal in the browser. <b>One click reboots a board into recovery.</b></p></dd></div>
-      <div><dt><h3>Playbooks</h3></dt><dd><p>Run steps on the boards you pick, by hand or <b>on a cron schedule</b>.</p></dd></div>
-      <div><dt><h3>Managed software</h3></dt><dd><p>Assign Docker, a kiosk display, a VPN client, metrics or security updates to a unit. Its boards keep them installed.</p></dd></div>
-      <div><dt><h3>Hardware</h3></dt><dd><p><b>Watchdog, status LEDs, overclock presets, bootloader updates</b> and carrier-board profiles, the Compute Blade included.</p></dd></div>
-      <div><dt><h3>Secrets and audit</h3></dt><dd><p>Secrets are stored encrypted. Every command is logged with its sender.</p></dd></div>
-    </dl>
-  </div>
-</section>
-
-<section id="signed">
-  <div class="wrap">
-    <div class="stamp"><b>Architecture</b> What checks what</div>
-    <h2>Every step checks the next one</h2>
-
+    <p class="lede">The board's own bootloader fetches a signed recovery system from the server over HTTP. An ordinary DHCP address is enough and the drive can be empty. If the server is away, the board boots its own drive.</p>
     <div class="arch" id="arch" aria-label="Animated diagram: a board boots from the server over the internet, gets its operating system and comes online">
       <div class="arch-stage">
         <svg viewBox="0 0 1120 372" role="img" aria-hidden="true">
@@ -475,6 +377,98 @@ footer a { color: var(--mute); }
         <div class="arch-dots" id="a-dots" role="group" aria-label="Steps"></div>
       </div>
     </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="wrap trace">
+    <div>
+      <div class="stamp"><b>T+0 to T+6</b> Minutes, from recorded runs</div>
+      <h2>Blank to managed in about six minutes</h2>
+      <p class="note">Over the internet, a CM5 Lite went from approval to a managed Ubuntu in 5 min 42 s and a CM4 in 6 min 9 s.</p>
+    </div>
+    <ol>
+      <li><time>T+0</time><div><h3>Approved</h3><p>You approve the board by its serial.</p></div></li>
+      <li><time>T+0</time><div><h3>Bootloader flashed</h3><p>From now on the board asks the server first.</p></div></li>
+      <li class="v"><time>T+2</time><div><h3>Recovery booted</h3><p>98 MB, signed, running from RAM.</p></div></li>
+      <li><time>T+3</time><div><h3>OS written</h3><p>Ubuntu took 81 seconds on a CM4.</p></div></li>
+      <li><time>T+4</time><div><h3>Agent installed</h3><p>The signed agent goes into the new system.</p></div></li>
+      <li class="done"><time>T+6</time><div><h3>Online</h3><p>The board boots from its drive and reports in.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="recovery">
+  <div class="wrap">
+    <div class="stamp"><b>Recovery</b> No rescue partition</div>
+    <h2>Recovery without A/B partitions</h2>
+    <p class="lede">No rescue partition, no A/B scheme. A board asks the server first on every boot, so you can bring it back from the network even when its OS is completely broken.</p>
+    <ol class="steps">
+      <li><b>1</b><h3>Set the boot target</h3><p>Switch the board to Recovery in the browser.</p></li>
+      <li><b>2</b><h3>Reboot it</h3><p>Power-cycle it, or arm the watchdog beforehand and a hung board reboots by itself. It boots recovery into RAM.</p></li>
+      <li><b>3</b><h3>Fix it</h3><p>Open a root terminal, reinstall the OS or restore a backup.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="stamp"><b>Self-hosted</b> Same software, on your machine</div>
+    <h2>Or run the server yourself</h2>
+    <div class="cmdbar">
+      <code><span class="p">$</span> curl -fsSL https://get.orchestrator.sh | sh</code>
+      <button type="button" class="copy" id="copy">Copy command</button>
+    </div>
+    <p class="cmdnote">On a fresh Ubuntu machine, x86-64 or arm64. The installer asks which setup you want.</p>
+    <div class="install-grid">
+      <div class="cases">
+        <div>
+          <h3>On your local network</h3>
+          <p>For a lab, an office or a home rack. No domain or certificate needed.</p>
+        </div>
+        <div>
+          <h3>From the internet</h3>
+          <p>For boards in other places. Point a DNS name at the machine and the installer gets a Let's Encrypt certificate.</p>
+        </div>
+        <ul>
+          <li><b>The name must not change</b>: every adopted board stores it.</li>
+          <li>The installer offers <b>network boot</b>.</li>
+          <li><b>By hand</b>, follow <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md" target="_blank" rel="noopener">the install guide</a>.</li>
+        </ul>
+      </div>
+      <div class="term" role="group" aria-label="Installer transcript">
+        <div class="term-bar" role="tablist">
+          <span class="term-label">What it asks</span>
+          <button type="button" role="tab" id="tab-lan" aria-selected="true" aria-controls="transcript">Local network</button>
+          <button type="button" role="tab" id="tab-public" aria-selected="false" aria-controls="transcript">From the internet</button>
+        </div>
+        <pre id="transcript" tabindex="0"></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="after">
+  <div class="wrap">
+    <div class="stamp"><b>T+6</b> The board is online</div>
+    <h2>What you do with it next</h2>
+    <dl class="spec">
+      <div><dt><h3>Users and keys</h3></dt><dd><p>Linux users, <b>SSH keys and sudo</b> for one board, a unit or the whole account.</p></dd></div>
+      <div><dt><h3>Images and backups</h3></dt><dd><p><b>Capture a configured board as a golden image</b> and install it on other boards. Back up a drive and restore it later.</p></dd></div>
+      <div><dt><h3>Terminal and recovery</h3></dt><dd><p>A root terminal in the browser. <b>One click reboots a board into recovery.</b></p></dd></div>
+      <div><dt><h3>Playbooks</h3></dt><dd><p>Run steps on the boards you pick, by hand or <b>on a cron schedule</b>.</p></dd></div>
+      <div><dt><h3>Managed software</h3></dt><dd><p>Assign Docker, a kiosk display, a VPN client, metrics or security updates to a unit. Its boards keep it all installed.</p></dd></div>
+      <div><dt><h3>Hardware</h3></dt><dd><p><b>Watchdog, status LEDs, overclock presets, bootloader updates</b> and carrier-board profiles, the Compute Blade included.</p></dd></div>
+      <div><dt><h3>Secrets and audit</h3></dt><dd><p>Secrets are stored encrypted. Every command is logged with its sender.</p></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="signed">
+  <div class="wrap">
+    <div class="stamp"><b>Architecture</b> Signed from boot to agent</div>
+    <h2>What checks what</h2>
+
     <div class="chain">
       <div><span>Bootloader</span><h3>Checks the recovery image</h3><p>Each server has its own signing key. The bootloader refuses an image signed by another.</p></div>
       <div><span>Recovery image</span><h3>Carries the agent</h3><p>The agent is inside the signed image.</p></div>
@@ -494,7 +488,7 @@ footer a { color: var(--mute); }
         <thead><tr><th>Board</th><th>Status</th><th>What works</th></tr></thead>
         <tbody>
           <tr><td>Raspberry Pi 5</td><td><span class="tag">Supported</span></td><td>All features</td></tr>
-          <tr><td>Raspberry Pi 4</td><td><span class="tag">Supported</span></td><td>All features</td></tr>
+          <tr><td>Raspberry Pi 4</td><td><span class="tag">Supported</span></td><td>All features except carrier-board profiles</td></tr>
           <tr><td>Compute Module 5</td><td><span class="tag">Supported</span></td><td>All features, eMMC or Lite</td></tr>
           <tr><td>Compute Module 4</td><td><span class="tag">Supported</span></td><td>All features, eMMC or Lite</td></tr>
         </tbody>
@@ -512,14 +506,14 @@ footer a { color: var(--mute); }
       <div>
         <h3>Hosted by us</h3>
         <div class="big">10 <span>devices free<br>on our server</span></div>
-        <p><b>We run the server at app.orchestrator.sh, every feature included.</b> For more than 10 devices, ask <a href="mailto:sales@orchestrator.sh">sales@orchestrator.sh</a> for a subscription.</p>
+        <p><b>We run the server at app.orchestrator.sh.</b> For more than 10 devices, ask <a href="mailto:sales@orchestrator.sh">sales@orchestrator.sh</a> for a subscription.</p>
         <p>Public beta. Boards reach it on ports 443 and 50051, and 80 for network boot.</p>
         <a class="btn solid" href="https://app.orchestrator.sh" target="_blank" rel="noopener">Start free</a>
       </div>
       <div>
         <h3>On your own machine</h3>
         <div class="big out">25 <span>devices free<br>on your server</span></div>
-        <p><b>Every feature included.</b> More than 25 devices on one server needs a subscription. Adopted boards are never locked out. Subscriptions are not on sale yet, so <a href="subscription/">ask about pricing</a>.</p>
+        <p><b>Every feature included.</b> More than 25 devices on one server needs a subscription. Boards already added keep working. Subscriptions are not on sale yet, so <a href="subscription/">ask about pricing</a>.</p>
         <p>The source is public under the Fair Core License, and <b>each version becomes Apache-2.0 two years after its release</b>. The agent on your boards is Apache-2.0 today.</p>
         <a class="btn" href="#install">Install the server</a>
       </div>
@@ -698,7 +692,7 @@ footer a { color: var(--mute); }
       api: "lime", ram: "lime", ramT: "your OS + agent", tls: "on", web: "on",
       status: ["ONLINE", "lime"], drive: "lime", driveT: "your OS", fill: 1, term: true,
       pk: [["tls", -1, "", 2], ["tls", 1, "", 2], ["web", -1, "", 2]] },
-    { cap: "OS broken? The board still asks the server first.", ms: 4200,
+    { cap: "Broken OS? Set Recovery and power-cycle. The board asks the server first.", ms: 4200,
       sign: "violet", boot: "lime", bootT: "asking the server", ram: "violet", ramT: "recovery + agent",
       l80: "v", tls: "on", web: "on", status: ["RECOVERY", "violet"], drive: "bad", driveT: "will not boot", fill: 1,
       pk: [["l80", -1, "", 2], ["l80", 1, "v", 5], ["tls", -1, "v", 2]] }
