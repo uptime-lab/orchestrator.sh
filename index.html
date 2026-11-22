@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Uptime Orchestrator: manage Raspberry Pi fleets</title>
+<title>Uptime Orchestrator: network boot and fleet management for Raspberry Pi</title>
 <link href="/fonts/fonts.css" rel="stylesheet">
 <style>
 /* Layout idea: the page is one install, top to bottom. A signal trace runs down
@@ -49,6 +49,7 @@ h2 { font-weight: 900; font-size: clamp(28px, 4.6vw, 62px); line-height: .95; le
 h3 { font-weight: 800; font-size: 17px; letter-spacing: .01em; }
 p { margin: 0; max-width: 62ch; }
 .mute { color: var(--mute); }
+.lede { color: var(--mute); max-width: 62ch; margin-top: 14px; font-size: clamp(15px, 1.4vw, 17px); }
 .lime { color: var(--lime); }
 .out { color: transparent; -webkit-text-stroke: 1.5px var(--lime); }
 
@@ -224,9 +225,9 @@ footer a { color: var(--mute); }
 <section class="hero">
   <div class="wrap">
     <div class="stamp"><b>Public beta</b> Raspberry Pi 4 and 5, boards and Compute Modules</div>
-    <h1>Manage your<br><span class="out">Raspberry Pi</span> fleet</h1>
+    <h1>Network boot for<br><span class="out">Raspberry Pi</span> fleets</h1>
     <div class="lead">
-      <p>Add your boards, install their operating system over the network, then open a terminal or run a playbook on many at once. All from a web UI. Start on our hosted service, free for 10 boards, or run the server yourself.</p>
+      <p>A board with an empty drive boots from a server anywhere on the internet, gets its operating system written and joins your fleet. No PXE, no TFTP, no boot server on its network. After that you manage it from a browser. Free for 10 boards on our hosted service, or run the server yourself.</p>
       <div class="cta">
         <a class="btn solid" href="https://app.orchestrator.sh">Try it free</a>
         <a class="btn" href="#install">Run it yourself</a>
@@ -261,12 +262,26 @@ footer a { color: var(--mute); }
       <li><b>2</b><h3>Run one command</h3><p>Click <i>Add node</i>, copy the command and run it on a board that runs 64-bit Raspberry Pi OS or Ubuntu.</p></li>
       <li><b>3</b><h3>Approve it</h3><p>The board appears in your browser. Approve it, then open a terminal or run a playbook.</p></li>
     </ol>
-    <p class="mute" style="margin-top:22px">The board has to reach app.orchestrator.sh on ports 443 and 50051. On a closed network, <a href="#install">run the server yourself</a>.</p>
+    <p class="mute" style="margin-top:22px">Nothing on the board yet? <a href="docs/add-a-device/">Set up its bootloader from the browser over USB, or boot it from a provisioning card</a>. The board has to reach app.orchestrator.sh on ports 443 and 50051, and on port 80 for network boot. On a closed network, <a href="#install">run the server yourself</a>.</p>
     <a class="btn solid" href="https://app.orchestrator.sh" style="margin-top:22px">Try it free</a>
   </div>
 </section>
 
 <section id="four-minutes">
+  <div class="wrap">
+    <div class="stamp"><b>Network boot</b> Over HTTP, from any network</div>
+    <h2>No PXE. No boot server on site.</h2>
+    <p class="lede">Network boot usually means a DHCP server you control and a TFTP server next to the boards. Here the board's own bootloader fetches a signed recovery system over HTTP from your server's name. The server can sit in another building, in another country or in our cloud.</p>
+    <div class="chain">
+      <div><span>Network</span><h3>Any network with DHCP</h3><p>The board needs an Ethernet cable and an ordinary address. Nothing changes on the router.</p></div>
+      <div><span>Transport</span><h3>Plain HTTP, port 80</h3><p>The board trusts the signature, not the connection. An image signed by another key does not boot.</p></div>
+      <div><span>Drive</span><h3>Empty is fine</h3><p>Recovery runs from RAM. The drive can be blank, broken or about to be erased.</p></div>
+      <div><span>Setup</span><h3>Once per board</h3><p>The bootloader learns the server's name and key from the browser over USB, from a provisioning card, or from a board that already runs Linux.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
   <div class="wrap trace">
     <div>
       <div class="stamp"><b>T+0 to T+6</b> Minutes, from recorded runs</div>
@@ -275,8 +290,8 @@ footer a { color: var(--mute); }
     </div>
     <ol>
       <li><time>T+0</time><div><h3>Approved</h3><p>You approve the board by its hardware serial.</p></div></li>
-      <li><time>T+0</time><div><h3>Bootloader flashed</h3><p>The board now boots from your server first.</p></div></li>
-      <li class="v"><time>T+2</time><div><h3>Recovery booted</h3><p>A 98 MB recovery system signed with your key runs from RAM.</p></div></li>
+      <li><time>T+0</time><div><h3>Bootloader flashed</h3><p>The board now boots from the server first.</p></div></li>
+      <li class="v"><time>T+2</time><div><h3>Recovery booted</h3><p>A 98 MB recovery system, signed with the server's key, runs from RAM.</p></div></li>
       <li><time>T+3</time><div><h3>OS written</h3><p>The image streams onto the drive. Ubuntu took 81 seconds on a CM4.</p></div></li>
       <li><time>T+4</time><div><h3>Agent installed</h3><p>The signed agent goes in with the board's own credential.</p></div></li>
       <li class="done"><time>T+6</time><div><h3>Online</h3><p>The board boots from its own drive and reports in.</p></div></li>
@@ -339,14 +354,16 @@ footer a { color: var(--mute); }
 
 <section id="signed">
   <div class="wrap">
-    <div class="stamp"><b>Security</b> Signed boot</div>
-    <h2>Signed from boot to agent</h2>
+    <div class="stamp"><b>Architecture</b> What checks what</div>
+    <h2>Every step checks the next one</h2>
+    <p class="lede">Nothing runs on a board because it arrived over the network. Each stage carries the key that checks the stage after it.</p>
     <div class="chain">
-      <div><span>Boot ROM</span><h3>Your key</h3><p>Created on your server. Bootloaders hold only the public half.</p></div>
-      <div><span>Recovery</span><h3>Checked image</h3><p>A board runs it only if the signature matches.</p></div>
-      <div><span>Agent</span><h3>Checked package</h3><p>Signed with offline hardware keys, checked by the server and again by the board.</p></div>
-      <div><span>Server</span><h3>Secrets as files</h3><p>Credentials reach the containers as files.</p></div>
+      <div><span>Bootloader</span><h3>Checks the recovery image</h3><p>Every server creates its own signing key. The bootloader holds the public half and refuses an image that key did not sign.</p></div>
+      <div><span>Recovery image</span><h3>Carries the agent</h3><p>The agent is inside the signed image. Recovery downloads no code at all.</p></div>
+      <div><span>Agent</span><h3>Checks the OS image</h3><p>It writes the image you picked and makes the drive bootable only when the SHA-256 matches the one sent over TLS.</p></div>
+      <div><span>Agent</span><h3>Checks every package</h3><p>Agent packages are signed on hardware keys kept offline. The server checks them on import and the board checks again before installing.</p></div>
     </div>
+    <p class="mute" style="margin-top:22px">This is not full Secure Boot: the bootloader key can be rewritten by someone holding the board, and the installed OS boots unsigned. <a href="docs/how-it-works/">How the chain works and where it stops</a>.</p>
   </div>
 </section>
 
