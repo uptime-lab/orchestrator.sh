@@ -60,6 +60,8 @@ You land on **Nodes**, which is empty on a new server. Sign-up is closed, so col
 4. Click **Save password**, paste the generated password into **Current password**, and click **Confirm**.
 5. Delete the file on the server with `rm ./orchestrator/owner-password`.
 
+The installer names the account "My Account". To rename it, open the same menu, then **Team Management** → **Organization** → **Rename**.
+
 ![The Password section with New password and Confirm password fields and a Save password button](img/quick-start/04-change-password.jpg)
 
 **Two-step verification** and **Passkeys** are on the same tab. If you lose the password and the server has no mail relay, reset it from the server with `--reset-password` ([INSTALL.md](https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#recover-a-lost-password-or-authenticator)).

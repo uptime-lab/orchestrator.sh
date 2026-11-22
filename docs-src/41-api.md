@@ -7,7 +7,7 @@ Everything the web UI does goes through an HTTP API, so a script can do the same
 
 ## Find the API
 
-Through the bundled proxy the base URL is `https://<your server>/api`. Versioned routes have `/api` twice, as in `/api/api/v1/nodes`, because the proxy strips the first one before the request reaches the server.
+Through the bundled proxy the base URL is `https://<your server>/api`, or `http://<your server>/api` on a local-network install. Versioned routes have `/api` twice, as in `/api/api/v1/nodes`, because the proxy strips the first one before the request reaches the server.
 
 Every route and field is in [`backend/docs/swagger.json`](https://github.com/uptime-lab/orchestrator/blob/main/backend/docs/swagger.json) in the release tree. A production server does not serve a browsable API page.
 

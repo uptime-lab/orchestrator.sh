@@ -20,7 +20,7 @@ Install or reinstall an OS on an approved node. The node boots a small recovery 
 
 ![Opening Install OS on a node in recovery: Ubuntu Server 26.04.1 is preselected as the default image, /dev/nvme0n1 is chosen as the target device, and Install OS opens the confirmation that the drive will be erased, which is cancelled here](img/install-an-os/v2-install-os.mp4 "Install OS")
 
-The node comes back **ONLINE** in the new system with the image's default hostname, which you can change with **Actions** → **Change hostname**. If an install fails, the node's boot target switches to **Recovery** so it doesn't boot a half-written disk. Run **Install OS** and **Install Agent** again.
+The node comes back **ONLINE** in the new system with the image's default hostname, which you can change with **Actions** → **Change hostname**. A fresh system usually gets a new address from your router, so check the node's IP before you connect over SSH. If an install fails, the node's boot target switches to **Recovery** so it doesn't boot a half-written disk. Run **Install OS** and **Install Agent** again.
 
 **Reboot to recovery** works once. The next reboot goes back to the node's saved boot target. It is refused when the node is offline or when its boot order doesn't reach network boot.
 

@@ -15,7 +15,7 @@ Paths are as in the community compose file.
 - The key that encrypts your dumps, kept anywhere but the server.
 - The `.env` file beside the compose file.
 - OS images and agent releases in `data/backend/storage/` or your bucket.
-- With the `proxy-tls` proxy, its certificate store `data/proxy/acme.json`.
+- With the `proxy-tls` proxy, its certificate store `data/proxy/acme.json`. A local-network install has no certificate, and `data/proxy/` stays empty.
 
 > **Warning:** Without `secrets/secrets_encryption_key` the dump restores but nothing encrypted in it can be read. Without `data/eeprom-keys/privkey.pem` no server can sign a boot image your network-booting devices accept, so put both in an escrow you control before you adopt the first device.
 
