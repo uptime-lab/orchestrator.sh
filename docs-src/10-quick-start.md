@@ -9,7 +9,7 @@ Uptime Orchestrator manages a fleet of Raspberry Pi boards from one web UI. You 
 
 ## What you need
 
-- An x86-64 machine or VM running Debian or Ubuntu, with 4 GB of RAM and disk space for your OS images. The installer installs Docker on Ubuntu. On another distribution, install Docker first.
+- An x86-64 or arm64 machine or VM running Debian or Ubuntu, with 4 GB of RAM and disk space for your OS images. A Raspberry Pi 5 with an SSD works as the server. The installer installs Docker on Ubuntu. On another distribution, install Docker first.
 - Root, or a user who can use `sudo`.
 - A name or address for the server. On a local network, ports **80** and **50051** must be free. From the internet, you need a public DNS name that points at the machine, with ports **80**, **443** and **50051** open.
 - Free loopback ports **8080**, **8088** and **50052**.
