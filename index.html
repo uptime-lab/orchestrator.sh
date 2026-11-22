@@ -175,6 +175,16 @@ td { color: var(--mute); }
 .tag.part { border-color: var(--mute); color: var(--text); } .tag.exp { border-style: dashed; border-color: var(--mute); color: var(--mute); }
 
 /* two ways to run */
+.hero .src { margin-top: 14px; font-size: 13px; }
+.hero .src a { color: var(--mute); }
+.steps { list-style: none; margin: 30px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--lime-deep); }
+.steps li { padding: clamp(20px, 2.6vw, 34px); border-right: 1px solid var(--lime-deep); }
+.steps li:last-child { border-right: 0; }
+.steps li > b { font-family: var(--display); font-stretch: 125%; font-weight: 900; font-size: clamp(34px, 4.5vw, 60px); line-height: 1; color: var(--lime); display: block; margin-bottom: 12px; }
+.steps h3 { font-size: 16px; margin-bottom: 8px; }
+.steps p { color: var(--mute); font-size: 14px; margin: 0; }
+.steps i { font-style: normal; color: var(--text); }
+@media (max-width: 800px) { .steps { grid-template-columns: 1fr; } .steps li { border-right: 0; border-bottom: 1px solid var(--lime-deep); } .steps li:last-child { border-bottom: 0; } }
 .ways { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 30px; border: 1px solid var(--lime-deep); }
 .ways > div { padding: clamp(22px, 3vw, 40px); }
 .ways > div:first-child { border-right: 1px solid var(--lime-deep); background: var(--panel); }
@@ -198,8 +208,9 @@ footer a { color: var(--mute); }
   <div class="wrap">
     <a class="mark" href="#top">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
     <nav aria-label="Sections">
+      <a href="#start">Start</a>
       <a href="#four-minutes">How it works</a>
-      <a href="#install">Install</a>
+      <a href="#install">Self-host</a>
       <a href="#after">Features</a>
       <a href="#boards">Boards</a>
       <a href="#run">Pricing</a>
@@ -216,11 +227,12 @@ footer a { color: var(--mute); }
     <div class="stamp"><b>Public beta</b> Raspberry Pi 4 and 5, boards and Compute Modules</div>
     <h1>Manage your<br><span class="out">Raspberry Pi</span> fleet</h1>
     <div class="lead">
-      <p>Add your boards, install their operating system over the network, then open a terminal or run a playbook on many at once. All from a web UI, on your server or ours.</p>
+      <p>Add your boards, install their operating system over the network, then open a terminal or run a playbook on many at once. All from a web UI. Start on our hosted service, free for 10 boards, or run the server yourself.</p>
       <div class="cta">
-        <a class="btn solid" href="#install">Install the server</a>
-        <a class="btn" href="https://github.com/uptime-lab/orchestrator">Read the source</a>
+        <a class="btn solid" href="https://app.orchestrator.sh">Try it free</a>
+        <a class="btn" href="#install">Run it yourself</a>
       </div>
+      <p class="src"><a href="https://github.com/uptime-lab/orchestrator">Read the source</a></p>
     </div>
 
     <div class="rack" aria-label="A rack of twenty blades, each in one stage of the install">
@@ -238,6 +250,20 @@ footer a { color: var(--mute); }
       </div>
       <p class="rack-log" id="log">Click a blade to swap it for a blank one.</p>
     </div>
+  </div>
+</section>
+
+<section id="start">
+  <div class="wrap">
+    <div class="stamp"><b>Hosted</b> No server to set up</div>
+    <h2>Your first board in two minutes</h2>
+    <ol class="steps">
+      <li><b>1</b><h3>Sign up</h3><p>Create an account at <a href="https://app.orchestrator.sh">app.orchestrator.sh</a>. It is free for 10 boards.</p></li>
+      <li><b>2</b><h3>Run one command</h3><p>Click <i>Add node</i>, copy the command and run it on a board that runs 64-bit Raspberry Pi OS or Ubuntu.</p></li>
+      <li><b>3</b><h3>Approve it</h3><p>The board appears in your browser. Approve it, then open a terminal or run a playbook.</p></li>
+    </ol>
+    <p class="mute" style="margin-top:22px">The board has to reach app.orchestrator.sh on ports 443 and 50051. On a closed network, <a href="#install">run the server yourself</a>.</p>
+    <a class="btn solid" href="https://app.orchestrator.sh" style="margin-top:22px">Try it free</a>
   </div>
 </section>
 
@@ -261,8 +287,8 @@ footer a { color: var(--mute); }
 
 <section id="install">
   <div class="wrap">
-    <div class="stamp"><b>Before T+0</b> The server</div>
-    <h2>One command installs the server</h2>
+    <div class="stamp"><b>Self-hosted</b> Same software, on your machine</div>
+    <h2>Or run the server yourself</h2>
     <div class="cmdbar">
       <code><span class="p">$</span> curl -fsSL https://get.orchestrator.sh | sh</code>
       <button type="button" class="copy" id="copy">Copy command</button>
@@ -347,21 +373,21 @@ footer a { color: var(--mute); }
 <section id="run">
   <div class="wrap">
     <div class="stamp"><b>Pricing</b> Same software</div>
-    <h2>Self-hosted or hosted</h2>
+    <h2>Hosted or self-hosted</h2>
     <div class="ways">
       <div>
-        <h3>On your own machine</h3>
-        <div class="big">25 <span>devices free<br>on your server</span></div>
-        <p><b>Every feature is included.</b> More than 25 devices on one server needs a subscription. Boards already adopted are never locked out. Subscriptions are not on sale yet, so <a href="subscription/">ask about pricing</a>.</p>
-        <p>The source is public under the Fair Core License, and <b>each version becomes Apache-2.0 two years after its release</b>. The agent on your boards is Apache-2.0 today.</p>
-        <a class="btn solid" href="#install">Install the server</a>
-      </div>
-      <div>
         <h3>Hosted by us</h3>
-        <div class="big out">10 <span>devices free<br>on our server</span></div>
+        <div class="big">10 <span>devices free<br>on our server</span></div>
         <p><b>We run the server at app.orchestrator.sh, with every feature included.</b> For more than 10 devices, ask <a href="mailto:sales@orchestrator.sh">sales@orchestrator.sh</a> for a subscription.</p>
         <p>It is a public beta: sign up and add your first board. Boards reach it on ports 443 and 50051, and on port 80 for network boot.</p>
-        <a class="btn" href="https://app.orchestrator.sh">Try it</a>
+        <a class="btn solid" href="https://app.orchestrator.sh">Try it free</a>
+      </div>
+      <div>
+        <h3>On your own machine</h3>
+        <div class="big out">25 <span>devices free<br>on your server</span></div>
+        <p><b>Every feature is included.</b> More than 25 devices on one server needs a subscription. Boards already adopted are never locked out. Subscriptions are not on sale yet, so <a href="subscription/">ask about pricing</a>.</p>
+        <p>The source is public under the Fair Core License, and <b>each version becomes Apache-2.0 two years after its release</b>. The agent on your boards is Apache-2.0 today.</p>
+        <a class="btn" href="#install">Install the server</a>
       </div>
     </div>
   </div>
