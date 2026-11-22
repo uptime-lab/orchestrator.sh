@@ -1,9 +1,9 @@
 ---
-title: Backups and gold images
+title: Backups and golden images
 summary: Copy a node's drive to the server, put it back, or turn it into an image for other nodes.
 section: Devices
 ---
-Copy a node's drive to your server and put it back later, or turn a configured node into a gold image you install on other nodes. Both are taken while the node runs the recovery system.
+Copy a node's drive to your server and put it back later, or turn a configured node into a golden image you install on other nodes. Both are taken while the node runs the recovery system.
 
 ## Back up a node's drive
 
@@ -28,7 +28,7 @@ The backup appears under **Operations** → **Backups**. Click it to see which n
 
 1. Reboot the node to recovery.
 2. Under **Provisioning**, click **Restore from backup**.
-3. In **Image**, pick the backup. Backups and gold images are listed after the OS images.
+3. In **Image**, pick the backup. Backups and golden images are listed after the OS images.
 4. Pick the **Target Device** and click **Restore from backup**.
 5. Read the confirmation and click **Restore from backup** again.
 6. When **Command history** shows the install has finished, click **Reboot**.
@@ -41,15 +41,15 @@ The node stays in recovery after the restore until you reboot it. Check that **P
 
 Restored onto the same node, a backup boots as that node. Restored onto a different node, the server strips the machine identity during the install so the copy doesn't clash with its source.
 
-## Make a gold image and install it on other nodes
+## Make a golden image and install it on other nodes
 
-A gold image is a backup without the machine identity: machine-id, SSH host keys, the adoption file, network state and hostname. Set up one node the way you want every node, then capture it.
+A golden image is a backup without the machine identity: machine-id, SSH host keys, the adoption file, network state and hostname. Set up one node the way you want every node, then capture it.
 
 1. Reboot the configured node to recovery.
 2. Click **Create backup**, give it a title and tick **Golden image**.
 3. Click **Create backup** and wait for **SUCCESS**. The source node keeps its own identity.
 4. Reboot the source node.
-5. On each target node, follow [Installing an operating system](../install-an-os/) and pick the gold image in **Image**.
+5. On each target node, follow [Installing an operating system](../install-an-os/) and pick the golden image in **Image**.
 
 ![The Create backup form with Golden image ticked](img/backups-and-images/05-create-golden.jpg)
 
@@ -59,7 +59,7 @@ Gold images are listed under **Operations** → **Gold images**.
 
 A backup covers the drive up to the end of the system partition, with free space trimmed, stored compressed. It restores onto a smaller or larger drive as long as the data fits. A drive with a partition after the system partition can't be captured.
 
-Backups and gold images live in your server's image storage, on local disk or in the bucket if the server uses object storage. They count toward the image limits set by whoever runs the server (`IMAGE_MAX_PER_ACCOUNT`, `IMAGE_MAX_BYTES_PER_ACCOUNT`, `IMAGE_MAX_BYTES_INSTANCE` in [CONFIGURATION.md](https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md)). Nothing deletes them for you.
+Backups and golden images live in your server's image storage, on local disk or in the bucket if the server uses object storage. They count toward the image limits set by whoever runs the server (`IMAGE_MAX_PER_ACCOUNT`, `IMAGE_MAX_BYTES_PER_ACCOUNT`, `IMAGE_MAX_BYTES_INSTANCE` in [CONFIGURATION.md](https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md)). Nothing deletes them for you.
 
 ## Who can do this
 

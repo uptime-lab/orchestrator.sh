@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Backups and gold images · Uptime Orchestrator docs</title>
+<title>Backups and golden images · Uptime Orchestrator docs</title>
 <meta name="description" content="Copy a node&#x27;s drive to the server, put it back, or turn it into an image for other nodes.">
 <link href="/fonts/fonts.css" rel="stylesheet">
 <link href="/docs/docs.css" rel="stylesheet">
@@ -40,7 +40,7 @@
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
-<li><a href="/docs/backups-and-images/" aria-current="page">Backups and gold images</a></li>
+<li><a href="/docs/backups-and-images/" aria-current="page">Backups and golden images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/">Organizational units and policies</a></li>
@@ -60,10 +60,10 @@
 </ul></nav>
 <article>
 <div class="stamp"><b>Devices</b> Documentation</div>
-<h1>Backups and gold images</h1>
+<h1>Backups and golden images</h1>
 <p class="summary">Copy a node's drive to the server, put it back, or turn it into an image for other nodes.</p>
-<nav class="toc" aria-label="On this page"><ul><li><a href="#back-up-a-node-s-drive">Back up a node's drive</a></li><li><a href="#restore-a-backup">Restore a backup</a></li><li><a href="#make-a-gold-image-and-install-it-on-other-nodes">Make a gold image and install it on other nodes</a></li><li><a href="#what-a-backup-holds-and-where-it-lives">What a backup holds and where it lives</a></li><li><a href="#who-can-do-this">Who can do this</a></li></ul></nav>
-<p>Copy a node's drive to your server and put it back later, or turn a configured node into a gold image you install on other nodes. Both are taken while the node runs the recovery system.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#back-up-a-node-s-drive">Back up a node's drive</a></li><li><a href="#restore-a-backup">Restore a backup</a></li><li><a href="#make-a-golden-image-and-install-it-on-other-nodes">Make a golden image and install it on other nodes</a></li><li><a href="#what-a-backup-holds-and-where-it-lives">What a backup holds and where it lives</a></li><li><a href="#who-can-do-this">Who can do this</a></li></ul></nav>
+<p>Copy a node's drive to your server and put it back later, or turn a configured node into a golden image you install on other nodes. Both are taken while the node runs the recovery system.</p>
 <h2 id="back-up-a-node-s-drive">Back up a node's drive</h2>
 <ol><li>Open the node, go to <b>Actions</b> and click <b>Reboot to recovery</b>. Wait until it shows <b>RECOVERY</b>.</li><li>Under <b>Provisioning</b>, click <b>Create backup</b>.</li><li>Type an <b>Image title</b>. Leave <b>Target Device</b> on <b>Boot disk (default)</b> unless the system lives on another drive.</li><li>Leave <b>Golden image</b> unticked and click <b>Create backup</b>.</li><li>Open <b>Command history</b> and wait until <b>Capture image</b> reads <b>SUCCESS</b>.</li><li>Click <b>Reboot</b>. The node starts its own system again, because <b>Reboot to recovery</b> lasts for one boot.</li></ol>
 <figure><a href="../img/backups-and-images/01-create-backup.jpg"><img src="../img/backups-and-images/01-create-backup.jpg" alt="The Create backup form on plasma-rig-01 with the title plasma-rig-01 baseline and Golden image unticked" loading="lazy"></a></figure>
@@ -72,19 +72,19 @@
 <p>The backup appears under <b>Operations</b> → <b>Backups</b>. Click it to see which node it was captured from, download it or delete it.</p>
 <figure><a href="../img/backups-and-images/03-backups-tab.jpg"><img src="../img/backups-and-images/03-backups-tab.jpg" alt="The Backups tab listing plasma-rig-01 baseline, format ZST, 1.81 GB, with the note Backup of node plasma-rig-01" loading="lazy"></a></figure>
 <h2 id="restore-a-backup">Restore a backup</h2>
-<ol><li>Reboot the node to recovery.</li><li>Under <b>Provisioning</b>, click <b>Restore from backup</b>.</li><li>In <b>Image</b>, pick the backup. Backups and gold images are listed after the OS images.</li><li>Pick the <b>Target Device</b> and click <b>Restore from backup</b>.</li><li>Read the confirmation and click <b>Restore from backup</b> again.</li><li>When <b>Command history</b> shows the install has finished, click <b>Reboot</b>.</li></ol>
+<ol><li>Reboot the node to recovery.</li><li>Under <b>Provisioning</b>, click <b>Restore from backup</b>.</li><li>In <b>Image</b>, pick the backup. Backups and golden images are listed after the OS images.</li><li>Pick the <b>Target Device</b> and click <b>Restore from backup</b>.</li><li>Read the confirmation and click <b>Restore from backup</b> again.</li><li>When <b>Command history</b> shows the install has finished, click <b>Reboot</b>.</li></ol>
 <figure><a href="../img/backups-and-images/04-restore-confirm.jpg"><img src="../img/backups-and-images/04-restore-confirm.jpg" alt="The Restore from backup confirmation: it erases /dev/nvme0n1 on plasma-rig-01 and writes plasma-rig-01 baseline over it" loading="lazy"></a></figure>
 <aside class="callout warning"><p><b>Warning:</b> A restore erases the target drive. Everything written since the backup is lost.</p></aside>
 <p>The node stays in recovery after the restore until you reboot it. Check that <b>Properties</b> → <b>Boot behavior</b> reads <b>Local OS</b> before you do.</p>
 <p>Restored onto the same node, a backup boots as that node. Restored onto a different node, the server strips the machine identity during the install so the copy doesn't clash with its source.</p>
-<h2 id="make-a-gold-image-and-install-it-on-other-nodes">Make a gold image and install it on other nodes</h2>
-<p>A gold image is a backup without the machine identity: machine-id, SSH host keys, the adoption file, network state and hostname. Set up one node the way you want every node, then capture it.</p>
-<ol><li>Reboot the configured node to recovery.</li><li>Click <b>Create backup</b>, give it a title and tick <b>Golden image</b>.</li><li>Click <b>Create backup</b> and wait for <b>SUCCESS</b>. The source node keeps its own identity.</li><li>Reboot the source node.</li><li>On each target node, follow <a href="../install-an-os/">Installing an operating system</a> and pick the gold image in <b>Image</b>.</li></ol>
+<h2 id="make-a-golden-image-and-install-it-on-other-nodes">Make a golden image and install it on other nodes</h2>
+<p>A golden image is a backup without the machine identity: machine-id, SSH host keys, the adoption file, network state and hostname. Set up one node the way you want every node, then capture it.</p>
+<ol><li>Reboot the configured node to recovery.</li><li>Click <b>Create backup</b>, give it a title and tick <b>Golden image</b>.</li><li>Click <b>Create backup</b> and wait for <b>SUCCESS</b>. The source node keeps its own identity.</li><li>Reboot the source node.</li><li>On each target node, follow <a href="../install-an-os/">Installing an operating system</a> and pick the golden image in <b>Image</b>.</li></ol>
 <figure><a href="../img/backups-and-images/05-create-golden.jpg"><img src="../img/backups-and-images/05-create-golden.jpg" alt="The Create backup form with Golden image ticked" loading="lazy"></a></figure>
 <p>Gold images are listed under <b>Operations</b> → <b>Gold images</b>.</p>
 <h2 id="what-a-backup-holds-and-where-it-lives">What a backup holds and where it lives</h2>
 <p>A backup covers the drive up to the end of the system partition, with free space trimmed, stored compressed. It restores onto a smaller or larger drive as long as the data fits. A drive with a partition after the system partition can't be captured.</p>
-<p>Backups and gold images live in your server's image storage, on local disk or in the bucket if the server uses object storage. They count toward the image limits set by whoever runs the server (<code>IMAGE_MAX_PER_ACCOUNT</code>, <code>IMAGE_MAX_BYTES_PER_ACCOUNT</code>, <code>IMAGE_MAX_BYTES_INSTANCE</code> in <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md" target="_blank" rel="noopener">CONFIGURATION.md</a>). Nothing deletes them for you.</p>
+<p>Backups and golden images live in your server's image storage, on local disk or in the bucket if the server uses object storage. They count toward the image limits set by whoever runs the server (<code>IMAGE_MAX_PER_ACCOUNT</code>, <code>IMAGE_MAX_BYTES_PER_ACCOUNT</code>, <code>IMAGE_MAX_BYTES_INSTANCE</code> in <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md" target="_blank" rel="noopener">CONFIGURATION.md</a>). Nothing deletes them for you.</p>
 <h2 id="who-can-do-this">Who can do this</h2>
 <p>Admins can create and restore backups. Downloading or deleting an image needs the account's super admin. A backup carries the node's credentials, so treat a downloaded copy as a secret.</p>
 <div class="pager"><a class="prev" href="/docs/hardware-and-watchdog/"><small>Previous</small>Hardware profiles, overclocking and the watchdog</a><a class="next" href="/docs/organization/"><small>Next</small>Organizational units and policies</a></div>

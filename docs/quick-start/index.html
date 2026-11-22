@@ -40,7 +40,7 @@
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
-<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
+<li><a href="/docs/backups-and-images/">Backups and golden images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/">Organizational units and policies</a></li>
@@ -80,7 +80,7 @@
 <aside class="callout warning"><p><b>Warning:</b> Without <code>secrets/secrets_encryption_key</code> a database backup can't be read. Without <code>data/eeprom-keys/privkey.pem</code> (created with network boot) you can never sign for your network-booted devices again.</p></aside>
 <h2 id="sign-in">Sign in</h2>
 <ol><li>Open the address the installer printed.</li><li>Enter the owner email in <b>Your Email</b> and the contents of <code>./orchestrator/owner-password</code> in <b>Password</b>, then click <b>Sign In</b>.</li></ol>
-<p>You land on <b>Nodes</b>, which is empty on a new server. Sign-up is closed, so colleagues join by invitation (<a href="../team-and-security/">Team and security</a>).</p>
+<p>You land on <b>Nodes</b>. It is empty on a new server; the picture shows one with devices already added. Sign-up is closed, so colleagues join by invitation (<a href="../team-and-security/">Team and security</a>).</p>
 <figure><a href="../img/quick-start/02-nodes-first-screen.jpg"><img src="../img/quick-start/02-nodes-first-screen.jpg" alt="The Nodes page: the Add node button at the top right, the search box and filters, and the first nodes of a fleet" loading="lazy"></a><figcaption>Nodes, with a fleet already added</figcaption></figure>
 <h2 id="change-the-generated-password">Change the generated password</h2>
 <ol><li>Click the round badge with your initials at the top right, then <b>Account</b>.</li><li>Expand <b>Password</b>.</li><li>Type the new password in <b>New password</b> and <b>Confirm password</b>. It needs at least 8 characters.</li><li>Click <b>Save password</b>, paste the generated password into <b>Current password</b>, and click <b>Confirm</b>.</li><li>Delete the file on the server with <code>rm ./orchestrator/owner-password</code>.</li></ol>

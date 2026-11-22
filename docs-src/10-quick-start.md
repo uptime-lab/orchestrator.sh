@@ -48,7 +48,7 @@ The run ends with the address to open and where the owner password is. It also n
 1. Open the address the installer printed.
 2. Enter the owner email in **Your Email** and the contents of `./orchestrator/owner-password` in **Password**, then click **Sign In**.
 
-You land on **Nodes**, which is empty on a new server. Sign-up is closed, so colleagues join by invitation ([Team and security](../team-and-security/)).
+You land on **Nodes**. It is empty on a new server; the picture shows one with devices already added. Sign-up is closed, so colleagues join by invitation ([Team and security](../team-and-security/)).
 
 ![The Nodes page: the Add node button at the top right, the search box and filters, and the first nodes of a fleet](img/quick-start/02-nodes-first-screen.jpg "Nodes, with a fleet already added")
 

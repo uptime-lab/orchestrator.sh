@@ -54,6 +54,6 @@ Network boot works because each node's bootloader knows your server's address an
 
 ## Back up a node
 
-**Create backup** in the **Provisioning** group captures the node's drive as an image you can put back later. See [Backups and gold images](../backups-and-images/).
+**Create backup** in the **Provisioning** group captures the node's drive as an image you can put back later. See [Backups and golden images](../backups-and-images/).
 
 Next: [Working with a node](../node-panel/).
