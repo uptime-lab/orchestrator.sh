@@ -62,7 +62,7 @@ To prepare a card for one named device, use the **Single node** tab instead. Cre
 
 ## Approve it
 
-A device from **One command** or **Master image** shows a yellow bar and **PENDING** in **Nodes**. Click it, check the **HW serial**, and click **Approve**. Approval applies the node's access and utilities at once. By default, a device running the recovery system from a provisioning card also gets a bootloader that boots from your server. A device added with **One command** keeps its bootloader.
+A device from **One command** or **Master image** shows a yellow bar and **PENDING** in **Nodes**. Click it, check the **HW serial**, and click **Approve**. Approval applies the node's access and utilities at once. By default, a device running the recovery system from a provisioning card also gets a bootloader that boots from your server. A device added with **One command** keeps its bootloader. If that device already network-boots from this server, open **Properties** and set **Boot behavior** to **Local OS** before its next reboot: left on **Inherit**, it boots the recovery system.
 
 ![The doomsday-clock panel with the Pending Approval banner, its explanation, the Approve and Reject buttons, and the node's IP, MAC and hardware serial.](img/add-a-device/08-approve.jpg)
 

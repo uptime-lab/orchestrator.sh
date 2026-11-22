@@ -80,7 +80,7 @@
 <aside class="callout warning"><p><b>Warning:</b> Treat a provisioning card as a secret. It can enrol devices into your account, and every device it sets up leaves a credential on it.</p></aside>
 <aside class="callout warning"><p><b>Warning:</b> A device that another server managed boots its own drive before the card, so it never reads your card. Remove the drive while the card does its work, or flash the board from the browser.</p></aside>
 <h2 id="approve-it">Approve it</h2>
-<p>A device from <b>One command</b> or <b>Master image</b> shows a yellow bar and <b>PENDING</b> in <b>Nodes</b>. Click it, check the <b>HW serial</b>, and click <b>Approve</b>. Approval applies the node's access and utilities at once. By default, a device running the recovery system from a provisioning card also gets a bootloader that boots from your server. A device added with <b>One command</b> keeps its bootloader.</p>
+<p>A device from <b>One command</b> or <b>Master image</b> shows a yellow bar and <b>PENDING</b> in <b>Nodes</b>. Click it, check the <b>HW serial</b>, and click <b>Approve</b>. Approval applies the node's access and utilities at once. By default, a device running the recovery system from a provisioning card also gets a bootloader that boots from your server. A device added with <b>One command</b> keeps its bootloader. If that device already network-boots from this server, open <b>Properties</b> and set <b>Boot behavior</b> to <b>Local OS</b> before its next reboot: left on <b>Inherit</b>, it boots the recovery system.</p>
 <figure><a href="../img/add-a-device/08-approve.jpg"><img src="../img/add-a-device/08-approve.jpg" alt="The doomsday-clock panel with the Pending Approval banner, its explanation, the Approve and Reject buttons, and the node&#x27;s IP, MAC and hardware serial." loading="lazy"></a></figure>
 <p>Next: <a href="../install-an-os/">install an operating system</a> on the node.</p>
 <div class="pager"><a class="prev" href="/docs/interface-tour/"><small>Previous</small>A tour of the interface</a><a class="next" href="/docs/install-an-os/"><small>Next</small>Installing an operating system</a></div>
@@ -89,7 +89,7 @@
 
 <footer>
   <div class="wrap">
-    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
     <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
   </div>
 </footer>
