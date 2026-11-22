@@ -41,7 +41,9 @@ Over the internet this takes about six minutes on a Compute Module 4 or 5 ([Inst
 
 ## When the OS is broken
 
-A board whose drive cannot be booted goes round its boot order and asks the server again, about every 30 seconds. Set its **Boot behavior** to **Recovery** and the next request gets the recovery system. No power cycle is needed. On the hosted service a board with a wiped drive was back in recovery 57 seconds after the switch.
+A board whose drive cannot be booted goes round its boot order and asks the server again, about every 30 seconds. Set its **Boot behavior** to **Recovery** and the next request gets the recovery system. No power cycle is needed. In two runs a board with a wiped drive was back in recovery 57 and 73 seconds after the switch.
+
+![plasma-rig-01, whose drive was wiped, is OFFLINE in the Nodes list; opening it, going to Properties and clicking Recovery under Boot behavior starts a timer, and with no reboot command the node turns violet RECOVERY, its hostname changing to the recovery name, 1 minute 13 seconds after the click](img/how-it-works/v1-broken-os-to-recovery.mp4 "A board that cannot boot its drive reaches recovery on its own after the switch; the wait is fast-forwarded")
 
 A board whose system starts and then hangs does not ask again by itself. It needs a reboot: a power cycle, or a watchdog you armed beforehand ([Hardware and the watchdog](../hardware-and-watchdog/)).
 
