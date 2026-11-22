@@ -39,6 +39,12 @@ The bootloader learns the server's name and key once per board: from the browser
 
 Over the internet this takes about six minutes on a Compute Module 4 or 5 ([Installing an operating system](../install-an-os/)).
 
+## When the OS is broken
+
+A board whose drive cannot be booted goes round its boot order and asks the server again, about every 30 seconds. Set its **Boot behavior** to **Recovery** and the next request gets the recovery system. No power cycle is needed. On the hosted service a board with a wiped drive was back in recovery 57 seconds after the switch.
+
+A board whose system starts and then hangs does not ask again by itself. It needs a reboot: a power cycle, or a watchdog you armed beforehand ([Hardware and the watchdog](../hardware-and-watchdog/)).
+
 ## What checks what
 
 | Step | Checked by | How |
