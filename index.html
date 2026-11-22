@@ -451,7 +451,8 @@ footer a { color: var(--mute); }
       line("p", "==> Setting up network boot") +
       line("", "Signing key generated. Recovery image signed.") + "\n" +
       line("q", " Open:  http://rack.home.arpa") +
-      line("c", " Sign in with the owner email. The password is in ./orchestrator/owner-password."),
+      line("c", " Sign in with the owner email. The password is in") +
+      line("c", "   ./orchestrator/owner-password"),
     "public":
       line("p", "$ " + CMD) + "\n" +
       line("q", "How will your devices and your browser reach this server?") +
@@ -468,7 +469,8 @@ footer a { color: var(--mute); }
       line("p", "==> Setting up network boot") +
       line("", "Signing key generated. Recovery image signed.") + "\n" +
       line("q", " Open:  https://orchestrator.example.com") +
-      line("c", " Sign in with the owner email. The password is in ./orchestrator/owner-password.")
+      line("c", " Sign in with the owner email. The password is in") +
+      line("c", "   ./orchestrator/owner-password")
   };
   var pre = document.getElementById("transcript");
   var tabs = { lan: document.getElementById("tab-lan"), "public": document.getElementById("tab-public") };
