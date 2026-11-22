@@ -130,7 +130,16 @@ section { position: relative; padding: clamp(56px, 9vw, 120px) 0 0; }
 .term-bar .copy { margin-left: auto; border-right: 0; border-left: 1px solid var(--line); color: var(--lime); padding-right: 30px; }
 .term pre { margin: 0; padding: 20px 22px 24px; overflow-x: auto; font: 400 13.5px/1.65 var(--mono); color: var(--text); }
 .term .p { color: var(--lime); } .term .q { color: var(--text); font-weight: 700; } .term .a { color: var(--violet); } .term .c { color: var(--mute); }
-.install-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(24px, 5vw, 64px); align-items: start; margin-top: 30px; }
+.cmdbar { display: flex; align-items: stretch; margin-top: 30px; border: 1px solid var(--lime); background: #070905; }
+.cmdbar code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; padding: clamp(16px, 2.2vw, 26px) clamp(16px, 2.4vw, 28px); font: 500 clamp(15px, 2vw, 24px)/1.3 var(--mono); color: var(--text); }
+.cmdbar code .p { color: var(--lime); margin-right: .4em; }
+.cmdbar .copy { font: 500 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; background: var(--lime); color: var(--ink); border: 0; padding: 0 clamp(16px, 2.4vw, 30px); cursor: pointer; white-space: nowrap; }
+.cmdnote { margin-top: 14px; color: var(--mute); font-size: 14px; max-width: 70ch; }
+.cases h3 { font-size: 15px; color: var(--lime); margin-bottom: 6px; }
+.cases > div { margin-bottom: 22px; }
+.cases > div p { color: var(--mute); font-size: 14px; margin: 0; }
+.term-label { font: 500 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); padding: 12px 18px; border-right: 1px solid var(--line); }
+.install-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 5vw, 64px); align-items: start; margin-top: 30px; }
 .install-grid ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; }
 .install-grid li { padding-left: 18px; position: relative; color: var(--mute); font-size: 14px; }
 .install-grid li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 1px; background: var(--lime); }
@@ -204,7 +213,7 @@ footer a { color: var(--mute); }
 
 <section class="hero">
   <div class="wrap">
-    <div class="stamp"><b>Public beta</b> Raspberry Pi 4 and 5, Compute Module 4 and 5</div>
+    <div class="stamp"><b>Public beta</b> Raspberry Pi 4 and 5, boards and Compute Modules</div>
     <h1>Manage your<br><span class="out">Raspberry Pi</span> fleet</h1>
     <div class="lead">
       <p>Add your boards, install their operating system over the network, then open a terminal or run a playbook on many at once. All from a web UI, on your server or ours.</p>
@@ -254,23 +263,34 @@ footer a { color: var(--mute); }
   <div class="wrap">
     <div class="stamp"><b>Before T+0</b> The server</div>
     <h2>One command installs the server</h2>
+    <div class="cmdbar">
+      <code><span class="p">$</span> curl -fsSL https://get.orchestrator.sh | sh</code>
+      <button type="button" class="copy" id="copy">Copy command</button>
+    </div>
+    <p class="cmdnote">Run it on a fresh Ubuntu or Debian machine, x86-64 or arm64. The same command covers both setups below: the installer asks which one you want.</p>
     <div class="install-grid">
-      <div class="term" role="group" aria-label="Installer transcript">
-        <div class="term-bar" role="tablist">
-          <button type="button" role="tab" id="tab-lan" aria-selected="true" aria-controls="transcript">Local network</button>
-          <button type="button" role="tab" id="tab-public" aria-selected="false" aria-controls="transcript">From the internet</button>
-          <button type="button" class="copy" id="copy">Copy command</button>
+      <div class="cases">
+        <div>
+          <h3>On your local network</h3>
+          <p>For a lab, an office or a home rack. The server answers over plain HTTP by the name your router gave the machine. No domain and no certificate needed.</p>
         </div>
-        <pre id="transcript" tabindex="0"></pre>
-      </div>
-      <div>
-        <p>Run it on a fresh Ubuntu or Debian machine, x86-64 or arm64. Give the server a name that won't change, because every board you adopt stores it.</p>
+        <div>
+          <h3>From the internet</h3>
+          <p>For boards in other places. Point a DNS name at the machine and the installer gets and renews a Let's Encrypt certificate.</p>
+        </div>
         <ul>
-          <li><b>On your network</b> it offers the name your router gave the machine.</li>
-          <li><b>On the internet</b> it gets and renews a Let's Encrypt certificate.</li>
+          <li><b>The name must not change</b>: every board you adopt stores it.</li>
           <li><b>Network boot</b> is one more yes. It creates your signing key and signs the recovery image.</li>
           <li><b>By hand</b> with your own reverse proxy, follow <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md">the install guide</a>.</li>
         </ul>
+      </div>
+      <div class="term" role="group" aria-label="Installer transcript">
+        <div class="term-bar" role="tablist">
+          <span class="term-label">What it asks</span>
+          <button type="button" role="tab" id="tab-lan" aria-selected="true" aria-controls="transcript">Local network</button>
+          <button type="button" role="tab" id="tab-public" aria-selected="false" aria-controls="transcript">From the internet</button>
+        </div>
+        <pre id="transcript" tabindex="0"></pre>
       </div>
     </div>
   </div>
@@ -340,8 +360,8 @@ footer a { color: var(--mute); }
         <h3>Hosted by us</h3>
         <div class="big out">10 <span>devices free<br>on our server</span></div>
         <p><b>We run the server at app.orchestrator.sh, with every feature included.</b> For more than 10 devices, ask <a href="mailto:sales@orchestrator.sh">sales@orchestrator.sh</a> for a subscription.</p>
-        <p>It is an invite-only beta. Boards reach it on ports 443 and 50051, and on port 80 for network boot.</p>
-        <a class="btn" href="https://app.orchestrator.sh">Ask for an invite</a>
+        <p>It is a public beta: sign up and add your first board. Boards reach it on ports 443 and 50051, and on port 80 for network boot.</p>
+        <a class="btn" href="https://app.orchestrator.sh">Try it</a>
       </div>
     </div>
   </div>
@@ -436,7 +456,6 @@ footer a { color: var(--mute); }
   function line(cls, s) { return (cls ? '<span class="' + cls + '">' + esc(s) + "</span>" : esc(s)) + "\n"; }
   var T = {
     lan:
-      line("p", "$ " + CMD) + "\n" +
       line("q", "How will your devices and your browser reach this server?") +
       line("", "  1) On my local network only.") +
       line("", "  2) From the internet.") +
@@ -454,7 +473,6 @@ footer a { color: var(--mute); }
       line("c", " Sign in with the owner email. The password is in") +
       line("c", "   ./orchestrator/owner-password"),
     "public":
-      line("p", "$ " + CMD) + "\n" +
       line("q", "How will your devices and your browser reach this server?") +
       line("", "  1) On my local network only.") +
       line("", "  2) From the internet.") +
@@ -483,7 +501,7 @@ footer a { color: var(--mute); }
   show("lan");
   var copy = document.getElementById("copy");
   copy.addEventListener("click", function () {
-    var done = function (ok) { copy.textContent = ok ? "Copied" : "Select it above"; setTimeout(function () { copy.textContent = "Copy command"; }, 1600); };
+    var done = function (ok) { copy.textContent = ok ? "Copied" : "Select it"; setTimeout(function () { copy.textContent = "Copy command"; }, 1600); };
     try { navigator.clipboard.writeText(CMD).then(function () { done(true); }, function () { done(false); }); } catch (e) { done(false); }
   });
 })();
