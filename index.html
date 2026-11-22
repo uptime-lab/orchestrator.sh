@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Uptime Orchestrator landing</title>
+<title>Uptime Orchestrator: manage Raspberry Pi fleets</title>
 <link href="/fonts/fonts.css" rel="stylesheet">
 <style>
 /* Layout idea: the page is one install, top to bottom. A signal trace runs down
@@ -204,10 +204,10 @@ footer a { color: var(--mute); }
 
 <section class="hero">
   <div class="wrap">
-    <div class="stamp"><b>T+0</b> A board with an empty drive gets power</div>
-    <h1>Blank boards in.<br><span class="out">Managed fleet</span> out.</h1>
+    <div class="stamp"><b>Public beta</b> Raspberry Pi 4 and 5, Compute Module 4 and 5</div>
+    <h1>Manage your<br><span class="out">Raspberry Pi</span> fleet</h1>
     <div class="lead">
-      <p>Plug a Compute Module into the rack. Uptime Orchestrator boots it from the network, checks the signature, writes the operating system and brings it online under your control. On a CM4 that takes <span class="lime">about six minutes</span>, and nobody touches the board.</p>
+      <p>Add your boards, install their operating system over the network, then open a terminal or run a playbook on many at once. All from a web UI, on your server or ours.</p>
       <div class="cta">
         <a class="btn solid" href="#install">Install the server</a>
         <a class="btn" href="https://github.com/uptime-lab/orchestrator">Read the source</a>
@@ -227,7 +227,7 @@ footer a { color: var(--mute); }
         <div class="slots" id="slots"></div>
         <div class="ear"><i></i></div>
       </div>
-      <p class="rack-log" id="log">Click any blade to pull it and slot in a blank one.</p>
+      <p class="rack-log" id="log">Click a blade to swap it for a blank one.</p>
     </div>
   </div>
 </section>
@@ -235,26 +235,25 @@ footer a { color: var(--mute); }
 <section id="four-minutes">
   <div class="wrap trace">
     <div>
-      <div class="stamp"><b>T+0</b> The bootloader learns who to trust</div>
-      <h2>What happens in those six minutes</h2>
-      <p class="mute" style="margin-top:20px">You start each step below from the server, by hand or with a playbook, and each command shows afterwards in the node's command history. The times are minutes, rounded from recorded runs.</p>
-      <p class="note">On a server reached over the internet, a CM5 Lite went from approval to a managed Ubuntu in 5 min 42 s and a CM4 in 6 min 9 s.</p>
+      <div class="stamp"><b>T+0 to T+6</b> Minutes, from recorded runs</div>
+      <h2>Blank to managed in about six minutes</h2>
+      <p class="note">Over the internet, a CM5 Lite went from approval to a managed Ubuntu in 5 min 42 s and a CM4 in 6 min 9 s.</p>
     </div>
     <ol>
-      <li><time>T+0</time><div><h3>Approved</h3><p>The board announced itself with its hardware serial. You said yes.</p></div></li>
-      <li><time>T+0</time><div><h3>Bootloader signed and flashed</h3><p>The server bakes a bootloader for this one board: your public key, your server's name, a boot order that tries the network first.</p></div></li>
-      <li class="v"><time>T+2</time><div><h3>Netbooted into recovery</h3><p>The ROM fetches a 98 MB recovery system over HTTP and refuses it unless your key signed it. It runs from RAM and touches no disk.</p></div></li>
-      <li><time>T+3</time><div><h3>Operating system written</h3><p>The image streams from the server straight onto the drive, checksum verified. 81 seconds for Ubuntu on a CM4.</p></div></li>
-      <li><time>T+4</time><div><h3>Agent and identity placed</h3><p>The agent package is verified against its signature and installed into the new system with this node's own credential.</p></div></li>
-      <li class="done"><time>T+6</time><div><h3>Online, managed</h3><p>The board boots its own drive and reports in. From here it takes users, keys, software and playbooks from the server.</p></div></li>
+      <li><time>T+0</time><div><h3>Approved</h3><p>You approve the board by its hardware serial.</p></div></li>
+      <li><time>T+0</time><div><h3>Bootloader flashed</h3><p>The board now boots from your server first.</p></div></li>
+      <li class="v"><time>T+2</time><div><h3>Recovery booted</h3><p>A 98 MB recovery system signed with your key runs from RAM.</p></div></li>
+      <li><time>T+3</time><div><h3>OS written</h3><p>The image streams onto the drive. Ubuntu took 81 seconds on a CM4.</p></div></li>
+      <li><time>T+4</time><div><h3>Agent installed</h3><p>The signed agent goes in with the board's own credential.</p></div></li>
+      <li class="done"><time>T+6</time><div><h3>Online</h3><p>The board boots from its own drive and reports in.</p></div></li>
     </ol>
   </div>
 </section>
 
 <section id="install">
   <div class="wrap">
-    <div class="stamp"><b>Before T</b> The server itself: one command, two questions</div>
-    <h2>Your server in about a minute</h2>
+    <div class="stamp"><b>Before T+0</b> The server</div>
+    <h2>One command installs the server</h2>
     <div class="install-grid">
       <div class="term" role="group" aria-label="Installer transcript">
         <div class="term-bar" role="tablist">
@@ -265,12 +264,12 @@ footer a { color: var(--mute); }
         <pre id="transcript" tabindex="0"></pre>
       </div>
       <div>
-        <p>Run it on a fresh Ubuntu machine. It asks how the server will be reached, because that answer is written into every board you adopt, then installs everything the manual describes.</p>
+        <p>Run it on a fresh Ubuntu machine, x86-64 or arm64. Give the server a name that won't change, because every board you adopt stores it.</p>
         <ul>
-          <li><b>On your own network</b> it uses the name your router gives the machine, with no certificate to arrange.</li>
-          <li><b>On the internet</b> it obtains a Let's Encrypt certificate for your domain and renews it.</li>
-          <li><b>Network boot</b> is one more yes: it generates your signing key on the machine and signs the recovery image with it.</li>
-          <li><b>No lock-in at the door:</b> the same install by hand, with your own reverse proxy, is a page of documentation.</li>
+          <li><b>On your network</b> it offers the name your router gave the machine.</li>
+          <li><b>On the internet</b> it gets and renews a Let's Encrypt certificate.</li>
+          <li><b>Network boot</b> is one more yes. It creates your signing key and signs the recovery image.</li>
+          <li><b>By hand</b> with your own reverse proxy, follow <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md">the install guide</a>.</li>
         </ul>
       </div>
     </div>
@@ -279,45 +278,45 @@ footer a { color: var(--mute); }
 
 <section id="after">
   <div class="wrap">
-    <div class="stamp"><b>T+6</b> The board is online. Now it is a node</div>
-    <h2>What you run from the server</h2>
+    <div class="stamp"><b>T+6</b> The board is online</div>
+    <h2>What you do with it next</h2>
     <dl class="spec">
-      <div><dt><h3>Shell access</h3></dt><dd><p>Declare who gets a login: <b>users, SSH keys, sudo, certificate authorities</b>, per node, per unit or for the whole account. A change that would lock everyone out is refused before it is sent, and again on the device.</p></dd></div>
-      <div><dt><h3>OS images</h3></dt><dd><p>Upload an image or <b>capture a running node as a golden image</b>, then install it on the next ten boards. Images are compressed for fast parallel installs and verified by digest.</p></dd></div>
-      <div><dt><h3>Recovery</h3></dt><dd><p><b>One click reboots a node into the network recovery system once</b>, then returns it to its own disk. A root terminal in the browser works there too, on a board whose OS will not start.</p></dd></div>
-      <div><dt><h3>Playbooks</h3></dt><dd><p>A graph editor for multi-step jobs: install, wait for the node, run a script, call a webhook, branch on the result. Run them by hand or <b>on a cron schedule</b> across a unit.</p></dd></div>
-      <div><dt><h3>Software roles</h3></dt><dd><p>Assign Docker, a kiosk display, a VPN client, metrics or unattended security updates to a unit, and every node in it converges. Unassigning removes nothing by surprise.</p></dd></div>
-      <div><dt><h3>Hardware</h3></dt><dd><p><b>Watchdog, status LEDs, overclock presets, bootloader updates, carrier-board profiles.</b> The platform knows a Compute Blade from a bare module and refuses a watchdog config that would reboot-loop the board.</p></dd></div>
-      <div><dt><h3>Secrets and audit</h3></dt><dd><p>Secrets are encrypted at rest and delivered to the nodes that need them. Every command to every device is recorded with who sent it. The trail cannot be edited through the API.</p></dd></div>
+      <div><dt><h3>Users and keys</h3></dt><dd><p>Set Linux users, <b>SSH keys and sudo</b> for one board, a unit or the whole account.</p></dd></div>
+      <div><dt><h3>Images and backups</h3></dt><dd><p><b>Capture a configured board as a golden image</b> and install it on the next ten. Back up a drive and restore it later.</p></dd></div>
+      <div><dt><h3>Terminal and recovery</h3></dt><dd><p>Open a root terminal in the browser. <b>One click reboots a board into recovery once</b>, and the terminal works there even when the OS will not start.</p></dd></div>
+      <div><dt><h3>Playbooks</h3></dt><dd><p>Run a list of steps on the boards you pick, by hand or <b>on a cron schedule</b>.</p></dd></div>
+      <div><dt><h3>Managed software</h3></dt><dd><p>Assign Docker, a kiosk display, a VPN client, metrics or unattended security updates to a unit, and its boards keep them installed.</p></dd></div>
+      <div><dt><h3>Hardware</h3></dt><dd><p><b>Watchdog, status LEDs, overclock presets, bootloader updates</b> and carrier-board profiles, the Compute Blade included.</p></dd></div>
+      <div><dt><h3>Secrets and audit</h3></dt><dd><p>Secrets are stored encrypted. Every command is recorded with who sent it.</p></dd></div>
     </dl>
   </div>
 </section>
 
 <section id="signed">
   <div class="wrap">
-    <div class="stamp"><b>Every hop</b> Nothing boots or installs on trust</div>
-    <h2>Signed from the ROM to the agent</h2>
+    <div class="stamp"><b>Security</b> Signed boot</div>
+    <h2>Signed from boot to agent</h2>
     <div class="chain">
-      <div><span>Boot ROM</span><h3>Your key</h3><p>The key that signs your recovery image is generated on your server and stays there unless you copy it out for a backup. Each board's bootloader carries only the public half.</p></div>
-      <div><span>Recovery</span><h3>Verified image</h3><p>A board fetches the recovery system over the network and runs it only if the signature matches. A tampered image falls through to the next boot device.</p></div>
-      <div><span>Agent</span><h3>Verified package</h3><p>Agent releases are signed with offline hardware keys. The server checks a release before it stores it, and the device checks it again before it installs.</p></div>
-      <div><span>Server</span><h3>Files, not env</h3><p>Credentials reach the containers as files with tight modes. A production server refuses to start on a placeholder secret.</p></div>
+      <div><span>Boot ROM</span><h3>Your key</h3><p>Created on your server. Bootloaders hold only the public half.</p></div>
+      <div><span>Recovery</span><h3>Checked image</h3><p>A board runs it only if the signature matches.</p></div>
+      <div><span>Agent</span><h3>Checked package</h3><p>Signed with offline hardware keys, checked by the server and again by the board.</p></div>
+      <div><span>Server</span><h3>Secrets as files</h3><p>Credentials reach the containers as files.</p></div>
     </div>
   </div>
 </section>
 
 <section id="boards">
   <div class="wrap">
-    <div class="stamp"><b>Hardware</b> Raspberry Pi 4 and 5, Compute Module 4 and 5</div>
+    <div class="stamp"><b>Hardware</b> Four boards</div>
     <h2>Supported boards</h2>
     <div class="scroll">
       <table>
         <thead><tr><th>Board</th><th>Status</th><th>What works</th></tr></thead>
         <tbody>
-          <tr><td>Raspberry Pi 5</td><td><span class="tag">Supported</span></td><td>Adoption, network recovery, OS install, everything after.</td></tr>
-          <tr><td>Raspberry Pi 4</td><td><span class="tag">Supported</span></td><td>The same.</td></tr>
-          <tr><td>Compute Module 5</td><td><span class="tag">Supported</span></td><td>The same, with eMMC or Lite.</td></tr>
-          <tr><td>Compute Module 4</td><td><span class="tag">Supported</span></td><td>The same, with eMMC or Lite.</td></tr>
+          <tr><td>Raspberry Pi 5</td><td><span class="tag">Supported</span></td><td>All features</td></tr>
+          <tr><td>Raspberry Pi 4</td><td><span class="tag">Supported</span></td><td>All features</td></tr>
+          <tr><td>Compute Module 5</td><td><span class="tag">Supported</span></td><td>All features, eMMC or Lite</td></tr>
+          <tr><td>Compute Module 4</td><td><span class="tag">Supported</span></td><td>All features, eMMC or Lite</td></tr>
         </tbody>
       </table>
     </div>
@@ -327,21 +326,21 @@ footer a { color: var(--mute); }
 
 <section id="run">
   <div class="wrap">
-    <div class="stamp"><b>Yours</b> Two ways to run it, one codebase</div>
+    <div class="stamp"><b>Pricing</b> Same software</div>
     <h2>Self-hosted or hosted</h2>
     <div class="ways">
       <div>
         <h3>On your own machine</h3>
         <div class="big">25 <span>devices free<br>on your server</span></div>
-        <p><b>Every feature is included.</b> More than 25 devices on one server needs a subscription. Nothing already adopted is ever locked out. <a href="subscription/">Subscriptions are not on sale yet: ask about pricing</a>.</p>
-        <p>The source is public under the Fair Core License, and <b>each version becomes Apache-2.0 two years after its release</b>. The agent that runs on your boards is Apache-2.0 today.</p>
+        <p><b>Every feature is included.</b> More than 25 devices on one server needs a subscription. Boards already adopted are never locked out. Subscriptions are not on sale yet, so <a href="subscription/">ask about pricing</a>.</p>
+        <p>The source is public under the Fair Core License, and <b>each version becomes Apache-2.0 two years after its release</b>. The agent on your boards is Apache-2.0 today.</p>
         <a class="btn solid" href="#install">Install the server</a>
       </div>
       <div>
         <h3>Hosted by us</h3>
         <div class="big out">10 <span>devices free<br>on our server</span></div>
-        <p><b>We run the server, and every feature is included.</b> More than 10 devices needs a subscription: write to <a href="mailto:sales@orchestrator.sh">sales@orchestrator.sh</a>. The same software at app.orchestrator.sh: point a board at it with one command and manage it from the browser.</p>
-        <p>The hosted service is in an invite-only beta. Boards reach it over TLS on ports 443 and 50051. Network boot works across the internet over plain HTTP on port 80, and a board runs the recovery system only if its signature checks out.</p>
+        <p><b>We run the server at app.orchestrator.sh, with every feature included.</b> For more than 10 devices, ask <a href="mailto:sales@orchestrator.sh">sales@orchestrator.sh</a> for a subscription.</p>
+        <p>It is an invite-only beta. Boards reach it on ports 443 and 50051, and on port 80 for network boot.</p>
         <a class="btn" href="https://app.orchestrator.sh">Ask for an invite</a>
       </div>
     </div>
@@ -352,7 +351,7 @@ footer a { color: var(--mute); }
 
 <footer>
   <div class="wrap">
-    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade.</span>
+    <span>Uptime Orchestrator is made by Uptime Lab, the makers of the Compute Blade.</span>
     <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md">Install guide</a> · <a href="docs/">Docs</a> · <a href="subscription/">Subscriptions</a> · <a href="imprint/">Imprint</a> · <a href="privacy/">Privacy</a> · <a href="https://computeblade.com">Compute Blade</a></span>
   </div>
 </footer>
@@ -364,11 +363,11 @@ footer a { color: var(--mute); }
   // Stage lengths follow a recorded CM4 run (about six minutes from the reboot
   // into recovery to online) scaled to about 16 s per blade.
   var STAGES = [
-    { s: "blank",    ms: 1400, text: "Blank drive, no OS. Waiting for power." },
-    { s: "rom",      ms: 4600, text: "ROM asks the server for boot.sig, checks it against your key." },
-    { s: "recovery", ms: 800,  text: "Recovery system running from RAM. Agent connected." },
-    { s: "install",  ms: 3600, text: "Writing the OS image to the drive." },
-    { s: "agent",    ms: 7000, text: "Agent and identity placed. Booting the new system." },
+    { s: "blank",    ms: 1400, text: "Blank drive. Waiting for power." },
+    { s: "rom",      ms: 4600, text: "Booting from the network, checking the signature." },
+    { s: "recovery", ms: 800,  text: "Recovery system running from RAM." },
+    { s: "install",  ms: 3600, text: "Writing the OS to the drive." },
+    { s: "agent",    ms: 7000, text: "Agent installed. Booting the new system." },
     { s: "managed",  ms: 0,    text: "Online, managed." }
   ];
   var slots = document.getElementById("slots");
@@ -452,7 +451,7 @@ footer a { color: var(--mute); }
       line("p", "==> Setting up network boot") +
       line("", "Signing key generated. Recovery image signed.") + "\n" +
       line("q", " Open:  http://rack.home.arpa") +
-      line("c", " Create your account there now: the first sign-up owns the server."),
+      line("c", " Sign in with the owner email. The password is in ./orchestrator/owner-password."),
     "public":
       line("p", "$ " + CMD) + "\n" +
       line("q", "How will your devices and your browser reach this server?") +
@@ -469,7 +468,7 @@ footer a { color: var(--mute); }
       line("p", "==> Setting up network boot") +
       line("", "Signing key generated. Recovery image signed.") + "\n" +
       line("q", " Open:  https://orchestrator.example.com") +
-      line("c", " Create your account there now: the first sign-up owns the server.")
+      line("c", " Sign in with the owner email. The password is in ./orchestrator/owner-password.")
   };
   var pre = document.getElementById("transcript");
   var tabs = { lan: document.getElementById("tab-lan"), "public": document.getElementById("tab-public") };
