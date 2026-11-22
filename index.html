@@ -145,7 +145,7 @@ section { position: relative; padding: clamp(56px, 9vw, 120px) 0 0; }
 .install-grid li { padding-left: 18px; position: relative; color: var(--mute); font-size: 14px; }
 .install-grid li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 1px; background: var(--lime); }
 .install-grid li b { color: var(--text); font-weight: 500; }
-@media (max-width: 900px) { .install-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .install-grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* spec sheet */
 .spec { margin-top: 30px; border-top: 1px solid var(--lime-deep); }
@@ -239,6 +239,8 @@ footer a { color: var(--mute); }
 .arch-dots button { width: 22px; height: 22px; padding: 0; background: none; border: 0; cursor: pointer; position: relative; }
 .arch-dots button::after { content: ""; position: absolute; inset: 8px; background: var(--lime-deep); }
 .arch-dots button[aria-current="true"]::after { background: var(--lime); inset: 6px; }
+.arch-hint { display: none; padding: 8px 18px 0; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+@media (max-width: 800px) { .arch-hint { display: block; } }
 @media (max-width: 620px) { .arch-cap { grid-template-columns: auto minmax(0, 1fr); } .arch-dots { grid-column: 1 / -1; } }
 @media (prefers-reduced-motion: reduce) { .arch .fill, .arch .chip, .arch .link { transition: none; } .arch .pulse { animation: none; } }
 </style>
@@ -313,6 +315,7 @@ footer a { color: var(--mute); }
     <h2>No PXE. No boot server on site.</h2>
     <p class="lede">The board's own bootloader fetches a signed recovery system from the server over HTTP. An ordinary DHCP address is enough and the drive can be empty. If the server is away, the board boots its own drive.</p>
     <div class="arch" id="arch" aria-label="Animated diagram: a board boots from the server over the internet, gets its operating system and comes online">
+      <p class="arch-hint">Swipe the diagram sideways</p>
       <div class="arch-stage">
         <svg viewBox="0 0 1120 372" role="img" aria-hidden="true">
           <!-- panels -->
