@@ -67,7 +67,9 @@
 <h2 id="what-you-need">What you need</h2>
 <ul><li>A Raspberry Pi 4, Pi 5, Compute Module 4 or Compute Module 5 on wired Ethernet.</li><li>Outbound access from the board to <code>app.orchestrator.sh</code> on ports 443 and 50051, and to <code>boot.orchestrator.sh</code> on port 80 for network boot. Nothing has to be opened towards the board.</li></ul>
 <h2 id="sign-up">Sign up</h2>
-<ol><li>Open <a href="https://app.orchestrator.sh" target="_blank" rel="noopener">app.orchestrator.sh</a> and create an account.</li><li>Click the link in the confirmation e-mail. Until you do, the app shows a reminder instead of your account.</li></ol>
+<p>Open <a href="https://app.orchestrator.sh" target="_blank" rel="noopener">app.orchestrator.sh</a> and click <b>Sign up with Google</b>. That's it.</p>
+<p>Prefer a password? Sign up with your e-mail and click the link in the confirmation message. Until you do, the app shows a reminder instead of your account.</p>
+<p>Once you're in, you can add a passkey under your account settings and sign in with it from then on.</p>
 <h2 id="add-a-board-that-already-runs-linux">Add a board that already runs Linux</h2>
 <ol><li>Click <b>Add node</b> and open the <b>One command</b> tab.</li><li>Click <b>Generate command</b>, then <b>Copy command</b>.</li><li>Run the line on the board as a user with sudo. It needs 64-bit Raspberry Pi OS, Debian or Ubuntu.</li><li>The board shows up in <b>Nodes</b> as <b>PENDING</b>. Check the <b>HW serial</b> and click <b>Approve</b>.</li></ol>
 <p>A board with nothing on it joins another way: flash its bootloader from the browser over USB, or boot it from a provisioning card (<a href="../add-a-device/">Adding a device</a>).</p>

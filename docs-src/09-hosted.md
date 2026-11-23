@@ -12,8 +12,11 @@ We run the server at [app.orchestrator.sh](https://app.orchestrator.sh). An acco
 
 ## Sign up
 
-1. Open [app.orchestrator.sh](https://app.orchestrator.sh) and create an account.
-2. Click the link in the confirmation e-mail. Until you do, the app shows a reminder instead of your account.
+Open [app.orchestrator.sh](https://app.orchestrator.sh) and click **Sign up with Google**. That's it.
+
+Prefer a password? Sign up with your e-mail and click the link in the confirmation message. Until you do, the app shows a reminder instead of your account.
+
+Once you're in, you can add a passkey under your account settings and sign in with it from then on.
 
 ## Add a board that already runs Linux
 
