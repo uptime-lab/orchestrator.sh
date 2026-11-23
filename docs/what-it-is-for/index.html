@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What it is for · Uptime Orchestrator docs</title>
+<meta name="description" content="What Uptime Orchestrator does and who uses it, from one board at home to screens across many sites.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ccff3d">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css?v=3d8cd86f14" rel="stylesheet">
+<script src="/docs/search.js?v=4d9b802c06" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/" aria-label="Uptime Orchestrator"><span class="logo" role="img" aria-hidden="true"></span> <small>from one Raspberry Pi to a fleet</small></a>
+    <nav aria-label="Site">
+      <a href="/#start">Start</a>
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Self-host</a>
+      <a href="/#after">Features</a>
+      <a href="/#run">Pricing</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs wrap">
+<nav class="side" aria-label="Documentation">
+<div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
+<h4>Start</h4><ul>
+<li><a href="/docs/what-it-is-for/" aria-current="page">What it is for</a></li>
+<li><a href="/docs/hosted/">Quick start on the hosted service</a></li>
+<li><a href="/docs/quick-start/">Quick start on your own server</a></li>
+<li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+<li><a href="/docs/how-it-works/">How it works</a></li>
+</ul>
+<h4>Devices</h4><ul>
+<li><a href="/docs/add-a-device/">Adding a device</a></li>
+<li><a href="/docs/install-an-os/">Installing an operating system</a></li>
+<li><a href="/docs/node-panel/">Working with a node</a></li>
+<li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+<li><a href="/docs/backups-and-images/">Backups and golden images</a></li>
+</ul>
+<h4>Operating a fleet</h4><ul>
+<li><a href="/docs/organization/">Organizational units and policies</a></li>
+<li><a href="/docs/access-and-credentials/">Access: SSH keys and device users</a></li>
+<li><a href="/docs/secrets-and-variables/">Secrets and variables</a></li>
+<li><a href="/docs/utilities/">Utilities: managed software</a></li>
+<li><a href="/docs/status-and-audit/">Status, attention and the audit trail</a></li>
+</ul>
+<h4>Automation</h4><ul>
+<li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+<li><a href="/docs/api/">Using the API</a></li>
+</ul>
+<h4>Administration</h4><ul>
+<li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
+<li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+<li><a href="/docs/troubleshooting/">Troubleshooting</a></li>
+</ul></nav>
+<article>
+<div class="stamp"><b>Start</b> Documentation</div>
+<h1>What it is for</h1>
+<p class="summary">What Uptime Orchestrator does and who uses it, from one board at home to screens across many sites.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#the-problem">The problem</a></li><li><a href="#who-uses-it">Who uses it</a></li><li><a href="#what-you-need">What you need</a></li></ul></nav>
+<p>Uptime Orchestrator installs, reaches and repairs Raspberry Pi boards over the network. A board boots from the server, so you can put an operating system on it, open a terminal on it and bring it back when its system no longer starts, without a keyboard, a card reader or a trip to the device.</p>
+<h2 id="the-problem">The problem</h2>
+<p>A Raspberry Pi is easy to set up on a desk and hard to look after once it is somewhere else. A card wears out, an update breaks the boot, SSH stops answering, and someone has to go there with a laptop. With one board that is an evening. With boards in other buildings or other cities it is a cost you pay every time.</p>
+<p>With Orchestrator the board asks the server first on every boot. From the browser you can:</p>
+<ul><li>install or reinstall the operating system on a board with an empty or broken drive</li><li>open a root terminal when SSH is gone</li><li>back up a drive and restore it later</li><li>set users, keys, software and schedules once and have every board keep them</li></ul>
+<p>The board connects out to the server. It can sit behind a home router or a customer's firewall, and nothing has to be opened towards it.</p>
+<h2 id="who-uses-it">Who uses it</h2>
+<h3 id="one-board">One board</h3>
+<p>A home server, a home automation box, a Pi at a relative's house, a camera in a shed. If its system stops booting you switch it to recovery from your browser and reinstall it or restore a backup. Turn on the watchdog and a board that hangs reboots by itself.</p>
+<h3 id="a-homelab-or-a-cluster">A homelab or a cluster</h3>
+<p>A shelf of boards or a rack of Compute Modules. Install the same image on a new board in minutes, capture a configured board as a golden image, and reinstall a node instead of debugging it. Hardware profiles cover carrier boards, the Compute Blade included.</p>
+<h3 id="a-classroom-or-a-lab">A classroom or a lab</h3>
+<p>A set of boards that many people use and break. Keep one golden image and put each board back to it before the next class. Give a group its own users and SSH keys by placing its boards in a unit, and take them away the same way.</p>
+<h3 id="kiosks-and-screens">Kiosks and screens</h3>
+<p>Displays in cafés, shops, offices and airports, and kiosks spread over many sites. Assign the kiosk display to a unit and its boards keep it installed. Give each site its own unit, run playbooks on a schedule, and bring a screen back from recovery without sending anyone to it.</p>
+<h3 id="a-company-s-devices">A company's devices</h3>
+<p>Edge boxes at customer sites, test rigs, gateways. Roles decide who may do what, single sign-on and two-step verification protect the accounts, every command is logged with its sender, and the API lets your own scripts do what the web UI does. You can run the server on your own machine.</p>
+<h2 id="what-you-need">What you need</h2>
+<p>A Raspberry Pi 4, Pi 5, Compute Module 4 or Compute Module 5 on wired Ethernet.</p>
+<ul><li>On our server: <a href="../hosted/">Quick start on the hosted service</a>. Free for 10 devices.</li><li>On your own machine: <a href="../quick-start/">Quick start on your own server</a>. Free for 25 devices.</li></ul>
+<p>To see how a board boots from the server, read <a href="../how-it-works/">How it works</a>.</p>
+<div class="pager"><a class="next" href="/docs/hosted/"><small>Next</small>Quick start on the hosted service</a></div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
