@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>What it is for · Uptime Orchestrator docs</title>
-<meta name="description" content="What Uptime Orchestrator does and who uses it, from one board at home to screens across many sites.">
+<meta name="description" content="Install, reach and repair Raspberry Pi boards without going to them.">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -68,29 +68,17 @@
 <article>
 <div class="stamp"><b>Start</b> Documentation</div>
 <h1>What it is for</h1>
-<p class="summary">What Uptime Orchestrator does and who uses it, from one board at home to screens across many sites.</p>
-<nav class="toc" aria-label="On this page"><ul><li><a href="#the-problem">The problem</a></li><li><a href="#who-uses-it">Who uses it</a></li><li><a href="#what-you-need">What you need</a></li></ul></nav>
-<p>Uptime Orchestrator installs, reaches and repairs Raspberry Pi boards over the network. A board boots from the server, so you can put an operating system on it, open a terminal on it and bring it back when its system no longer starts, without a keyboard, a card reader or a trip to the device.</p>
-<h2 id="the-problem">The problem</h2>
-<p>A Raspberry Pi is easy to set up on a desk and hard to look after once it is somewhere else. A card wears out, an update breaks the boot, SSH stops answering, and someone has to go there with a laptop. With one board that is an evening. With boards in other buildings or other cities it is a cost you pay every time.</p>
-<p>With Orchestrator the board asks the server first on every boot. From the browser you can:</p>
-<ul><li>install or reinstall the operating system on a board with an empty or broken drive</li><li>open a root terminal when SSH is gone</li><li>back up a drive and restore it later</li><li>set users, keys, software and schedules once and have every board keep them</li></ul>
-<p>The board connects out to the server. It can sit behind a home router or a customer's firewall, and nothing has to be opened towards it.</p>
+<p class="summary">Install, reach and repair Raspberry Pi boards without going to them.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#what-you-can-do">What you can do</a></li><li><a href="#who-uses-it">Who uses it</a></li><li><a href="#start">Start</a></li></ul></nav>
+<p>A Raspberry Pi is easy to set up on a desk and hard to look after once it is somewhere else. Uptime Orchestrator makes the board ask a server on every boot, so you can fix it from a browser.</p>
+<h2 id="what-you-can-do">What you can do</h2>
+<ul><li>Install an operating system on a board with an empty or broken drive.</li><li>Open a root terminal when SSH is gone.</li><li>Back up a drive and restore it.</li><li>Set users, keys and software once for a group of boards.</li><li>Run steps on many boards, by hand or on a schedule.</li></ul>
+<p>The board connects out to the server, so it works behind a home router or a customer's firewall.</p>
 <h2 id="who-uses-it">Who uses it</h2>
-<h3 id="one-board">One board</h3>
-<p>A home server, a home automation box, a Pi at a relative's house, a camera in a shed. If its system stops booting you switch it to recovery from your browser and reinstall it or restore a backup. Turn on the watchdog and a board that hangs reboots by itself.</p>
-<h3 id="a-homelab-or-a-cluster">A homelab or a cluster</h3>
-<p>A shelf of boards or a rack of Compute Modules. Install the same image on a new board in minutes, capture a configured board as a golden image, and reinstall a node instead of debugging it. Hardware profiles cover carrier boards, the Compute Blade included.</p>
-<h3 id="a-classroom-or-a-lab">A classroom or a lab</h3>
-<p>A set of boards that many people use and break. Keep one golden image and put each board back to it before the next class. Give a group its own users and SSH keys by placing its boards in a unit, and take them away the same way.</p>
-<h3 id="kiosks-and-screens">Kiosks and screens</h3>
-<p>Displays in cafés, shops, offices and airports, and kiosks spread over many sites. Assign the kiosk display to a unit and its boards keep it installed. Give each site its own unit, run playbooks on a schedule, and bring a screen back from recovery without sending anyone to it.</p>
-<h3 id="a-company-s-devices">A company's devices</h3>
-<p>Edge boxes at customer sites, test rigs, gateways. Roles decide who may do what, single sign-on and two-step verification protect the accounts, every command is logged with its sender, and the API lets your own scripts do what the web UI does. You can run the server on your own machine.</p>
-<h2 id="what-you-need">What you need</h2>
-<p>A Raspberry Pi 4, Pi 5, Compute Module 4 or Compute Module 5 on wired Ethernet.</p>
-<ul><li>On our server: <a href="../hosted/">Quick start on the hosted service</a>. Free for 10 devices.</li><li>On your own machine: <a href="../quick-start/">Quick start on your own server</a>. Free for 25 devices.</li></ul>
-<p>To see how a board boots from the server, read <a href="../how-it-works/">How it works</a>.</p>
+<ul><li><b>One board.</b> A home server or a Pi at a relative's house. When it stops booting, reinstall it from your browser.</li><li><b>A homelab or a cluster.</b> Reinstall a node instead of debugging it. Capture a configured board and install its image on the next one.</li><li><b>A classroom.</b> Put every board back to the same image before the next class.</li><li><b>Kiosks and screens.</b> Displays in cafés, shops and airports. Each site is a unit, and its boards keep the kiosk software installed.</li><li><b>A company's devices.</b> Roles, single sign-on, an audit trail and an API. The server can run on your own machine.</li></ul>
+<h2 id="start">Start</h2>
+<ul><li><a href="../hosted/">On our server</a>, free for 10 devices.</li><li><a href="../quick-start/">On your own machine</a>, free for 25 devices.</li></ul>
+<p><a href="../how-it-works/">How it works</a> explains the boot.</p>
 <div class="pager"><a class="next" href="/docs/hosted/"><small>Next</small>Quick start on the hosted service</a></div>
 </article>
 </main>
