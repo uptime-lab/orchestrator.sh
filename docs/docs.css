@@ -48,6 +48,8 @@ header.nav { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb
 .nav .wrap { display: flex; align-items: center; gap: 28px; min-height: 60px; flex-wrap: wrap; }
 .mark { font-family: var(--display); font-stretch: 125%; font-weight: 900; text-transform: uppercase; letter-spacing: .02em; color: var(--lime); text-decoration: none; display: flex; gap: 10px; align-items: baseline; }
 .mark small { font: 500 11px var(--mono); color: var(--mute); letter-spacing: .14em; }
+.mark .logo { display: block; align-self: center; width: 112px; height: 31px; background: var(--text); -webkit-mask: url(/logo.svg) center / contain no-repeat; mask: url(/logo.svg) center / contain no-repeat; }
+.mark { align-items: center; }
 .nav nav { display: flex; gap: 22px; margin-left: auto; flex-wrap: wrap; }
 .nav nav a { color: var(--text); text-decoration: none; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
 .nav nav a:hover { color: var(--lime); }

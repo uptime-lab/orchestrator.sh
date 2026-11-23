@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Uptime Orchestrator: network boot and fleet management for Raspberry Pi</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ccff3d">
 <link href="/fonts/fonts.css" rel="stylesheet">
 <style>
 /* Layout idea: the page is one install, top to bottom. A signal trace runs down
@@ -58,6 +63,8 @@ header.nav { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb
 .nav .wrap { display: flex; align-items: center; gap: 28px; min-height: 60px; flex-wrap: wrap; }
 .mark { font-family: var(--display); font-stretch: 125%; font-weight: 900; text-transform: uppercase; letter-spacing: .02em; color: var(--lime); text-decoration: none; display: flex; gap: 10px; align-items: baseline; }
 .mark small { font: 500 11px var(--mono); color: var(--mute); letter-spacing: .14em; }
+.mark .logo { display: block; align-self: center; width: 112px; height: 31px; background: var(--text); -webkit-mask: url(/logo.svg) center / contain no-repeat; mask: url(/logo.svg) center / contain no-repeat; }
+.mark { align-items: center; }
 .nav nav { display: flex; gap: 22px; margin-left: auto; flex-wrap: wrap; }
 .nav nav a { color: var(--text); text-decoration: none; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
 .nav nav a:hover { color: var(--lime); }
@@ -249,7 +256,7 @@ footer a { color: var(--mute); }
 
 <header class="nav">
   <div class="wrap">
-    <a class="mark" href="#top">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <a class="mark" href="#top" aria-label="Uptime Orchestrator"><span class="logo" role="img" aria-hidden="true"></span> <small>for Raspberry Pi fleets</small></a>
     <nav aria-label="Sections">
       <a href="#start">Start</a>
       <a href="#four-minutes">How it works</a>
