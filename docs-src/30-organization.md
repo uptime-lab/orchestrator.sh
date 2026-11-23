@@ -3,11 +3,9 @@ title: Organizational units and policies
 summary: Group nodes into units and set policies once for all of them.
 section: Operating a fleet
 ---
-Group nodes into units on the **Organization** page and set policies there once for all of them.
+Units group nodes, such as the devices in one room or one site. Anything you set on a unit reaches every node in it, including nodes you move in later. A node's own setting wins, then its unit's, then a parent unit's if the unit is nested, then the account default.
 
-Units group nodes, such as the devices in one room or one site. Anything you set on a unit reaches every node in it, including nodes you move in later. A node's own setting wins, then its unit's (and a parent unit's, if the unit is nested), then the account default.
-
-SSH users, secrets and utilities attached at several levels add up on the node. Where two levels define the same one, the nearer level wins.
+SSH users, secrets and utilities attached at several levels add up on the node. Where two levels define the same user, secret or utility, the nearer level wins.
 
 ## Create a unit
 

@@ -53,7 +53,7 @@ A golden image is a backup without the machine identity: machine-id, SSH host ke
 
 ![The Create backup form with Golden image ticked](img/backups-and-images/05-create-golden.jpg)
 
-Gold images are listed under **Operations** → **Gold images**.
+Golden images are listed under **Operations** → **Gold images**.
 
 ## What a backup holds and where it lives
 
@@ -63,4 +63,4 @@ Backups and golden images live in your server's image storage, on local disk or 
 
 ## Who can do this
 
-Admins can create and restore backups. Downloading or deleting an image needs the account's super admin. A backup carries the node's credentials, so treat a downloaded copy as a secret.
+Admins can create and restore backups. Downloading or deleting an image needs the account's Super Admin. A backup carries the node's credentials, so treat a downloaded copy as a secret.

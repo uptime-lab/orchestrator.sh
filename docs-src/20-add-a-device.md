@@ -40,14 +40,14 @@ This writes the board's bootloader so it boots from your server. Use Chrome or E
 4. Click **Flash EEPROM** and don't unplug the board until the green notice appears.
 5. Unplug USB, connect Ethernet and power the board on.
 
-The node arrives already approved. Power the board on within the days the tab names (30 by default). Until the board first connects, your account holds its serial only that long. After that another account can claim the serial. The node stays and binds the board when it connects, unless another account has claimed it first.
+The node arrives already approved. Power the board on within the days the tab names (30 by default). Your account holds the serial only for that time. After it, another account can claim the serial. If none has, the node still binds the board when it connects.
 
 ## Boot a blank device from a provisioning card
 
 ![The Master image tab: description of the FAT32 MBR requirement with the macOS scheme Master Boot Record, the GPL source note, the yellow keep-the-card-in warning, and the Name field set to sd-provisioning.](img/add-a-device/05-master-image.jpg)
 
 1. Open the **Master image** tab.
-2. Pick an **SSH key** for the new nodes, and set **Expires At** if 7 days is wrong for you.
+2. Pick an **SSH key** for the new nodes, and set **Expires At** to change the default of 7 days.
 3. Click **Download SD Image**. Each click creates a new token.
 4. Format the card as FAT32 on an MBR partition table. In macOS Disk Utility, choose **View** → **Show All Devices**, select the card itself, and erase it as **MS-DOS (FAT)** with scheme **Master Boot Record**.
 5. Unzip the bundle into the root of the card.
@@ -62,7 +62,9 @@ To prepare a card for one named device, use the **Single node** tab instead. Cre
 
 ## Approve it
 
-A device from **One command** or **Master image** shows a yellow bar and **PENDING** in **Nodes**. Click it, check the **HW serial**, and click **Approve**. Approval applies the node's access and utilities at once. By default, a device running the recovery system from a provisioning card also gets a bootloader that boots from your server. A device added with **One command** keeps its bootloader. If that device already network-boots from this server, open **Properties** and set **Boot behavior** to **Local OS** before its next reboot: left on **Inherit**, it boots the recovery system.
+A device from **One command** or **Master image** shows a yellow bar and **PENDING** in **Nodes**. Click it, check the **HW serial**, and click **Approve**. Approval applies the node's access and utilities at once. By default, a device running the recovery system from a provisioning card also gets a bootloader that boots from your server.
+
+A device added with **One command** keeps its bootloader. If that device already network-boots from this server, open **Properties** and set **Boot behavior** to **Local OS** before its next reboot: left on **Inherit**, it boots the recovery system.
 
 ![The doomsday-clock panel with the Pending Approval banner, its explanation, the Approve and Reject buttons, and the node's IP, MAC and hardware serial.](img/add-a-device/08-approve.jpg)
 

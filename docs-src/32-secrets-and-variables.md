@@ -3,9 +3,9 @@ title: Secrets and variables
 summary: Store values once and use them on your nodes and in playbooks.
 section: Operating a fleet
 ---
-On **Secrets** you store a value once, attach it where it is needed and use it as `{{secrets.NAME}}`. Only account admins and super admins see this page.
+On **Secrets** you store a value once, attach it where it is needed and use it as `{{secrets.NAME}}`. Only Admins and Super Admins see this page.
 
-A variable stays readable and editable, so use it for URLs, time zones and settings. A secret's value is hidden on this page once you save it, so use it for passwords and keys. Admins and Super Admins can still see the value in the commands and playbook runs that used it. Where an attached value reaches follows the unit rules on [Organizational units and policies](../organization/).
+Use a variable for URLs, time zones and settings: it stays readable and editable. Use a secret for passwords and keys: its value is hidden on this page once you save it. Admins and Super Admins can still see the value in the commands and playbook runs that used it. Which nodes an attached value reaches is decided by the unit rules on [Organizational units and policies](../organization/).
 
 ## Add a variable or a secret
 

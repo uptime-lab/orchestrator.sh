@@ -12,9 +12,9 @@ We run the server at [app.orchestrator.sh](https://app.orchestrator.sh). An acco
 
 ## Sign up
 
-Open [app.orchestrator.sh](https://app.orchestrator.sh) and click **Sign up with Google**. That's it.
+Open [app.orchestrator.sh](https://app.orchestrator.sh) and click **Sign up with Google**.
 
-Prefer a password? Sign up with your e-mail and click the link in the confirmation message. Until you do, the app shows a reminder instead of your account.
+To use a password instead, sign up with your e-mail and click the link in the confirmation message. Until you do, the app shows a reminder instead of your account.
 
 Once you're in, you can add a passkey under your account settings and sign in with it from then on.
 
@@ -34,7 +34,7 @@ A board added with one command keeps its old bootloader. Point it at the server 
 1. Open the node, go to **Advanced** → **Bootloader / EEPROM** and click **Update bootloader**.
 2. Click **Reboot to apply**.
 
-From now on the board asks the server first on every boot. The server sends the recovery system when you ask for it, and otherwise the board boots its own drive. If the server can't be reached, the board also boots its own drive.
+From now on the board asks the server first on every boot. The server sends the recovery system when you ask for it. Otherwise, or if the server can't be reached, the board boots its own drive.
 
 ## Install an operating system
 

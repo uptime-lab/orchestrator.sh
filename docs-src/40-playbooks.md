@@ -3,11 +3,11 @@ title: Playbooks: automating work across nodes
 summary: Build a list of steps once, then run it on the nodes you pick or on a schedule.
 section: Automation
 ---
-A playbook is a list of steps run on the nodes you pick. You build it on the **Operations** page and run it by hand or on a schedule.
+You build playbooks on the **Operations** page and run them by hand or on a schedule.
 
 ## Create a playbook
 
-The fast path is an example. Open **Operations**, then the **Playbooks** tab.
+The quickest start is an example. Open **Operations**, then the **Playbooks** tab.
 
 1. Click **From example**.
 2. Click a card: **Install OS**, **Capture a golden image**, **Back up a node** or **Restore from a backup**.

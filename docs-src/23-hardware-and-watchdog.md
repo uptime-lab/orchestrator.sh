@@ -18,7 +18,7 @@ The server detects the compute module. It cannot see the carrier board, or a clo
 5. Click **Reboot**.
 6. Click **Scan**.
 
-After the scan, **confirmed** or **works** means the hardware answers. **not found** means a wrong variant, a module not seated, or no reboot since the apply. A wrong declaration does no harm, and modules that clash on pins, I2C address or bus are refused when you save.
+After the scan, **confirmed** or **works** means the hardware answers. **not found** means a wrong variant, a module not seated, or no reboot since the apply. A wrong declaration does no harm. Modules that clash on pins, I2C address or bus are refused when you save.
 
 An apply to an offline node waits until the node connects on its installed OS. **Scan** is refused while the node runs the recovery system.
 

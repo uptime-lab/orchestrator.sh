@@ -3,8 +3,6 @@ title: Troubleshooting
 summary: Find what you see, why it happens, and what to do.
 section: Administration
 ---
-Find what you see, then do what the entry says.
-
 ## A device does not appear
 
 - **A card-booted device shows a login prompt and never appears.** The card has a GUID partition table. In macOS Disk Utility, choose **View** → **Show All Devices**, select the card itself, erase it as **MS-DOS (FAT)** with scheme **Master Boot Record**, and unzip the bundle again.

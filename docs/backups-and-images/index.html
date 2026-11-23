@@ -81,12 +81,12 @@
 <p>A golden image is a backup without the machine identity: machine-id, SSH host keys, the adoption file, network state and hostname. Set up one node the way you want every node, then capture it.</p>
 <ol><li>Reboot the configured node to recovery.</li><li>Click <b>Create backup</b>, give it a title and tick <b>Golden image</b>.</li><li>Click <b>Create backup</b> and wait for <b>SUCCESS</b>. The source node keeps its own identity.</li><li>Reboot the source node.</li><li>On each target node, follow <a href="../install-an-os/">Installing an operating system</a> and pick the golden image in <b>Image</b>.</li></ol>
 <figure><a href="../img/backups-and-images/05-create-golden.jpg"><img src="../img/backups-and-images/05-create-golden.jpg" alt="The Create backup form with Golden image ticked" loading="lazy"></a></figure>
-<p>Gold images are listed under <b>Operations</b> → <b>Gold images</b>.</p>
+<p>Golden images are listed under <b>Operations</b> → <b>Gold images</b>.</p>
 <h2 id="what-a-backup-holds-and-where-it-lives">What a backup holds and where it lives</h2>
 <p>A backup covers the drive up to the end of the system partition, with free space trimmed, stored compressed. It restores onto a smaller or larger drive as long as the data fits. A drive with a partition after the system partition can't be captured.</p>
 <p>Backups and golden images live in your server's image storage, on local disk or in the bucket if the server uses object storage. They count toward the image limits set by whoever runs the server (<code>IMAGE_MAX_PER_ACCOUNT</code>, <code>IMAGE_MAX_BYTES_PER_ACCOUNT</code>, <code>IMAGE_MAX_BYTES_INSTANCE</code> in <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md" target="_blank" rel="noopener">CONFIGURATION.md</a>). Nothing deletes them for you.</p>
 <h2 id="who-can-do-this">Who can do this</h2>
-<p>Admins can create and restore backups. Downloading or deleting an image needs the account's super admin. A backup carries the node's credentials, so treat a downloaded copy as a secret.</p>
+<p>Admins can create and restore backups. Downloading or deleting an image needs the account's Super Admin. A backup carries the node's credentials, so treat a downloaded copy as a secret.</p>
 <div class="pager"><a class="prev" href="/docs/hardware-and-watchdog/"><small>Previous</small>Hardware profiles, overclocking and the watchdog</a><a class="next" href="/docs/organization/"><small>Next</small>Organizational units and policies</a></div>
 </article>
 </main>

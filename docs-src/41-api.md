@@ -3,7 +3,7 @@ title: Using the API
 section: Automation
 summary: Sign in from a script, then list nodes, send commands, start playbooks and read the results.
 ---
-Everything the web UI does goes through an HTTP API, so a script can do the same. Sign in, keep the token, and call the routes below.
+Everything the web UI does goes through an HTTP API, so a script can do the same.
 
 ## Find the API
 

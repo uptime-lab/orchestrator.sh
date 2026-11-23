@@ -3,7 +3,7 @@ title: Utilities: managed software
 summary: Assign built-in software to a unit and keep it installed and configured.
 section: Operating a fleet
 ---
-A utility is software from a built-in catalog that the platform installs and keeps configured on every node its assignment reaches. Which nodes that is follows the unit rules on [Organizational units and policies](../organization/).
+A utility is software from a built-in catalog that the platform installs and keeps configured on every node its assignment reaches. Which nodes those are is decided by the unit rules on [Organizational units and policies](../organization/).
 
 ## Assign a utility to a unit
 

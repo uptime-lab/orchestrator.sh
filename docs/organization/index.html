@@ -63,9 +63,8 @@
 <h1>Organizational units and policies</h1>
 <p class="summary">Group nodes into units and set policies once for all of them.</p>
 <nav class="toc" aria-label="On this page"><ul><li><a href="#create-a-unit">Create a unit</a></li><li><a href="#move-nodes-into-a-unit">Move nodes into a unit</a></li><li><a href="#set-a-policy-on-a-unit-or-for-the-whole-account">Set a policy on a unit or for the whole account</a></li></ul></nav>
-<p>Group nodes into units on the <b>Organization</b> page and set policies there once for all of them.</p>
-<p>Units group nodes, such as the devices in one room or one site. Anything you set on a unit reaches every node in it, including nodes you move in later. A node's own setting wins, then its unit's (and a parent unit's, if the unit is nested), then the account default.</p>
-<p>SSH users, secrets and utilities attached at several levels add up on the node. Where two levels define the same one, the nearer level wins.</p>
+<p>Units group nodes, such as the devices in one room or one site. Anything you set on a unit reaches every node in it, including nodes you move in later. A node's own setting wins, then its unit's, then a parent unit's if the unit is nested, then the account default.</p>
+<p>SSH users, secrets and utilities attached at several levels add up on the node. Where two levels define the same user, secret or utility, the nearer level wins.</p>
 <h2 id="create-a-unit">Create a unit</h2>
 <ol><li>Open <b>Organization</b> in the top bar.</li><li>Click <b>+ New OU</b> under the tree.</li><li>Type a <b>Name</b>.</li><li>Choose a <b>Parent</b>, or leave <b>None</b> for a top-level unit. Units nest two levels deep.</li><li>Click <b>Create</b>.</li></ol>
 <figure><a href="../img/organization/06-new-unit.jpg"><img src="../img/organization/06-new-unit.jpg" alt="The New unit dialog with Name &quot;Roof antenna&quot; and Parent &quot;Garage&quot;" loading="lazy"></a></figure>

@@ -3,7 +3,7 @@ title: Access: SSH keys and device users
 summary: Add your SSH keys and create the Linux users your nodes should have.
 section: Operating a fleet
 ---
-On **Credentials** you add SSH keys and create the Linux users the agent maintains on your nodes. Where a user applies follows the unit rules on [Organizational units and policies](../organization/).
+On **Credentials** you add SSH keys and create the Linux users the agent maintains on your nodes. Which nodes get a user is decided by the unit rules on [Organizational units and policies](../organization/).
 
 ## Add an SSH key
 
@@ -15,7 +15,7 @@ On **Credentials** you add SSH keys and create the Linux users the agent maintai
 
 ![The Add SSH Key panel with Alias "Field tablet" and an ssh-ed25519 public key pasted](img/access-and-credentials/02-add-ssh-key.jpg)
 
-Paste one key per entry. A value with several lines saves, but the device refuses it. A key grants nothing until you attach it to a user.
+A value with several lines saves, but the device refuses it. A key grants nothing until you attach it to a user.
 
 **Generate keypair** creates a key the platform uses to adopt devices over the network. You don't log in with it.
 

@@ -3,8 +3,6 @@ title: Quick start on your own server
 summary: Install the server with one command and sign in.
 section: Start
 ---
-Install the server with one command, sign in, then add your first device.
-
 Uptime Orchestrator manages a fleet of Raspberry Pi boards from one web UI. You adopt devices, install operating systems on them over the network, and control who logs in and what runs on them.
 
 ## What you need
@@ -27,7 +25,7 @@ On the server, run:
 curl -fsSL https://get.orchestrator.sh | sh
 ```
 
-It asks a few questions, checks everything, and asks **Install now? (y/n)** before it changes anything.
+It asks a few questions, runs its checks, and asks **Install now? (y/n)** before it changes anything.
 
 - **How will your devices and your browser reach this server?** Pick `1` for a local network or `2` for the internet.
 - **Name or address the devices should use** (local network). Accept the offered name or give the machine's address. A `.local` name is refused because a Pi bootloader can't resolve it.

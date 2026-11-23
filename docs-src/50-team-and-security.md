@@ -3,7 +3,7 @@ title: Team, sign-in security and the device limit
 summary: Invite people, give them roles, protect your sign-in and see how many devices your server admits.
 section: Administration
 ---
-Invite colleagues, choose what each may do, and protect your own sign-in. Click your initials at the top right: **Team Management** holds the members, **Account** your own sign-in.
+Click your initials at the top right: **Team Management** holds the members, **Account** your own sign-in.
 
 ![The account menu open at the top right, showing the user's name, an Active badge, the email address, Team Management, Account and Sign out](img/team-and-security/01-account-menu.jpg "The account menu")
 
@@ -46,7 +46,7 @@ To make two-step sign-in mandatory for everyone, tick **Require two-step verific
 
 ## See and end your sessions
 
-**Sessions** on **Account** lists every browser and script signed in as you, by browser and system, or **Unknown device** for a script. Your current browser is marked **this device**. Hover over a row to see the full browser identification.
+**Sessions** on **Account** lists every browser and script signed in as you. A browser shows as its browser and system, a script as **Unknown device**. Your current browser is marked **this device**. Hover over a row to see the full browser identification.
 
 ![The Sessions section: Chrome on macOS marked this device, two Unknown device rows, each with an address, the time it was last used and a Sign out button](img/team-and-security/04-sessions.jpg "Sessions")
 

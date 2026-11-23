@@ -3,7 +3,7 @@ title: Backup, restore and upgrading the server
 summary: What to back up, where the restore and upgrade procedures are, and how to update agents.
 section: Administration
 ---
-Keep a self-hosted server recoverable and current. The commands are in the reference: [BACKUP-RESTORE.md](https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md) and [INSTALL.md → Upgrading](https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#upgrading).
+The commands for a self-hosted server are in the reference: [BACKUP-RESTORE.md](https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md) and [INSTALL.md → Upgrading](https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#upgrading).
 
 ## What to back up
 
@@ -41,4 +41,4 @@ The server hands devices the agent release you marked latest when you imported i
 
 ![The Overview tab of an offline node, welding-bot, with Hostname, Unit, IP, MAC, HW serial, Bootloader and an Agent row showing 0.8.5 and a greyed-out Update button](img/backup-and-upgrade/01-agent-row.jpg "Update is greyed out while the node is offline")
 
-To update many, open **Status** → **Attention**, filter by **Agent update available**, select the rows and click **Update agent**. A node away at the time gets the update when it returns, and a node still finishing another command is held back until it is done.
+To update many, open **Status** → **Attention**, filter by **Agent update available**, select the rows and click **Update agent**. A node offline at the time gets the update when it reconnects, and a node still finishing another command is held back until it is done.

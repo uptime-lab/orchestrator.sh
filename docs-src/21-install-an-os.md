@@ -3,14 +3,14 @@ title: Installing an operating system
 summary: Write an OS image to a node's drive from the recovery system and boot it.
 section: Devices
 ---
-Install or reinstall an OS on an approved node. The node boots a small recovery system from your server, the server writes the image to its drive, and the node then boots the new system from its own disk.
+Install or reinstall an OS on an approved node. The node boots a small recovery system from your server, the agent in it writes the image to the node's drive, and the node then boots the new system from its own disk.
 
 ## Install an OS on a node
 
 1. Go to **Operations** → **Install images**, click **Upload image**, fill in **Title** and **Version**, choose the file, and click **Done**. Use `.img`, `.iso`, `.xz` or `.zst`.
 2. Open the node, go to **Actions**, click **Reboot to recovery** and confirm. Wait until the node turns violet and shows **RECOVERY**.
 3. Click **Install OS** in the **Provisioning** group.
-4. Check the **Image** and pick the **Target Device**. The node's default image is preselected and marked **default**, and an image without an uploaded file is listed but can't be chosen. Read the device path, because a board with a card or eMMC lists those too.
+4. Check the **Image** and pick the **Target Device**. The node's default image is preselected and marked **default**. An image without an uploaded file is listed but can't be chosen. Read the device path, because a board with a card or eMMC lists those too.
 5. Click **Install OS** and confirm. This erases the target drive. Progress shows in **Command history**.
 6. Click **Install Agent**, choose the same **Target Device**, keep the other defaults and start it. It takes seconds.
 7. Open **Properties** and set **Boot behavior** to **Local OS**.

@@ -304,7 +304,7 @@ footer a { color: var(--mute); }
       <li><b>2</b><h3>Run one command</h3><p>Click <i>Add node</i> and run the command on a board with 64-bit Raspberry Pi OS, Debian or Ubuntu.</p></li>
       <li><b>3</b><h3>Approve it</h3><p>The board appears in your browser. Approve it, then update its bootloader there so it boots from the network.</p></li>
     </ol>
-    <p class="mute" style="margin-top:22px">Empty board? <a href="docs/add-a-device/">Set up its bootloader over USB or from a card</a> and it boots from the network.</p>
+    <p class="mute" style="margin-top:22px">For an empty board, <a href="docs/add-a-device/">set up its bootloader over USB or from a card</a> and it boots from the network.</p>
     <a class="btn solid" href="https://app.orchestrator.sh" style="margin-top:22px" target="_blank" rel="noopener">Start free</a>
   </div>
 </section>
@@ -312,8 +312,8 @@ footer a { color: var(--mute); }
 <section id="four-minutes">
   <div class="wrap">
     <div class="stamp"><b>Network boot</b> Over HTTP, from any network</div>
-    <h2>No PXE. No boot server on site.</h2>
-    <p class="lede">The board's own bootloader fetches a signed recovery system from the server over HTTP. An ordinary DHCP address is enough and the drive can be empty. If the server is away, the board boots its own drive.</p>
+    <h2>Nothing to install on the board's network</h2>
+    <p class="lede">The board's own bootloader fetches a signed recovery system from the server over HTTP. An ordinary DHCP address is enough and the drive can be empty. If the server is unreachable, the board boots its own drive.</p>
     <div class="arch" id="arch" aria-label="Animated diagram: a board boots from the server over the internet, gets its operating system and comes online">
       <p class="arch-hint">Swipe the diagram sideways</p>
       <div class="arch-stage">
@@ -403,9 +403,9 @@ footer a { color: var(--mute); }
 
 <section id="recovery">
   <div class="wrap">
-    <div class="stamp"><b>Recovery</b> No rescue partition</div>
+    <div class="stamp"><b>Recovery</b> From the network</div>
     <h2>Recovery without A/B partitions</h2>
-    <p class="lede">No rescue partition, no A/B scheme. A board asks the server first on every boot, so you can bring it back from the network even when its OS is completely broken. We wiped the drive of a board on the hosted service: it was back in recovery about a minute after the switch.</p>
+    <p class="lede">A board asks the server first on every boot, so you can bring it back from the network even when its OS is completely broken. We wiped the drive of a board on the hosted service: it was back in recovery about a minute after the switch.</p>
     <ol class="steps">
       <li><b>1</b><h3>Set the boot target</h3><p>Switch the board to Recovery in the browser.</p></li>
       <li><b>2</b><h3>Wait a minute</h3><p>A board that cannot boot its drive keeps asking the server, so it comes back by itself. A board that hangs later needs a reboot: arm the watchdog beforehand.</p></li>
@@ -416,7 +416,7 @@ footer a { color: var(--mute); }
 
 <section id="install">
   <div class="wrap">
-    <div class="stamp"><b>Self-hosted</b> Same software, on your machine</div>
+    <div class="stamp"><b>Self-hosted</b> On your machine</div>
     <h2>Or run the server yourself</h2>
     <div class="cmdbar">
       <code><span class="p">$</span> curl -fsSL https://get.orchestrator.sh | sh</code>

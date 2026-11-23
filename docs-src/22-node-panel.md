@@ -17,7 +17,7 @@ Click a node on **Nodes** to open its panel. Everything you do to one device sta
 
 ![The Actions tab with Terminal, Command history, Change hostname, Run playbook, Reboot, Reboot to recovery and the Danger section](img/node-panel/03-actions.jpg "Rows your role cannot use are hidden.")
 
-On **Actions**, **Reboot to recovery** network-boots the recovery system once, and **Shutdown** keeps the device off until someone powers it on. A new hostname applies without a reboot. Click **Refresh DHCP lease** to make DNS pick it up now.
+On **Actions**, **Reboot to recovery** network-boots the recovery system once, and **Shutdown** keeps the device off until someone powers it on. A new hostname applies without a reboot. Click **Refresh DHCP lease** to make DNS pick up the new name now.
 
 A manager may reboot, identify, rename and run playbooks. Shutting down, deleting, the terminal, file edits and agent updates need an admin.
 
@@ -67,7 +67,7 @@ The server closes the shell within a minute if you lose access. The [audit trail
 
 **Refresh from device** stores a new version when the file changed on the device.
 
-The password-hash files, the adoption file and files ending in `.pem`, `.key`, `.p12` or `.pfx` are refused, so don't track any other file that holds a secret. A version holds at most 512 KiB, and anyone who can manage the node's files can read it.
+The password-hash files, the adoption file and files ending in `.pem`, `.key`, `.p12` or `.pfx` are refused. Don't track any other file that holds a secret either. A version holds at most 512 KiB, and anyone who can manage the node's files can read it.
 
 `/boot/firmware/config.txt` is tracked on every node as **MANAGED**. You can edit it but not untrack it. To stop tracking another file, click **Untrack (keep the file on the device)**. **Delete on device** removes the file and keeps a backup beside it.
 

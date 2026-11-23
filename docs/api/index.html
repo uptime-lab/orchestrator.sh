@@ -63,7 +63,7 @@
 <h1>Using the API</h1>
 <p class="summary">Sign in from a script, then list nodes, send commands, start playbooks and read the results.</p>
 <nav class="toc" aria-label="On this page"><ul><li><a href="#find-the-api">Find the API</a></li><li><a href="#sign-in-and-get-a-token">Sign in and get a token</a></li><li><a href="#list-nodes">List nodes</a></li><li><a href="#run-something-on-a-node">Run something on a node</a></li><li><a href="#start-a-playbook-and-read-the-run">Start a playbook and read the run</a></li><li><a href="#read-what-happened">Read what happened</a></li><li><a href="#confirm-it-s-you">Confirm it's you</a></li><li><a href="#what-limits-apply">What limits apply</a></li></ul></nav>
-<p>Everything the web UI does goes through an HTTP API, so a script can do the same. Sign in, keep the token, and call the routes below.</p>
+<p>Everything the web UI does goes through an HTTP API, so a script can do the same.</p>
 <h2 id="find-the-api">Find the API</h2>
 <p>Through the bundled proxy the base URL is <code>https://&lt;your server&gt;/api</code>, or <code>http://&lt;your server&gt;/api</code> on a local-network install. Versioned routes have <code>/api</code> twice, as in <code>/api/api/v1/nodes</code>, because the proxy strips the first one before the request reaches the server.</p>
 <p>Every route and field is in <a href="https://github.com/uptime-lab/orchestrator/blob/main/backend/docs/swagger.json" target="_blank" rel="noopener"><code>backend/docs/swagger.json</code></a> in the release tree. A production server does not serve a browsable API page.</p>

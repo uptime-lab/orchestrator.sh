@@ -67,8 +67,8 @@
 <h2 id="what-you-need">What you need</h2>
 <ul><li>A Raspberry Pi 4, Pi 5, Compute Module 4 or Compute Module 5 on wired Ethernet.</li><li>Outbound access from the board to <code>app.orchestrator.sh</code> on ports 443 and 50051, and to <code>boot.orchestrator.sh</code> on port 80 for network boot. Nothing has to be opened towards the board.</li></ul>
 <h2 id="sign-up">Sign up</h2>
-<p>Open <a href="https://app.orchestrator.sh" target="_blank" rel="noopener">app.orchestrator.sh</a> and click <b>Sign up with Google</b>. That's it.</p>
-<p>Prefer a password? Sign up with your e-mail and click the link in the confirmation message. Until you do, the app shows a reminder instead of your account.</p>
+<p>Open <a href="https://app.orchestrator.sh" target="_blank" rel="noopener">app.orchestrator.sh</a> and click <b>Sign up with Google</b>.</p>
+<p>To use a password instead, sign up with your e-mail and click the link in the confirmation message. Until you do, the app shows a reminder instead of your account.</p>
 <p>Once you're in, you can add a passkey under your account settings and sign in with it from then on.</p>
 <h2 id="add-a-board-that-already-runs-linux">Add a board that already runs Linux</h2>
 <ol><li>Click <b>Add node</b> and open the <b>One command</b> tab.</li><li>Click <b>Generate command</b>, then <b>Copy command</b>.</li><li>Run the line on the board as a user with sudo. It needs 64-bit Raspberry Pi OS, Debian or Ubuntu.</li><li>The board shows up in <b>Nodes</b> as <b>PENDING</b>. Check the <b>HW serial</b> and click <b>Approve</b>.</li></ol>
@@ -76,7 +76,7 @@
 <h2 id="make-it-boot-from-the-network">Make it boot from the network</h2>
 <p>A board added with one command keeps its old bootloader. Point it at the server once:</p>
 <ol><li>Open the node, go to <b>Advanced</b> → <b>Bootloader / EEPROM</b> and click <b>Update bootloader</b>.</li><li>Click <b>Reboot to apply</b>.</li></ol>
-<p>From now on the board asks the server first on every boot. The server sends the recovery system when you ask for it, and otherwise the board boots its own drive. If the server can't be reached, the board also boots its own drive.</p>
+<p>From now on the board asks the server first on every boot. The server sends the recovery system when you ask for it. Otherwise, or if the server can't be reached, the board boots its own drive.</p>
 <h2 id="install-an-operating-system">Install an operating system</h2>
 <ol><li>Go to <b>Operations</b> → <b>Install images</b> and upload an image. A hosted account holds up to 3 images of up to 15 GB each.</li><li>Open the node, click <b>Reboot to recovery</b> and wait for <b>RECOVERY</b>.</li><li>Follow <a href="../install-an-os/">Installing an operating system</a> from step 3.</li></ol>
 <h2 id="more-than-10-devices">More than 10 devices</h2>

@@ -15,7 +15,7 @@ Click a chip to show only the nodes with that condition. To fix several at once:
 2. Click the action in the bar above the table, for example **Update agent 2**.
 3. Confirm.
 
-The results list each node as **Sent**, **Queued**, **Skipped** or **Failed**. The count covers only nodes the action can reach. A node still carrying an earlier command shows **Running**, so wait for that command to finish first.
+The results list each node as **Sent**, **Queued**, **Skipped** or **Failed**. The number on the action counts only the nodes it can reach. A node still carrying an earlier command shows **Running**, so wait for that command to finish first.
 
 | Condition | What to do |
 |---|---|
@@ -38,7 +38,7 @@ The results list each node as **Sent**, **Queued**, **Skipped** or **Failed**. T
 | **Command stopped reporting** | Check the node's command history. |
 | **Device limit reached** | **Open subscription**, or delete a node. |
 
-**Hide** stops a node's conditions counting in this browser until a condition changes. If a check could not run, for example because the agent release list was unreachable, a line above the table names it.
+**Hide** stops counting a node's conditions in this browser until one of them changes. If a check could not run, for example because the agent release list was unreachable, a line above the table names it.
 
 ## Find a command that was sent
 

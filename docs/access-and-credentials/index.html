@@ -63,11 +63,11 @@
 <h1>Access: SSH keys and device users</h1>
 <p class="summary">Add your SSH keys and create the Linux users your nodes should have.</p>
 <nav class="toc" aria-label="On this page"><ul><li><a href="#add-an-ssh-key">Add an SSH key</a></li><li><a href="#create-a-user-on-a-unit">Create a user on a unit</a></li><li><a href="#what-happens-on-the-devices">What happens on the devices</a></li><li><a href="#trust-a-ca-for-certificate-logins">Trust a CA for certificate logins</a></li></ul></nav>
-<p>On <b>Credentials</b> you add SSH keys and create the Linux users the agent maintains on your nodes. Where a user applies follows the unit rules on <a href="../organization/">Organizational units and policies</a>.</p>
+<p>On <b>Credentials</b> you add SSH keys and create the Linux users the agent maintains on your nodes. Which nodes get a user is decided by the unit rules on <a href="../organization/">Organizational units and policies</a>.</p>
 <h2 id="add-an-ssh-key">Add an SSH key</h2>
 <ol><li>Open <b>Credentials</b> and the <b>SSH Keys</b> tab.</li><li>Click <b>Add SSH key</b>.</li><li>Under <b>Paste public key</b>, type an <b>Alias</b>.</li><li>Paste one public key line, such as <code>ssh-ed25519 …</code>.</li><li>Click <b>Create Key</b>.</li></ol>
 <figure><a href="../img/access-and-credentials/02-add-ssh-key.jpg"><img src="../img/access-and-credentials/02-add-ssh-key.jpg" alt="The Add SSH Key panel with Alias &quot;Field tablet&quot; and an ssh-ed25519 public key pasted" loading="lazy"></a></figure>
-<p>Paste one key per entry. A value with several lines saves, but the device refuses it. A key grants nothing until you attach it to a user.</p>
+<p>A value with several lines saves, but the device refuses it. A key grants nothing until you attach it to a user.</p>
 <p><b>Generate keypair</b> creates a key the platform uses to adopt devices over the network. You don't log in with it.</p>
 <h2 id="create-a-user-on-a-unit">Create a user on a unit</h2>
 <ol><li>Open the <b>Users</b> tab.</li><li>Select the unit in the left rail, or <b>All nodes</b> for the whole account.</li><li>Click <b>Add user</b>.</li><li>Type the <b>Username</b>.</li><li>Tick or clear <b>Grant sudo</b>.</li><li>Pick your key under <b>SSH keys</b> and click <b>Attach</b>.</li><li>Click <b>Create user</b>.</li></ol>
