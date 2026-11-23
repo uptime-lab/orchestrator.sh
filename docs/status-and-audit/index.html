@@ -15,10 +15,10 @@
   <div class="wrap">
     <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
     <nav aria-label="Site">
+      <a href="/#start">Start</a>
       <a href="/#four-minutes">How it works</a>
-      <a href="/#install">Install</a>
+      <a href="/#install">Self-host</a>
       <a href="/#after">Features</a>
-      <a href="/#boards">Boards</a>
       <a href="/#run">Pricing</a>
       <a href="/docs/" aria-current="page">Docs</a>
     </nav>
@@ -30,15 +30,17 @@
 <nav class="side" aria-label="Documentation">
 <div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
 <h4>Start</h4><ul>
-<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/hosted/">Quick start on the hosted service</a></li>
+<li><a href="/docs/quick-start/">Quick start on your own server</a></li>
 <li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+<li><a href="/docs/how-it-works/">How it works</a></li>
 </ul>
 <h4>Devices</h4><ul>
 <li><a href="/docs/add-a-device/">Adding a device</a></li>
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
-<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
+<li><a href="/docs/backups-and-images/">Backups and golden images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/">Organizational units and policies</a></li>
@@ -67,7 +69,7 @@
 <p>Click a chip to show only the nodes with that condition. To fix several at once:</p>
 <ol><li>Tick the nodes, or click <b>Select all</b>.</li><li>Click the action in the bar above the table, for example <b>Update agent 2</b>.</li><li>Confirm.</li></ol>
 <p>The results list each node as <b>Sent</b>, <b>Queued</b>, <b>Skipped</b> or <b>Failed</b>. The count covers only nodes the action can reach. A node still carrying an earlier command shows <b>Running</b>, so wait for that command to finish first.</p>
-<div class="table"><table><thead><tr><th>Condition</th><th>What to do</th></tr></thead><tbody><tr><td><b>Offline</b></td><td>Check power and network. Queued commands wait for it.</td></tr><tr><td><b>Not back yet</b>, <b>Waiting to leave recovery</b></td><td>Usually wait.</td></tr><tr><td><b>Never connected</b></td><td>Check the device was flashed and has network (<a href="../add-a-device/">Adding a device</a>).</td></tr><tr><td><b>Waiting for approval</b></td><td><b>Approve</b>, or reject it in the node panel.</td></tr><tr><td><b>Agent update available</b></td><td><b>Update agent</b>.</td></tr><tr><td><b>Bootloader update available</b></td><td><b>Update bootloader</b>, then reboot.</td></tr><tr><td><b>Bootloader flashed, reboot to apply</b>, <b>Hardware profile applied, reboot to bring it up</b></td><td><b>Reboot</b> when it suits you.</td></tr><tr><td><b>Hardware profile not applied</b></td><td><b>Apply profile</b>.</td></tr><tr><td><b>Utility not applied</b></td><td><b>Apply utilities</b> (<a href="../utilities/">Utilities</a>).</td></tr><tr><td><b>Device login setup failed</b></td><td>Fix the cause, then <b>Re-apply</b> (<a href="../access-and-credentials/">Access and credentials</a>).</td></tr><tr><td><b>In recovery</b></td><td>Finish the work there, or boot the OS (<a href="../install-an-os/">Installing an OS</a>).</td></tr><tr><td><b>Failing to boot</b>, <b>Sent to recovery after failed boots</b></td><td>Find why the OS won't boot. Then <b>Acknowledge</b> the recovery mark.</td></tr><tr><td><b>Watchdog disarmed by the device</b></td><td>Find why it kept restarting, then re-arm (<a href="../hardware-and-watchdog/">Hardware and watchdog</a>).</td></tr><tr><td><b>Unit no longer exists</b></td><td>Move the node to an existing unit.</td></tr><tr><td><b>Watcher cannot netboot</b></td><td>Fix the boot order at the device.</td></tr><tr><td><b>Device credential unreadable</b></td><td>Fix the server's keys (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md">configuration reference</a>).</td></tr><tr><td><b>Command stopped reporting</b></td><td>Check the node's command history.</td></tr><tr><td><b>Device limit reached</b></td><td><b>Open subscription</b>, or delete a node.</td></tr></tbody></table></div>
+<div class="table"><table><thead><tr><th>Condition</th><th>What to do</th></tr></thead><tbody><tr><td><b>Offline</b></td><td>Check power and network. Queued commands wait for it.</td></tr><tr><td><b>Not back yet</b>, <b>Waiting to leave recovery</b></td><td>Usually wait.</td></tr><tr><td><b>Never connected</b></td><td>Check the device was flashed and has network (<a href="../add-a-device/">Adding a device</a>).</td></tr><tr><td><b>Waiting for approval</b></td><td><b>Approve</b>, or reject it in the node panel.</td></tr><tr><td><b>Agent update available</b></td><td><b>Update agent</b>.</td></tr><tr><td><b>Bootloader update available</b></td><td><b>Update bootloader</b>, then reboot.</td></tr><tr><td><b>Bootloader flashed, reboot to apply</b>, <b>Hardware profile applied, reboot to bring it up</b></td><td><b>Reboot</b> when it suits you.</td></tr><tr><td><b>Hardware profile not applied</b></td><td><b>Apply profile</b>.</td></tr><tr><td><b>Utility not applied</b></td><td><b>Apply utilities</b> (<a href="../utilities/">Utilities</a>).</td></tr><tr><td><b>Device login setup failed</b></td><td>Fix the cause, then <b>Re-apply</b> (<a href="../access-and-credentials/">Access and credentials</a>).</td></tr><tr><td><b>In recovery</b></td><td>Finish the work there, or boot the OS (<a href="../install-an-os/">Installing an OS</a>).</td></tr><tr><td><b>Failing to boot</b>, <b>Sent to recovery after failed boots</b></td><td>Find why the OS won't boot. Then <b>Acknowledge</b> the recovery mark.</td></tr><tr><td><b>Watchdog disarmed by the device</b></td><td>Find why it kept restarting, then re-arm (<a href="../hardware-and-watchdog/">Hardware and watchdog</a>).</td></tr><tr><td><b>Unit no longer exists</b></td><td>Move the node to an existing unit.</td></tr><tr><td><b>Watcher cannot netboot</b></td><td>Fix the boot order at the device.</td></tr><tr><td><b>Device credential unreadable</b></td><td>Fix the server's keys (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md" target="_blank" rel="noopener">configuration reference</a>).</td></tr><tr><td><b>Command stopped reporting</b></td><td>Check the node's command history.</td></tr><tr><td><b>Device limit reached</b></td><td><b>Open subscription</b>, or delete a node.</td></tr></tbody></table></div>
 <p><b>Hide</b> stops a node's conditions counting in this browser until a condition changes. If a check could not run, for example because the agent release list was unreachable, a line above the table names it.</p>
 <h2 id="find-a-command-that-was-sent">Find a command that was sent</h2>
 <figure><a href="../img/status-and-audit/03-logs.jpg"><img src="../img/status-and-audit/03-logs.jpg" alt="The Logs tab with status and time filters and the most recent commands" loading="lazy"></a></figure>
@@ -87,7 +89,7 @@
 <footer>
   <div class="wrap">
     <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
-    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
   </div>
 </footer>
 

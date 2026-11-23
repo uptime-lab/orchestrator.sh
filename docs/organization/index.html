@@ -15,10 +15,10 @@
   <div class="wrap">
     <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
     <nav aria-label="Site">
+      <a href="/#start">Start</a>
       <a href="/#four-minutes">How it works</a>
-      <a href="/#install">Install</a>
+      <a href="/#install">Self-host</a>
       <a href="/#after">Features</a>
-      <a href="/#boards">Boards</a>
       <a href="/#run">Pricing</a>
       <a href="/docs/" aria-current="page">Docs</a>
     </nav>
@@ -30,15 +30,17 @@
 <nav class="side" aria-label="Documentation">
 <div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
 <h4>Start</h4><ul>
-<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/hosted/">Quick start on the hosted service</a></li>
+<li><a href="/docs/quick-start/">Quick start on your own server</a></li>
 <li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+<li><a href="/docs/how-it-works/">How it works</a></li>
 </ul>
 <h4>Devices</h4><ul>
 <li><a href="/docs/add-a-device/">Adding a device</a></li>
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
-<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
+<li><a href="/docs/backups-and-images/">Backups and golden images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/" aria-current="page">Organizational units and policies</a></li>
@@ -70,8 +72,8 @@
 <p>Rename a unit with the pencil next to its name. Drag it in the rail onto another unit to change its parent.</p>
 <p><b>Delete unit</b> refuses while the unit still holds nodes, child units, playbooks or utility assignments. Move those out first.</p>
 <h2 id="move-nodes-into-a-unit">Move nodes into a unit</h2>
-<ol><li>Open <b>Nodes</b>.</li><li>Click <b>Select / assign to unit</b> above the table.</li><li>Tick the nodes.</li><li>Open <b>Assign to unit</b> and pick the unit.</li></ol>
-<figure><video data-src="../img/organization/v1-move-to-unit.mp4" aria-label="Clicking Select / assign to unit, ticking jetpack-test-03 and paint-booth-display, opening the Assign to unit menu with Laboratory, Test bench, Garage, Basement and Remove from unit, then leaving with Done" muted loop playsinline preload="none"></video><figcaption>Select nodes and open the unit chooser</figcaption></figure>
+<ol><li>Open <b>Nodes</b>.</li><li>Click <b>Select / Assign to unit</b> above the table.</li><li>Tick the nodes.</li><li>Open <b>Assign to unit</b> and pick the unit.</li></ol>
+<figure><video data-src="../img/organization/v1-move-to-unit.mp4" aria-label="Clicking Select / Assign to unit, ticking jetpack-test-03 and paint-booth-display, opening the Assign to unit menu with Laboratory, Test bench, Garage, Basement and Remove from unit, then leaving with Done" muted loop playsinline preload="none"></video><figcaption>Select nodes and open the unit chooser</figcaption></figure>
 <p>You can also drag selected rows onto a unit in the left rail, or use <b>Move</b> on the <b>Unit</b> row of a node's <b>Overview</b>. A moved node picks up the new unit's settings at once. To place new devices in a unit when they join, give their adoption token an <b>Adoption OU</b> (<a href="../secrets-and-variables/">Secrets and variables</a>).</p>
 <h2 id="set-a-policy-on-a-unit-or-for-the-whole-account">Set a policy on a unit or for the whole account</h2>
 <ol><li>Open <b>Organization</b>.</li><li>Select a unit in the rail, or <b>Account defaults</b> for every node that has no answer of its own.</li><li>On the <b>Policies</b> tab, change the fields you need.</li><li>Click <b>Save policies</b>.</li></ol>
@@ -82,14 +84,14 @@
 <p><b>Password login</b> goes to the devices as soon as you save. Saving hardware or watchdog settings only stores them, and nothing changes on a device until you apply them.</p>
 <p>The unit's <b>Contents</b> tab lists its nodes and everything that reaches them. <b>N override(s)</b> next to a node means it sets some fields itself, and <b>Reset to inherited</b> clears them.</p>
 <p>Next: <a href="../access-and-credentials/">Access: SSH keys and device users</a>.</p>
-<div class="pager"><a class="prev" href="/docs/backups-and-images/"><small>Previous</small>Backups and gold images</a><a class="next" href="/docs/access-and-credentials/"><small>Next</small>Access: SSH keys and device users</a></div>
+<div class="pager"><a class="prev" href="/docs/backups-and-images/"><small>Previous</small>Backups and golden images</a><a class="next" href="/docs/access-and-credentials/"><small>Next</small>Access: SSH keys and device users</a></div>
 </article>
 </main>
 
 <footer>
   <div class="wrap">
     <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
-    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
   </div>
 </footer>
 

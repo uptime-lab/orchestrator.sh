@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick start on the hosted service · Uptime Orchestrator docs</title>
+<meta name="description" content="Sign up, add a board with one command and boot it from the network. No server to install.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css" rel="stylesheet">
+<script src="/docs/search.js" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="/#start">Start</a>
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Self-host</a>
+      <a href="/#after">Features</a>
+      <a href="/#run">Pricing</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs wrap">
+<nav class="side" aria-label="Documentation">
+<div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
+<h4>Start</h4><ul>
+<li><a href="/docs/hosted/" aria-current="page">Quick start on the hosted service</a></li>
+<li><a href="/docs/quick-start/">Quick start on your own server</a></li>
+<li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+<li><a href="/docs/how-it-works/">How it works</a></li>
+</ul>
+<h4>Devices</h4><ul>
+<li><a href="/docs/add-a-device/">Adding a device</a></li>
+<li><a href="/docs/install-an-os/">Installing an operating system</a></li>
+<li><a href="/docs/node-panel/">Working with a node</a></li>
+<li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+<li><a href="/docs/backups-and-images/">Backups and golden images</a></li>
+</ul>
+<h4>Operating a fleet</h4><ul>
+<li><a href="/docs/organization/">Organizational units and policies</a></li>
+<li><a href="/docs/access-and-credentials/">Access: SSH keys and device users</a></li>
+<li><a href="/docs/secrets-and-variables/">Secrets and variables</a></li>
+<li><a href="/docs/utilities/">Utilities: managed software</a></li>
+<li><a href="/docs/status-and-audit/">Status, attention and the audit trail</a></li>
+</ul>
+<h4>Automation</h4><ul>
+<li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+<li><a href="/docs/api/">Using the API</a></li>
+</ul>
+<h4>Administration</h4><ul>
+<li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
+<li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+<li><a href="/docs/troubleshooting/">Troubleshooting</a></li>
+</ul></nav>
+<article>
+<div class="stamp"><b>Start</b> Documentation</div>
+<h1>Quick start on the hosted service</h1>
+<p class="summary">Sign up, add a board with one command and boot it from the network. No server to install.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#what-you-need">What you need</a></li><li><a href="#sign-up">Sign up</a></li><li><a href="#add-a-board-that-already-runs-linux">Add a board that already runs Linux</a></li><li><a href="#make-it-boot-from-the-network">Make it boot from the network</a></li><li><a href="#install-an-operating-system">Install an operating system</a></li><li><a href="#more-than-10-devices">More than 10 devices</a></li></ul></nav>
+<p>We run the server at <a href="https://app.orchestrator.sh" target="_blank" rel="noopener">app.orchestrator.sh</a>. An account is free for 10 devices. To run the server on your own machine instead, see <a href="../quick-start/">Quick start on your own server</a>.</p>
+<h2 id="what-you-need">What you need</h2>
+<ul><li>A Raspberry Pi 4, Pi 5, Compute Module 4 or Compute Module 5 on wired Ethernet.</li><li>Outbound access from the board to <code>app.orchestrator.sh</code> on ports 443 and 50051, and to <code>boot.orchestrator.sh</code> on port 80 for network boot. Nothing has to be opened towards the board.</li></ul>
+<h2 id="sign-up">Sign up</h2>
+<p>Open <a href="https://app.orchestrator.sh" target="_blank" rel="noopener">app.orchestrator.sh</a> and click <b>Sign up with Google</b>. That's it.</p>
+<p>Prefer a password? Sign up with your e-mail and click the link in the confirmation message. Until you do, the app shows a reminder instead of your account.</p>
+<p>Once you're in, you can add a passkey under your account settings and sign in with it from then on.</p>
+<h2 id="add-a-board-that-already-runs-linux">Add a board that already runs Linux</h2>
+<ol><li>Click <b>Add node</b> and open the <b>One command</b> tab.</li><li>Click <b>Generate command</b>, then <b>Copy command</b>.</li><li>Run the line on the board as a user with sudo. It needs 64-bit Raspberry Pi OS, Debian or Ubuntu.</li><li>The board shows up in <b>Nodes</b> as <b>PENDING</b>. Check the <b>HW serial</b> and click <b>Approve</b>.</li></ol>
+<p>A board with nothing on it joins another way: flash its bootloader from the browser over USB, or boot it from a provisioning card (<a href="../add-a-device/">Adding a device</a>).</p>
+<h2 id="make-it-boot-from-the-network">Make it boot from the network</h2>
+<p>A board added with one command keeps its old bootloader. Point it at the server once:</p>
+<ol><li>Open the node, go to <b>Advanced</b> → <b>Bootloader / EEPROM</b> and click <b>Update bootloader</b>.</li><li>Click <b>Reboot to apply</b>.</li></ol>
+<p>From now on the board asks the server first on every boot. The server sends the recovery system when you ask for it, and otherwise the board boots its own drive. If the server can't be reached, the board also boots its own drive.</p>
+<h2 id="install-an-operating-system">Install an operating system</h2>
+<ol><li>Go to <b>Operations</b> → <b>Install images</b> and upload an image. A hosted account holds up to 3 images of up to 15 GB each.</li><li>Open the node, click <b>Reboot to recovery</b> and wait for <b>RECOVERY</b>.</li><li>Follow <a href="../install-an-os/">Installing an operating system</a> from step 3.</li></ol>
+<h2 id="more-than-10-devices">More than 10 devices</h2>
+<p>Write to <a href="mailto:sales@orchestrator.sh">sales@orchestrator.sh</a>. Devices you already added keep working when a limit is reached. Only new ones wait.</p>
+<p>Next: <a href="../add-a-device/">Adding a device</a>.</p>
+<div class="pager"><a class="next" href="/docs/quick-start/"><small>Next</small>Quick start on your own server</a></div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

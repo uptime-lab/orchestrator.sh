@@ -15,10 +15,10 @@
   <div class="wrap">
     <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
     <nav aria-label="Site">
+      <a href="/#start">Start</a>
       <a href="/#four-minutes">How it works</a>
-      <a href="/#install">Install</a>
+      <a href="/#install">Self-host</a>
       <a href="/#after">Features</a>
-      <a href="/#boards">Boards</a>
       <a href="/#run">Pricing</a>
       <a href="/docs/" aria-current="page">Docs</a>
     </nav>
@@ -30,15 +30,17 @@
 <nav class="side" aria-label="Documentation">
 <div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
 <h4>Start</h4><ul>
-<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/hosted/">Quick start on the hosted service</a></li>
+<li><a href="/docs/quick-start/">Quick start on your own server</a></li>
 <li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+<li><a href="/docs/how-it-works/">How it works</a></li>
 </ul>
 <h4>Devices</h4><ul>
 <li><a href="/docs/add-a-device/">Adding a device</a></li>
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
-<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
+<li><a href="/docs/backups-and-images/">Backups and golden images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/">Organizational units and policies</a></li>
@@ -64,7 +66,7 @@
 <p>Everything the web UI does goes through an HTTP API, so a script can do the same. Sign in, keep the token, and call the routes below.</p>
 <h2 id="find-the-api">Find the API</h2>
 <p>Through the bundled proxy the base URL is <code>https://&lt;your server&gt;/api</code>, or <code>http://&lt;your server&gt;/api</code> on a local-network install. Versioned routes have <code>/api</code> twice, as in <code>/api/api/v1/nodes</code>, because the proxy strips the first one before the request reaches the server.</p>
-<p>Every route and field is in <a href="https://github.com/uptime-lab/orchestrator/blob/main/backend/docs/swagger.json"><code>backend/docs/swagger.json</code></a> in the release tree. A production server does not serve a browsable API page.</p>
+<p>Every route and field is in <a href="https://github.com/uptime-lab/orchestrator/blob/main/backend/docs/swagger.json" target="_blank" rel="noopener"><code>backend/docs/swagger.json</code></a> in the release tree. A production server does not serve a browsable API page.</p>
 <h2 id="sign-in-and-get-a-token">Sign in and get a token</h2>
 <pre><code>API=https://orchestrator.example.com/api
 read -rs PASSWORD
@@ -97,7 +99,7 @@ REFRESH=$(jq -r .data.refresh_token &lt;&lt;&lt;"$LOGIN")</code></pre>
 curl -fsS "$API/api/v1/node-commands/$CMD" -H "Authorization: Bearer $TOKEN" |
   jq '.data | {status, result}'
 # {"status":"success","result":{"exit_code":"0","stdout":"Filesystem ...","stderr":""}}</code></pre>
-<p><code>status</code> moves through <code>registered</code>, <code>sent</code> and <code>in_progress</code>. It ends as <code>success</code>, <code>failed</code>, <code>superseded</code>, <code>expired</code> or <code>skipped</code>. A non-zero exit code fails the command. The other commands and their parameters are in the <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/DEVICE-COMMANDS.md">device commands reference</a>.</p>
+<p><code>status</code> moves through <code>registered</code>, <code>sent</code> and <code>in_progress</code>. It ends as <code>success</code>, <code>failed</code>, <code>superseded</code>, <code>expired</code> or <code>skipped</code>. A non-zero exit code fails the command. The other commands and their parameters are in the <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/DEVICE-COMMANDS.md" target="_blank" rel="noopener">device commands reference</a>.</p>
 <h2 id="start-a-playbook-and-read-the-run">Start a playbook and read the run</h2>
 <p>Find the playbook's id, then start it on the nodes you name:</p>
 <pre><code>curl -fsS "$API/api/v1/workflow-templates?name=Nightly" -H "Authorization: Bearer $TOKEN" |
@@ -132,7 +134,7 @@ curl -fsS "$API/api/v1/workflow-executions/$RUN" -H "Authorization: Bearer $TOKE
 <footer>
   <div class="wrap">
     <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
-    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
   </div>
 </footer>
 

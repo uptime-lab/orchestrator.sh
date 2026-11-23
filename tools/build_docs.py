@@ -47,7 +47,8 @@ def inline(text):
         elif m.group(3) is not None:
             out.append("<em>%s</em>" % inline(m.group(3)))
         else:
-            out.append('<a href="%s">%s</a>' % (html.escape(m.group(5)), inline(m.group(4))))
+            ext = ' target="_blank" rel="noopener"' if re.match(r"https?://", m.group(5)) else ""
+            out.append('<a href="%s"%s>%s</a>' % (html.escape(m.group(5)), ext, inline(m.group(4))))
         pos = m.end()
     out.append(html.escape(text[pos:], quote=False))
     return "".join(out)
@@ -214,10 +215,10 @@ HEAD = """<!DOCTYPE html>
   <div class="wrap">
     <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
     <nav aria-label="Site">
+      <a href="/#start">Start</a>
       <a href="/#four-minutes">How it works</a>
-      <a href="/#install">Install</a>
+      <a href="/#install">Self-host</a>
       <a href="/#after">Features</a>
-      <a href="/#boards">Boards</a>
       <a href="/#run">Pricing</a>
       <a href="/docs/" aria-current="page">Docs</a>
     </nav>
@@ -230,7 +231,7 @@ FOOT = """
 <footer>
   <div class="wrap">
     <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
-    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
   </div>
 </footer>
 
@@ -285,7 +286,7 @@ def main():
     index = HEAD.format(title="Documentation", summary="How to install Uptime Orchestrator, add devices and run a fleet.")
     index += '\n<main class="docs-index wrap">\n<div class="stamp"><b>Docs</b> Uptime Orchestrator 0.1</div>\n<h1>Documentation</h1>\n'
     index += SEARCH + "\n"
-    index += '<p class="summary">From an empty server to a managed fleet. The reference pages for self-hosting live with the source, in <a href="https://github.com/uptime-lab/orchestrator/tree/main/docs">the repository</a>.</p>\n'
+    index += '<p class="summary">From an empty server to a managed fleet. The reference pages for self-hosting live with the source, in <a href="https://github.com/uptime-lab/orchestrator/tree/main/docs" target="_blank" rel="noopener">the repository</a>.</p>\n'
     section = None
     for p in pages:
         if p["meta"]["section"] != section:

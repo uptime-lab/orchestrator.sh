@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Uptime Orchestrator: manage Raspberry Pi fleets</title>
+<title>Uptime Orchestrator: network boot and fleet management for Raspberry Pi</title>
 <link href="/fonts/fonts.css" rel="stylesheet">
 <style>
 /* Layout idea: the page is one install, top to bottom. A signal trace runs down
@@ -49,6 +49,7 @@ h2 { font-weight: 900; font-size: clamp(28px, 4.6vw, 62px); line-height: .95; le
 h3 { font-weight: 800; font-size: 17px; letter-spacing: .01em; }
 p { margin: 0; max-width: 62ch; }
 .mute { color: var(--mute); }
+.lede { color: var(--mute); max-width: 62ch; margin-top: 14px; font-size: clamp(15px, 1.4vw, 17px); }
 .lime { color: var(--lime); }
 .out { color: transparent; -webkit-text-stroke: 1.5px var(--lime); }
 
@@ -144,7 +145,7 @@ section { position: relative; padding: clamp(56px, 9vw, 120px) 0 0; }
 .install-grid li { padding-left: 18px; position: relative; color: var(--mute); font-size: 14px; }
 .install-grid li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 1px; background: var(--lime); }
 .install-grid li b { color: var(--text); font-weight: 500; }
-@media (max-width: 900px) { .install-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .install-grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* spec sheet */
 .spec { margin-top: 30px; border-top: 1px solid var(--lime-deep); }
@@ -175,6 +176,16 @@ td { color: var(--mute); }
 .tag.part { border-color: var(--mute); color: var(--text); } .tag.exp { border-style: dashed; border-color: var(--mute); color: var(--mute); }
 
 /* two ways to run */
+.hero .src { margin-top: 14px; font-size: 13px; }
+.hero .src a { color: var(--mute); }
+.steps { list-style: none; margin: 30px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--lime-deep); }
+.steps li { padding: clamp(20px, 2.6vw, 34px); border-right: 1px solid var(--lime-deep); }
+.steps li:last-child { border-right: 0; }
+.steps li > b { font-family: var(--display); font-stretch: 125%; font-weight: 900; font-size: clamp(34px, 4.5vw, 60px); line-height: 1; color: var(--lime); display: block; margin-bottom: 12px; }
+.steps h3 { font-size: 16px; margin-bottom: 8px; }
+.steps p { color: var(--mute); font-size: 14px; margin: 0; }
+.steps i { font-style: normal; color: var(--text); }
+@media (max-width: 800px) { .steps { grid-template-columns: 1fr; } .steps li { border-right: 0; border-bottom: 1px solid var(--lime-deep); } .steps li:last-child { border-bottom: 0; } }
 .ways { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 30px; border: 1px solid var(--lime-deep); }
 .ways > div { padding: clamp(22px, 3vw, 40px); }
 .ways > div:first-child { border-right: 1px solid var(--lime-deep); background: var(--panel); }
@@ -190,6 +201,48 @@ footer { margin-top: clamp(64px, 10vw, 140px); border-top: 1px solid var(--line)
 footer .wrap { display: flex; gap: 14px 40px; flex-wrap: wrap; justify-content: space-between; }
 footer a { color: var(--mute); }
 .proto { border: 1px dashed var(--mute); padding: 2px 8px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+
+/* architecture animation */
+.arch { margin-top: 30px; border: 1px solid var(--lime-deep); background: color-mix(in srgb, var(--panel) 80%, transparent); }
+.arch-stage { overflow-x: auto; }
+.arch svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.arch text { font-family: var(--mono); fill: var(--mute); font-size: 11px; letter-spacing: .12em; }
+.arch .t-head { fill: var(--text); font-weight: 700; font-size: 12px; }
+.arch .t-chip { fill: var(--text); font-weight: 700; font-size: 12.5px; letter-spacing: .06em; }
+.arch .t-sub { font-size: 11px; letter-spacing: .02em; }
+.arch .box { fill: var(--ink); stroke: var(--line); }
+.arch .chip { fill: var(--panel); stroke: var(--lime-deep); transition: stroke .4s, fill .4s; }
+.arch .link { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 5; transition: stroke .4s; }
+.arch .link.on { stroke: var(--lime); stroke-dasharray: none; }
+.arch .link.v { stroke: var(--violet); stroke-dasharray: none; }
+.arch .net { stroke: var(--line); stroke-dasharray: 2 6; }
+.arch .pk { fill: var(--lime); }
+.arch .pk.v { fill: var(--violet); }
+.arch [data-on="lime"] .chip { stroke: var(--lime); }
+.arch [data-on="violet"] .chip { stroke: var(--violet); fill: color-mix(in srgb, var(--violet) 14%, var(--panel)); }
+.arch [data-on="bad"] .chip { stroke: var(--mute); stroke-dasharray: 4 4; }
+.arch [data-on="lime"] .t-sub { fill: var(--lime); }
+.arch [data-on="violet"] .t-sub { fill: var(--violet); }
+.arch .fill { fill: var(--lime); transform-box: fill-box; transform-origin: left center; transform: scaleX(0); transition: transform .5s linear; }
+.arch .pill { fill: none; stroke: var(--line); transition: stroke .3s; }
+.arch .pill-t { font-size: 10px; text-anchor: middle; transition: fill .3s; }
+.arch [data-pill="lime"] .pill { stroke: var(--lime); } .arch [data-pill="lime"] .pill-t { fill: var(--lime); }
+.arch [data-pill="violet"] .pill { stroke: var(--violet); } .arch [data-pill="violet"] .pill-t { fill: var(--violet); }
+.arch .abtn { fill: var(--lime); transition: opacity .3s; } .arch .abtn-t { fill: var(--ink); font-weight: 700; font-size: 10.5px; text-anchor: middle; transition: opacity .3s; }
+.arch .hide { opacity: 0; }
+.arch .pulse { animation: arch-pulse .5s ease-out 2; }
+@keyframes arch-pulse { 50% { opacity: .35; } }
+.arch-cap { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px; align-items: center; border-top: 1px solid var(--line); padding: 14px 18px; }
+.arch-cap b { font-family: var(--display); font-stretch: 125%; font-weight: 900; font-size: 22px; color: var(--lime); font-variant-numeric: tabular-nums; }
+.arch-cap p { color: var(--text); font-size: 14px; max-width: none; min-height: 2.9em; display: flex; align-items: center; }
+.arch-dots { display: flex; gap: 6px; }
+.arch-dots button { width: 22px; height: 22px; padding: 0; background: none; border: 0; cursor: pointer; position: relative; }
+.arch-dots button::after { content: ""; position: absolute; inset: 8px; background: var(--lime-deep); }
+.arch-dots button[aria-current="true"]::after { background: var(--lime); inset: 6px; }
+.arch-hint { display: none; padding: 8px 18px 0; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+@media (max-width: 800px) { .arch-hint { display: block; } }
+@media (max-width: 620px) { .arch-cap { grid-template-columns: auto minmax(0, 1fr); } .arch-dots { grid-column: 1 / -1; } }
+@media (prefers-reduced-motion: reduce) { .arch .fill, .arch .chip, .arch .link { transition: none; } .arch .pulse { animation: none; } }
 </style>
 </head>
 <body>
@@ -198,10 +251,10 @@ footer a { color: var(--mute); }
   <div class="wrap">
     <a class="mark" href="#top">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
     <nav aria-label="Sections">
+      <a href="#start">Start</a>
       <a href="#four-minutes">How it works</a>
-      <a href="#install">Install</a>
+      <a href="#install">Self-host</a>
       <a href="#after">Features</a>
-      <a href="#boards">Boards</a>
       <a href="#run">Pricing</a>
       <a href="docs/">Docs</a>
     </nav>
@@ -214,13 +267,14 @@ footer a { color: var(--mute); }
 <section class="hero">
   <div class="wrap">
     <div class="stamp"><b>Public beta</b> Raspberry Pi 4 and 5, boards and Compute Modules</div>
-    <h1>Manage your<br><span class="out">Raspberry Pi</span> fleet</h1>
+    <h1>Network boot for<br><span class="out">Raspberry Pi</span> over the internet</h1>
     <div class="lead">
-      <p>Add your boards, install their operating system over the network, then open a terminal or run a playbook on many at once. All from a web UI, on your server or ours.</p>
+      <p>Your boards boot from a server anywhere on the internet. No PXE, no TFTP, nothing to set up on their network. A board needs no drive to join: it boots a recovery system into RAM and shows up in your browser.</p>
       <div class="cta">
-        <a class="btn solid" href="#install">Install the server</a>
-        <a class="btn" href="https://github.com/uptime-lab/orchestrator">Read the source</a>
+        <a class="btn solid" href="#run">Start free now</a>
+        <a class="btn" href="#install">Run it yourself</a>
       </div>
+      <p class="src"><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Read the source</a></p>
     </div>
 
     <div class="rack" aria-label="A rack of twenty blades, each in one stage of the install">
@@ -241,7 +295,95 @@ footer a { color: var(--mute); }
   </div>
 </section>
 
+<section id="start">
+  <div class="wrap">
+    <div class="stamp"><b>Hosted</b> No server to set up</div>
+    <h2>Add your first board</h2>
+    <ol class="steps">
+      <li><b>1</b><h3>Sign up</h3><p>Create an account at <a href="https://app.orchestrator.sh" target="_blank" rel="noopener">app.orchestrator.sh</a>. Free for 10 boards.</p></li>
+      <li><b>2</b><h3>Run one command</h3><p>Click <i>Add node</i> and run the command on a board with 64-bit Raspberry Pi OS, Debian or Ubuntu.</p></li>
+      <li><b>3</b><h3>Approve it</h3><p>The board appears in your browser. Approve it, then update its bootloader there so it boots from the network.</p></li>
+    </ol>
+    <p class="mute" style="margin-top:22px">Empty board? <a href="docs/add-a-device/">Set up its bootloader over USB or from a card</a> and it boots from the network.</p>
+    <a class="btn solid" href="https://app.orchestrator.sh" style="margin-top:22px" target="_blank" rel="noopener">Start free</a>
+  </div>
+</section>
+
 <section id="four-minutes">
+  <div class="wrap">
+    <div class="stamp"><b>Network boot</b> Over HTTP, from any network</div>
+    <h2>No PXE. No boot server on site.</h2>
+    <p class="lede">The board's own bootloader fetches a signed recovery system from the server over HTTP. An ordinary DHCP address is enough and the drive can be empty. If the server is away, the board boots its own drive.</p>
+    <div class="arch" id="arch" aria-label="Animated diagram: a board boots from the server over the internet, gets its operating system and comes online">
+      <p class="arch-hint">Swipe the diagram sideways</p>
+      <div class="arch-stage">
+        <svg viewBox="0 0 1120 372" role="img" aria-hidden="true">
+          <!-- panels -->
+          <text class="t-head" x="14" y="24">YOUR BROWSER</text>
+          <rect class="box" x="10" y="36" width="250" height="316"/>
+          <text class="t-head" x="404" y="24">SERVER</text><text x="474" y="24">OURS OR YOURS</text>
+          <rect class="box" x="400" y="36" width="260" height="316"/>
+          <text x="750" y="24" text-anchor="middle">INTERNET</text>
+          <line class="net" x1="750" y1="36" x2="750" y2="352"/>
+          <text class="t-head" x="844" y="24">BOARD</text><text x="902" y="24">BEHIND ANY ROUTER</text>
+          <rect class="box" x="840" y="36" width="260" height="316"/>
+
+          <!-- links -->
+          <line class="link" id="a-lweb" x1="260" y1="194" x2="420" y2="194"/>
+          <text x="330" y="184" text-anchor="middle">HTTPS</text>
+          <line class="link" id="a-l80" x1="640" y1="104" x2="860" y2="104"/>
+          <text x="750" y="94" text-anchor="middle">HTTP :80</text>
+          <line class="link" id="a-ltls" x1="640" y1="194" x2="860" y2="194"/>
+          <text x="750" y="184" text-anchor="middle">TLS :50051</text>
+          <line class="link" id="a-limg" x1="640" y1="284" x2="860" y2="284"/>
+          <text x="750" y="274" text-anchor="middle">IMAGE</text>
+
+          <!-- browser -->
+          <g id="a-browser">
+            <circle cx="26" cy="52" r="3" fill="var(--line)"/><circle cx="38" cy="52" r="3" fill="var(--line)"/><circle cx="50" cy="52" r="3" fill="var(--line)"/>
+            <line x1="10" y1="66" x2="260" y2="66" stroke="var(--line)"/>
+            <text x="26" y="96">NODES</text>
+            <g id="a-row">
+              <rect x="26" y="110" width="218" height="40" fill="var(--panel)" stroke="var(--line)"/>
+              <text class="t-chip" x="38" y="135">board-01</text>
+              <rect class="pill" x="150" y="120" width="84" height="20"/>
+              <text class="pill-t" id="a-status" x="192" y="134">—</text>
+            </g>
+            <rect class="abtn hide" id="a-btn" x="26" y="166" width="118" height="30"/>
+            <text class="abtn-t hide" id="a-btn-t" x="85" y="185">APPROVE</text>
+            <g id="a-term" class="hide">
+              <rect x="26" y="216" width="218" height="112" fill="var(--panel)" stroke="var(--line)"/>
+              <text class="t-sub" x="38" y="240" fill="var(--lime)" style="fill:var(--lime)">root@board-01:~#</text>
+              <text class="t-sub" x="38" y="262" style="fill:var(--text)">uptime</text>
+              <text class="t-sub" x="38" y="284">up 3 min, load 0.08</text>
+              <text class="t-sub" x="38" y="306" style="fill:var(--lime)">root@board-01:~# _</text>
+            </g>
+          </g>
+
+          <!-- server chips -->
+          <g id="a-s-sign"><rect class="chip" x="420" y="72" width="220" height="64"/><text class="t-chip" x="436" y="100">RECOVERY IMAGE</text><text class="t-sub" x="436" y="120">signed with the server's key</text></g>
+          <g id="a-s-api"><rect class="chip" x="420" y="162" width="220" height="64"/><text class="t-chip" x="436" y="190">WEB UI + API</text><text class="t-sub" x="436" y="210">boards connect out to it</text></g>
+          <g id="a-s-img"><rect class="chip" x="420" y="252" width="220" height="64"/><text class="t-chip" x="436" y="280">OS IMAGES</text><text class="t-sub" x="436" y="300">Ubuntu, Raspberry Pi OS</text></g>
+
+          <!-- board chips -->
+          <g id="a-b-boot"><rect class="chip" x="860" y="72" width="220" height="64"/><text class="t-chip" x="876" y="100">BOOTLOADER</text><text class="t-sub" id="a-boot-t" x="876" y="120">server name + public key</text></g>
+          <g id="a-b-ram"><rect class="chip" x="860" y="162" width="220" height="64"/><text class="t-chip" x="876" y="190">RAM</text><text class="t-sub" id="a-ram-t" x="876" y="210">empty</text></g>
+          <g id="a-b-drive"><rect class="chip" x="860" y="252" width="220" height="64"/><text class="t-chip" x="876" y="280">DRIVE</text><text class="t-sub" id="a-drive-t" x="876" y="300">empty</text>
+            <rect x="860" y="312" width="220" height="4" fill="var(--line)"/><rect class="fill" id="a-fill" x="860" y="312" width="220" height="4"/></g>
+
+          <g id="a-pk"></g>
+        </svg>
+      </div>
+      <div class="arch-cap">
+        <b id="a-n">01</b>
+        <p id="a-cap" aria-live="off">Power on. The bootloader asks the server first.</p>
+        <div class="arch-dots" id="a-dots" role="group" aria-label="Steps"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
   <div class="wrap trace">
     <div>
       <div class="stamp"><b>T+0 to T+6</b> Minutes, from recorded runs</div>
@@ -249,39 +391,52 @@ footer a { color: var(--mute); }
       <p class="note">Over the internet, a CM5 Lite went from approval to a managed Ubuntu in 5 min 42 s and a CM4 in 6 min 9 s.</p>
     </div>
     <ol>
-      <li><time>T+0</time><div><h3>Approved</h3><p>You approve the board by its hardware serial.</p></div></li>
-      <li><time>T+0</time><div><h3>Bootloader flashed</h3><p>The board now boots from your server first.</p></div></li>
-      <li class="v"><time>T+2</time><div><h3>Recovery booted</h3><p>A 98 MB recovery system signed with your key runs from RAM.</p></div></li>
-      <li><time>T+3</time><div><h3>OS written</h3><p>The image streams onto the drive. Ubuntu took 81 seconds on a CM4.</p></div></li>
-      <li><time>T+4</time><div><h3>Agent installed</h3><p>The signed agent goes in with the board's own credential.</p></div></li>
-      <li class="done"><time>T+6</time><div><h3>Online</h3><p>The board boots from its own drive and reports in.</p></div></li>
+      <li><time>T+0</time><div><h3>Approved</h3><p>You approve the board by its serial.</p></div></li>
+      <li><time>T+0</time><div><h3>Bootloader flashed</h3><p>From now on the board asks the server first.</p></div></li>
+      <li class="v"><time>T+2</time><div><h3>Recovery booted</h3><p>98 MB, signed, running from RAM.</p></div></li>
+      <li><time>T+3</time><div><h3>OS written</h3><p>Ubuntu took 81 seconds on a CM4.</p></div></li>
+      <li><time>T+4</time><div><h3>Agent installed</h3><p>The signed agent goes into the new system.</p></div></li>
+      <li class="done"><time>T+6</time><div><h3>Online</h3><p>The board boots from its drive and reports in.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="recovery">
+  <div class="wrap">
+    <div class="stamp"><b>Recovery</b> No rescue partition</div>
+    <h2>Recovery without A/B partitions</h2>
+    <p class="lede">No rescue partition, no A/B scheme. A board asks the server first on every boot, so you can bring it back from the network even when its OS is completely broken. We wiped the drive of a board on the hosted service: it was back in recovery about a minute after the switch.</p>
+    <ol class="steps">
+      <li><b>1</b><h3>Set the boot target</h3><p>Switch the board to Recovery in the browser.</p></li>
+      <li><b>2</b><h3>Wait a minute</h3><p>A board that cannot boot its drive keeps asking the server, so it comes back by itself. A board that hangs later needs a reboot: arm the watchdog beforehand.</p></li>
+      <li><b>3</b><h3>Fix it</h3><p>Open a root terminal, reinstall the OS or restore a backup.</p></li>
     </ol>
   </div>
 </section>
 
 <section id="install">
   <div class="wrap">
-    <div class="stamp"><b>Before T+0</b> The server</div>
-    <h2>One command installs the server</h2>
+    <div class="stamp"><b>Self-hosted</b> Same software, on your machine</div>
+    <h2>Or run the server yourself</h2>
     <div class="cmdbar">
       <code><span class="p">$</span> curl -fsSL https://get.orchestrator.sh | sh</code>
       <button type="button" class="copy" id="copy">Copy command</button>
     </div>
-    <p class="cmdnote">Run it on a fresh Ubuntu or Debian machine, x86-64 or arm64. The same command covers both setups below: the installer asks which one you want.</p>
+    <p class="cmdnote">On a fresh Ubuntu machine, x86-64 or arm64. The installer asks which setup you want.</p>
     <div class="install-grid">
       <div class="cases">
         <div>
           <h3>On your local network</h3>
-          <p>For a lab, an office or a home rack. The server answers over plain HTTP by the name your router gave the machine. No domain and no certificate needed.</p>
+          <p>For a lab, an office or a home rack. No domain or certificate needed.</p>
         </div>
         <div>
           <h3>From the internet</h3>
-          <p>For boards in other places. Point a DNS name at the machine and the installer gets and renews a Let's Encrypt certificate.</p>
+          <p>For boards in other places. Point a DNS name at the machine and the installer gets a Let's Encrypt certificate.</p>
         </div>
         <ul>
-          <li><b>The name must not change</b>: every board you adopt stores it.</li>
-          <li><b>Network boot</b> is one more yes. It creates your signing key and signs the recovery image.</li>
-          <li><b>By hand</b> with your own reverse proxy, follow <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md">the install guide</a>.</li>
+          <li><b>The name must not change</b>: every adopted board stores it.</li>
+          <li>The installer offers <b>network boot</b>.</li>
+          <li><b>By hand</b>, follow <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md" target="_blank" rel="noopener">the install guide</a>.</li>
         </ul>
       </div>
       <div class="term" role="group" aria-label="Installer transcript">
@@ -301,27 +456,29 @@ footer a { color: var(--mute); }
     <div class="stamp"><b>T+6</b> The board is online</div>
     <h2>What you do with it next</h2>
     <dl class="spec">
-      <div><dt><h3>Users and keys</h3></dt><dd><p>Set Linux users, <b>SSH keys and sudo</b> for one board, a unit or the whole account.</p></dd></div>
-      <div><dt><h3>Images and backups</h3></dt><dd><p><b>Capture a configured board as a golden image</b> and install it on the next ten. Back up a drive and restore it later.</p></dd></div>
-      <div><dt><h3>Terminal and recovery</h3></dt><dd><p>Open a root terminal in the browser. <b>One click reboots a board into recovery once</b>, and the terminal works there even when the OS will not start.</p></dd></div>
-      <div><dt><h3>Playbooks</h3></dt><dd><p>Run a list of steps on the boards you pick, by hand or <b>on a cron schedule</b>.</p></dd></div>
-      <div><dt><h3>Managed software</h3></dt><dd><p>Assign Docker, a kiosk display, a VPN client, metrics or unattended security updates to a unit, and its boards keep them installed.</p></dd></div>
+      <div><dt><h3>Users and keys</h3></dt><dd><p>Linux users, <b>SSH keys and sudo</b> for one board, a unit or the whole account.</p></dd></div>
+      <div><dt><h3>Images and backups</h3></dt><dd><p><b>Capture a configured board as a golden image</b> and install it on other boards. Back up a drive and restore it later.</p></dd></div>
+      <div><dt><h3>Terminal and recovery</h3></dt><dd><p>A root terminal in the browser. <b>One click reboots a board into recovery.</b></p></dd></div>
+      <div><dt><h3>Playbooks</h3></dt><dd><p>Run steps on the boards you pick, by hand or <b>on a cron schedule</b>.</p></dd></div>
+      <div><dt><h3>Managed software</h3></dt><dd><p>Assign Docker, a kiosk display, a VPN client, metrics or security updates to a unit. Its boards keep it all installed.</p></dd></div>
       <div><dt><h3>Hardware</h3></dt><dd><p><b>Watchdog, status LEDs, overclock presets, bootloader updates</b> and carrier-board profiles, the Compute Blade included.</p></dd></div>
-      <div><dt><h3>Secrets and audit</h3></dt><dd><p>Secrets are stored encrypted. Every command is recorded with who sent it.</p></dd></div>
+      <div><dt><h3>Secrets and audit</h3></dt><dd><p>Secrets are stored encrypted. Every command is logged with its sender.</p></dd></div>
     </dl>
   </div>
 </section>
 
 <section id="signed">
   <div class="wrap">
-    <div class="stamp"><b>Security</b> Signed boot</div>
-    <h2>Signed from boot to agent</h2>
+    <div class="stamp"><b>Architecture</b> Signed from boot to agent</div>
+    <h2>What checks what</h2>
+
     <div class="chain">
-      <div><span>Boot ROM</span><h3>Your key</h3><p>Created on your server. Bootloaders hold only the public half.</p></div>
-      <div><span>Recovery</span><h3>Checked image</h3><p>A board runs it only if the signature matches.</p></div>
-      <div><span>Agent</span><h3>Checked package</h3><p>Signed with offline hardware keys, checked by the server and again by the board.</p></div>
-      <div><span>Server</span><h3>Secrets as files</h3><p>Credentials reach the containers as files.</p></div>
+      <div><span>Bootloader</span><h3>Checks the recovery image</h3><p>Each server has its own signing key. The bootloader refuses an image signed by another.</p></div>
+      <div><span>Recovery image</span><h3>Carries the agent</h3><p>The agent is inside the signed image.</p></div>
+      <div><span>Agent</span><h3>Checks the OS image</h3><p>The drive becomes bootable only if the SHA-256 matches.</p></div>
+      <div><span>Agent</span><h3>Checks every package</h3><p>Packages are signed on offline hardware keys. The server and the board both check them.</p></div>
     </div>
+    <p class="mute" style="margin-top:22px"><a href="docs/how-it-works/">How it works, step by step</a></p>
   </div>
 </section>
 
@@ -334,7 +491,7 @@ footer a { color: var(--mute); }
         <thead><tr><th>Board</th><th>Status</th><th>What works</th></tr></thead>
         <tbody>
           <tr><td>Raspberry Pi 5</td><td><span class="tag">Supported</span></td><td>All features</td></tr>
-          <tr><td>Raspberry Pi 4</td><td><span class="tag">Supported</span></td><td>All features</td></tr>
+          <tr><td>Raspberry Pi 4</td><td><span class="tag">Supported</span></td><td>All features except carrier-board profiles</td></tr>
           <tr><td>Compute Module 5</td><td><span class="tag">Supported</span></td><td>All features, eMMC or Lite</td></tr>
           <tr><td>Compute Module 4</td><td><span class="tag">Supported</span></td><td>All features, eMMC or Lite</td></tr>
         </tbody>
@@ -347,21 +504,21 @@ footer a { color: var(--mute); }
 <section id="run">
   <div class="wrap">
     <div class="stamp"><b>Pricing</b> Same software</div>
-    <h2>Self-hosted or hosted</h2>
+    <h2>Hosted or self-hosted</h2>
     <div class="ways">
       <div>
-        <h3>On your own machine</h3>
-        <div class="big">25 <span>devices free<br>on your server</span></div>
-        <p><b>Every feature is included.</b> More than 25 devices on one server needs a subscription. Boards already adopted are never locked out. Subscriptions are not on sale yet, so <a href="subscription/">ask about pricing</a>.</p>
-        <p>The source is public under the Fair Core License, and <b>each version becomes Apache-2.0 two years after its release</b>. The agent on your boards is Apache-2.0 today.</p>
-        <a class="btn solid" href="#install">Install the server</a>
+        <h3>Hosted by us</h3>
+        <div class="big">10 <span>devices free<br>on our server</span></div>
+        <p><b>We run the server at app.orchestrator.sh.</b> For more than 10 devices, ask <a href="mailto:sales@orchestrator.sh">sales@orchestrator.sh</a> for a subscription.</p>
+        <p>Public beta. Boards reach it on ports 443 and 50051, and 80 for network boot.</p>
+        <a class="btn solid" href="https://app.orchestrator.sh" target="_blank" rel="noopener">Start free</a>
       </div>
       <div>
-        <h3>Hosted by us</h3>
-        <div class="big out">10 <span>devices free<br>on our server</span></div>
-        <p><b>We run the server at app.orchestrator.sh, with every feature included.</b> For more than 10 devices, ask <a href="mailto:sales@orchestrator.sh">sales@orchestrator.sh</a> for a subscription.</p>
-        <p>It is a public beta: sign up and add your first board. Boards reach it on ports 443 and 50051, and on port 80 for network boot.</p>
-        <a class="btn" href="https://app.orchestrator.sh">Try it</a>
+        <h3>On your own machine</h3>
+        <div class="big out">25 <span>devices free<br>on your server</span></div>
+        <p><b>Every feature included.</b> More than 25 devices on one server needs a subscription. Boards already added keep working. Subscriptions are not on sale yet, so <a href="subscription/">ask about pricing</a>.</p>
+        <p>The source is public under the Fair Core License, and <b>each version becomes Apache-2.0 two years after its release</b>. The agent on your boards is Apache-2.0 today.</p>
+        <a class="btn" href="#install">Install the server</a>
       </div>
     </div>
   </div>
@@ -371,8 +528,8 @@ footer a { color: var(--mute); }
 
 <footer>
   <div class="wrap">
-    <span>Uptime Orchestrator is made by Uptime Lab, the makers of the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
-    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md">Install guide</a> · <a href="docs/">Docs</a> · <a href="subscription/">Subscriptions</a> · <a href="imprint/">Imprint</a> · <a href="privacy/">Privacy</a> · <a href="https://computeblade.com">Compute Blade</a></span>
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md" target="_blank" rel="noopener">Install guide</a> · <a href="docs/">Docs</a> · <a href="subscription/">Subscriptions</a> · <a href="imprint/">Imprint</a> · <a href="privacy/">Privacy</a> · <a href="https://computeblade.com" target="_blank" rel="noopener">Compute Blade</a></span>
   </div>
 </footer>
 
@@ -504,6 +661,122 @@ footer a { color: var(--mute); }
     var done = function (ok) { copy.textContent = ok ? "Copied" : "Select it"; setTimeout(function () { copy.textContent = "Copy command"; }, 1600); };
     try { navigator.clipboard.writeText(CMD).then(function () { done(true); }, function () { done(false); }); } catch (e) { done(false); }
   });
+})();
+</script>
+
+<script>
+(function () {
+  var root = document.getElementById("arch");
+  if (!root) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var NS = "http://www.w3.org/2000/svg";
+  var L = { web: [260, 420, 194], l80: [640, 860, 104], tls: [640, 860, 194], img: [640, 860, 284] };
+
+  // One entry is the whole picture at that step, so any step can be shown on its own.
+  var STEPS = [
+    { cap: "Power on. The bootloader asks the server first.", ms: 3000,
+      boot: "lime", bootT: "asking the server", l80: "on", pk: [["l80", -1, "", 2]] },
+    { cap: "The server answers with a signed recovery image.", ms: 3200,
+      sign: "violet", boot: "lime", bootT: "receiving", l80: "v", pk: [["l80", 1, "v", 6]] },
+    { cap: "The bootloader checks the signature. Recovery runs from RAM.", ms: 3200,
+      boot: "lime", bootT: "signature ok", ram: "violet", ramT: "recovery + agent", l80: "v" },
+    { cap: "The agent calls home over TLS. The board shows up in your browser.", ms: 3600,
+      api: "lime", ram: "violet", ramT: "recovery + agent", tls: "on", web: "on",
+      status: ["PENDING", ""], btn: "APPROVE", pk: [["tls", -1, "", 3], ["web", -1, "", 2]] },
+    { cap: "You approve it and pick an image. It streams onto the drive.", ms: 4600,
+      api: "lime", img: "lime", ram: "violet", ramT: "recovery + agent", tls: "on", web: "on", limg: "on",
+      status: ["INSTALLING", "lime"], btn: "INSTALL OS", pulse: true, drive: "lime", driveT: "writing", fill: 1,
+      pk: [["web", 1, "", 1], ["img", 1, "", 14]] },
+    { cap: "The checksum matches. The drive becomes bootable.", ms: 3000,
+      api: "lime", ram: "violet", ramT: "recovery + agent", tls: "on", web: "on",
+      status: ["INSTALLING", "lime"], drive: "lime", driveT: "sha-256 ok", fill: 1 },
+    { cap: "The board boots from its drive. Online.", ms: 4200,
+      api: "lime", ram: "lime", ramT: "your OS + agent", tls: "on", web: "on",
+      status: ["ONLINE", "lime"], drive: "lime", driveT: "your OS", fill: 1, term: true,
+      pk: [["tls", -1, "", 2], ["tls", 1, "", 2], ["web", -1, "", 2]] },
+    { cap: "Broken OS? Set Recovery. The board keeps asking the server and comes back.", ms: 4200,
+      sign: "violet", boot: "lime", bootT: "asking the server", ram: "violet", ramT: "recovery + agent",
+      l80: "v", tls: "on", web: "on", status: ["RECOVERY", "violet"], drive: "bad", driveT: "will not boot", fill: 1,
+      pk: [["l80", -1, "", 2], ["l80", 1, "v", 5], ["tls", -1, "v", 2]] }
+  ];
+
+  var dots = $("a-dots"), cur = -1, timer = null, visible = false, anims = [];
+  STEPS.forEach(function (_, i) {
+    var b = document.createElement("button");
+    b.type = "button"; b.setAttribute("aria-label", "Step " + (i + 1));
+    b.addEventListener("click", function () { show(i); schedule(); });
+    dots.appendChild(b);
+  });
+
+  function on(id, v) { var e = $(id); if (v) e.setAttribute("data-on", v); else e.removeAttribute("data-on"); }
+  function link(id, v) { $(id).setAttribute("class", "link" + (v ? " " + v : "")); }
+  function vis(id, yes) { $(id).classList.toggle("hide", !yes); }
+
+  function clearPackets() {
+    anims.forEach(function (a) { try { a.cancel(); } catch (e) {} });
+    anims = []; $("a-pk").textContent = "";
+  }
+  function packets(list) {
+    clearPackets();
+    if (reduce || !list) return;
+    list.forEach(function (p) {
+      var g = L[p[0]], dir = p[1], n = p[3];
+      var from = dir > 0 ? g[0] : g[1], to = dir > 0 ? g[1] : g[0];
+      for (var i = 0; i < n; i++) {
+        var r = document.createElementNS(NS, "rect");
+        r.setAttribute("width", 8); r.setAttribute("height", 8); r.setAttribute("y", g[2] - 4); r.setAttribute("x", -4);
+        r.setAttribute("class", "pk" + (p[2] ? " " + p[2] : "")); r.style.opacity = 0;
+        $("a-pk").appendChild(r);
+        if (!r.animate) continue;
+        anims.push(r.animate(
+          [{ transform: "translateX(" + from + "px)", opacity: 1 }, { transform: "translateX(" + to + "px)", opacity: 1 }],
+          { duration: 900, delay: 250 + i * (n > 8 ? 230 : 420), easing: "linear", fill: "none" }));
+      }
+    });
+  }
+
+  function show(i) {
+    var s = STEPS[i], fresh = i !== cur; cur = i;
+    $("a-n").textContent = (i < 9 ? "0" : "") + (i + 1);
+    $("a-cap").textContent = s.cap;
+    [].forEach.call(dots.children, function (b, k) { b.setAttribute("aria-current", k === i ? "true" : "false"); });
+    on("a-s-sign", s.sign); on("a-s-api", s.api); on("a-s-img", s.img);
+    on("a-b-boot", s.boot); on("a-b-ram", s.ram); on("a-b-drive", s.drive);
+    $("a-boot-t").textContent = s.bootT || "server name + public key";
+    $("a-ram-t").textContent = s.ramT || "empty";
+    $("a-drive-t").textContent = s.driveT || "empty";
+    link("a-l80", s.l80); link("a-ltls", s.tls); link("a-lweb", s.web); link("a-limg", s.limg);
+    var st = s.status || ["—", ""];
+    $("a-status").textContent = st[0];
+    if (st[1]) $("a-row").setAttribute("data-pill", st[1]); else $("a-row").removeAttribute("data-pill");
+    vis("a-btn", !!s.btn); vis("a-btn-t", !!s.btn);
+    if (s.btn) $("a-btn-t").textContent = s.btn;
+    $("a-btn").classList.remove("pulse");
+    if (s.pulse && fresh && !reduce) { void $("a-btn").getBoundingClientRect(); $("a-btn").classList.add("pulse"); }
+    vis("a-term", !!s.term);
+    var f = $("a-fill");
+    f.style.transitionDuration = (s.driveT === "writing" && fresh && !reduce) ? "3.4s" : "0s";
+    if (s.driveT === "writing" && fresh && !reduce) { f.style.transitionDuration = "0s"; f.style.transform = "scaleX(0)"; void f.getBoundingClientRect(); f.style.transitionDuration = "3.4s"; }
+    f.style.transform = "scaleX(" + (s.fill || 0) + ")";
+    f.style.fill = s.drive === "bad" ? "var(--mute)" : "";
+    if (fresh) packets(s.pk);
+  }
+
+  function schedule() {
+    clearTimeout(timer);
+    if (reduce || !visible || document.hidden) return;
+    timer = setTimeout(function () { show((cur + 1) % STEPS.length); schedule(); }, STEPS[cur].ms);
+  }
+
+  show(reduce ? 6 : 0);
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) {
+      visible = es[0].isIntersecting;
+      if (visible) schedule(); else { clearTimeout(timer); clearPackets(); }
+    }, { threshold: 0.35 }).observe(root);
+  } else { visible = true; schedule(); }
+  document.addEventListener("visibilitychange", schedule);
 })();
 </script>
 </body>

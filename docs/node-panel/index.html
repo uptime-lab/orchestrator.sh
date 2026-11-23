@@ -15,10 +15,10 @@
   <div class="wrap">
     <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
     <nav aria-label="Site">
+      <a href="/#start">Start</a>
       <a href="/#four-minutes">How it works</a>
-      <a href="/#install">Install</a>
+      <a href="/#install">Self-host</a>
       <a href="/#after">Features</a>
-      <a href="/#boards">Boards</a>
       <a href="/#run">Pricing</a>
       <a href="/docs/" aria-current="page">Docs</a>
     </nav>
@@ -30,15 +30,17 @@
 <nav class="side" aria-label="Documentation">
 <div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
 <h4>Start</h4><ul>
-<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/hosted/">Quick start on the hosted service</a></li>
+<li><a href="/docs/quick-start/">Quick start on your own server</a></li>
 <li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+<li><a href="/docs/how-it-works/">How it works</a></li>
 </ul>
 <h4>Devices</h4><ul>
 <li><a href="/docs/add-a-device/">Adding a device</a></li>
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/" aria-current="page">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
-<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
+<li><a href="/docs/backups-and-images/">Backups and golden images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/">Organizational units and policies</a></li>
@@ -81,7 +83,7 @@
 <h2 id="open-a-terminal">Open a terminal</h2>
 <figure><video data-src="../img/node-panel/v1-open-terminal.mp4" aria-label="On the Actions tab of rocket-bench-01, clicking Terminal, typing uptime at the root prompt and pressing Enter" muted loop playsinline preload="none"></video><figcaption>Open a terminal</figcaption></figure>
 <p>Click <b>Terminal</b> for a root shell. It runs over the agent's connection, so the device needs no open SSH port, and it works in the recovery system too. Type <code>exit</code> or click <b>← Back</b> to close it.</p>
-<p>The row appears only if the install sets <code>TERMINAL_ENABLED</code>. It is off by default and on in the community compose file (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md">CONFIGURATION.md</a>). Admins and Super Admins can use it, and a Super Admin can grant it to other roles under <b>Role permissions</b> (<a href="../team-and-security/">Team and security</a>). If the account requires two-factor authentication, yours must be enrolled.</p>
+<p>The row appears only if the install sets <code>TERMINAL_ENABLED</code>. It is off by default and on in the community compose file (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md" target="_blank" rel="noopener">CONFIGURATION.md</a>). Admins and Super Admins can use it, and a Super Admin can grant it to other roles under <b>Role permissions</b> (<a href="../team-and-security/">Team and security</a>). If the account requires two-factor authentication, yours must be enrolled.</p>
 <p>The server closes the shell within a minute if you lose access. The <a href="../status-and-audit/#see-who-did-what">audit trail</a> records opening and closing, but not keystrokes.</p>
 <h2 id="track-and-edit-a-file">Track and edit a file</h2>
 <ol><li>Open <b>Advanced</b> → <b>Files</b> and click <b>Add file</b>.</li><li>Enter the file's absolute path. The platform reads it and stores version 1.</li><li>Click the file, change <b>Content</b> and click <b>Save version</b>.</li><li>Click <b>Apply to device</b>.</li></ol>
@@ -90,7 +92,7 @@
 <p>The password-hash files, the adoption file and files ending in <code>.pem</code>, <code>.key</code>, <code>.p12</code> or <code>.pfx</code> are refused, so don't track any other file that holds a secret. A version holds at most 512 KiB, and anyone who can manage the node's files can read it.</p>
 <p><code>/boot/firmware/config.txt</code> is tracked on every node as <b>MANAGED</b>. You can edit it but not untrack it. To stop tracking another file, click <b>Untrack (keep the file on the device)</b>. <b>Delete on device</b> removes the file and keeps a backup beside it.</p>
 <h2 id="remove-a-node">Remove a node</h2>
-<p><b>Actions</b> → <b>Delete node</b> deletes the node's command history, tracked files and secret attachments. A connected device erases its adoption file and keeps its users, keys, data and agent. To remove the agent too, run the uninstall script from <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md">INSTALL.md</a>. An offline device is not told and keeps trying to connect with an identity the platform refuses.</p>
+<p><b>Actions</b> → <b>Delete node</b> deletes the node's command history, tracked files and secret attachments. A connected device erases its adoption file and keeps its users, keys, data and agent. To remove the agent too, run the uninstall script from <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md" target="_blank" rel="noopener">INSTALL.md</a>. An offline device is not told and keeps trying to connect with an identity the platform refuses.</p>
 <p>To swap hardware instead, <b>Replace with another node</b> moves the attributes, hostname and unit onto a spare node.</p>
 <figure><a href="../img/node-panel/13-deleted-node.jpg"><img src="../img/node-panel/13-deleted-node.jpg" alt="A deleted node record whose board is now the live node plasma-rig-01, with Restore disabled and Forget" loading="lazy"></a></figure>
 <p>Set the status filter on <b>Nodes</b> to <b>Deleted</b> to find deleted nodes. <b>Restore</b> gives the identity back, so the device is accepted again. History and files do not return. If the board has since joined as another node in your account, <b>Restore</b> is disabled and the panel names that node. Delete it first to take the old one back. <b>Forget</b> removes the record for good.</p>
@@ -103,7 +105,7 @@
 <footer>
   <div class="wrap">
     <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
-    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
   </div>
 </footer>
 

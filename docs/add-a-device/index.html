@@ -15,10 +15,10 @@
   <div class="wrap">
     <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
     <nav aria-label="Site">
+      <a href="/#start">Start</a>
       <a href="/#four-minutes">How it works</a>
-      <a href="/#install">Install</a>
+      <a href="/#install">Self-host</a>
       <a href="/#after">Features</a>
-      <a href="/#boards">Boards</a>
       <a href="/#run">Pricing</a>
       <a href="/docs/" aria-current="page">Docs</a>
     </nav>
@@ -30,15 +30,17 @@
 <nav class="side" aria-label="Documentation">
 <div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
 <h4>Start</h4><ul>
-<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/hosted/">Quick start on the hosted service</a></li>
+<li><a href="/docs/quick-start/">Quick start on your own server</a></li>
 <li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+<li><a href="/docs/how-it-works/">How it works</a></li>
 </ul>
 <h4>Devices</h4><ul>
 <li><a href="/docs/add-a-device/" aria-current="page">Adding a device</a></li>
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
-<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
+<li><a href="/docs/backups-and-images/">Backups and golden images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/">Organizational units and policies</a></li>
@@ -85,14 +87,14 @@
 <p>A device from <b>One command</b> or <b>Master image</b> shows a yellow bar and <b>PENDING</b> in <b>Nodes</b>. Click it, check the <b>HW serial</b>, and click <b>Approve</b>. Approval applies the node's access and utilities at once. By default, a device running the recovery system from a provisioning card also gets a bootloader that boots from your server. A device added with <b>One command</b> keeps its bootloader. If that device already network-boots from this server, open <b>Properties</b> and set <b>Boot behavior</b> to <b>Local OS</b> before its next reboot: left on <b>Inherit</b>, it boots the recovery system.</p>
 <figure><a href="../img/add-a-device/08-approve.jpg"><img src="../img/add-a-device/08-approve.jpg" alt="The doomsday-clock panel with the Pending Approval banner, its explanation, the Approve and Reject buttons, and the node&#x27;s IP, MAC and hardware serial." loading="lazy"></a></figure>
 <p>Next: <a href="../install-an-os/">install an operating system</a> on the node.</p>
-<div class="pager"><a class="prev" href="/docs/interface-tour/"><small>Previous</small>A tour of the interface</a><a class="next" href="/docs/install-an-os/"><small>Next</small>Installing an operating system</a></div>
+<div class="pager"><a class="prev" href="/docs/how-it-works/"><small>Previous</small>How it works</a><a class="next" href="/docs/install-an-os/"><small>Next</small>Installing an operating system</a></div>
 </article>
 </main>
 
 <footer>
   <div class="wrap">
     <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
-    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
   </div>
 </footer>
 

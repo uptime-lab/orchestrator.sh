@@ -15,10 +15,10 @@
   <div class="wrap">
     <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
     <nav aria-label="Site">
+      <a href="/#start">Start</a>
       <a href="/#four-minutes">How it works</a>
-      <a href="/#install">Install</a>
+      <a href="/#install">Self-host</a>
       <a href="/#after">Features</a>
-      <a href="/#boards">Boards</a>
       <a href="/#run">Pricing</a>
       <a href="/docs/" aria-current="page">Docs</a>
     </nav>
@@ -30,15 +30,17 @@
 <nav class="side" aria-label="Documentation">
 <div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
 <h4>Start</h4><ul>
-<li><a href="/docs/quick-start/">Quick start</a></li>
+<li><a href="/docs/hosted/">Quick start on the hosted service</a></li>
+<li><a href="/docs/quick-start/">Quick start on your own server</a></li>
 <li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+<li><a href="/docs/how-it-works/">How it works</a></li>
 </ul>
 <h4>Devices</h4><ul>
 <li><a href="/docs/add-a-device/">Adding a device</a></li>
 <li><a href="/docs/install-an-os/">Installing an operating system</a></li>
 <li><a href="/docs/node-panel/">Working with a node</a></li>
 <li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
-<li><a href="/docs/backups-and-images/">Backups and gold images</a></li>
+<li><a href="/docs/backups-and-images/">Backups and golden images</a></li>
 </ul>
 <h4>Operating a fleet</h4><ul>
 <li><a href="/docs/organization/">Organizational units and policies</a></li>
@@ -61,15 +63,15 @@
 <h1>Backup, restore and upgrading the server</h1>
 <p class="summary">What to back up, where the restore and upgrade procedures are, and how to update agents.</p>
 <nav class="toc" aria-label="On this page"><ul><li><a href="#what-to-back-up">What to back up</a></li><li><a href="#restore">Restore</a></li><li><a href="#upgrade-the-server">Upgrade the server</a></li><li><a href="#update-agents-on-devices">Update agents on devices</a></li></ul></nav>
-<p>Keep a self-hosted server recoverable and current. The commands are in the reference: <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md">BACKUP-RESTORE.md</a> and <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#upgrading">INSTALL.md → Upgrading</a>.</p>
+<p>Keep a self-hosted server recoverable and current. The commands are in the reference: <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md" target="_blank" rel="noopener">BACKUP-RESTORE.md</a> and <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#upgrading" target="_blank" rel="noopener">INSTALL.md → Upgrading</a>.</p>
 <h2 id="what-to-back-up">What to back up</h2>
 <p>Paths are as in the community compose file.</p>
-<ul><li>The credential files in <code>secrets/</code>.</li><li>The bootloader signing key, <code>data/eeprom-keys/privkey.pem</code>.</li><li>The database, as a nightly encrypted dump (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#a-scripted-nightly-dump">A scripted nightly dump</a>), copied off the host.</li><li>The key that encrypts your dumps, kept anywhere but the server.</li><li>The <code>.env</code> file beside the compose file.</li><li>OS images and agent releases in <code>data/backend/storage/</code> or your bucket.</li><li>With the <code>proxy-tls</code> proxy, its certificate store <code>data/proxy/acme.json</code>. A local-network install has no certificate, and <code>data/proxy/</code> stays empty.</li></ul>
+<ul><li>The credential files in <code>secrets/</code>.</li><li>The bootloader signing key, <code>data/eeprom-keys/privkey.pem</code>.</li><li>The database, as a nightly encrypted dump (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#a-scripted-nightly-dump" target="_blank" rel="noopener">A scripted nightly dump</a>), copied off the host.</li><li>The key that encrypts your dumps, kept anywhere but the server.</li><li>The <code>.env</code> file beside the compose file.</li><li>OS images and agent releases in <code>data/backend/storage/</code> or your bucket.</li><li>With the <code>proxy-tls</code> proxy, its certificate store <code>data/proxy/acme.json</code>. A local-network install has no certificate, and <code>data/proxy/</code> stays empty.</li></ul>
 <aside class="callout warning"><p><b>Warning:</b> Without <code>secrets/secrets_encryption_key</code> the dump restores but nothing encrypted in it can be read. Without <code>data/eeprom-keys/privkey.pem</code> no server can sign a boot image your network-booting devices accept, so put both in an escrow you control before you adopt the first device.</p></aside>
 <h2 id="restore">Restore</h2>
-<p>The reference has two procedures, <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#restore-into-the-same-install">into the same install</a> and <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#restore-onto-an-empty-host">onto an empty host</a>, and the order of steps matters in both. Prepare an empty host by hand with the same release and <code>DOMAIN</code>, because the installer would create new keys and a new owner. Devices reconnect on their own when the restored server keeps the same name and keys.</p>
+<p>The reference has two procedures, <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#restore-into-the-same-install" target="_blank" rel="noopener">into the same install</a> and <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#restore-onto-an-empty-host" target="_blank" rel="noopener">onto an empty host</a>, and the order of steps matters in both. Prepare an empty host by hand with the same release and <code>DOMAIN</code>, because the installer would create new keys and a new owner. Devices reconnect on their own when the restored server keeps the same name and keys.</p>
 <h2 id="upgrade-the-server">Upgrade the server</h2>
-<p>The full procedure is <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#upgrading">INSTALL.md → Upgrading</a>.</p>
+<p>The full procedure is <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#upgrading" target="_blank" rel="noopener">INSTALL.md → Upgrading</a>.</p>
 <ol><li>Read <code>CHANGELOG.md</code> for every release between yours and the new one.</li><li>Run the dump by hand and check your copies of <code>secrets/</code> and <code>.env</code>.</li><li>Get the new release's files, run <code>chmod -R a+rX proxy</code> in the install directory, and create any new credential file its compose file names.</li><li>Set <code>PLATFORM_VERSION</code> in <code>.env</code> to the new release.</li><li>Run <code>docker compose -f docker-compose.community.yml pull</code>, then <code>up -d</code>, and check that every container is up.</li></ol>
 <p>There is no downgrade across a schema change, so rolling back means restoring the dump from step 2.</p>
 <h2 id="update-agents-on-devices">Update agents on devices</h2>
@@ -83,7 +85,7 @@
 <footer>
   <div class="wrap">
     <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
-    <span><a href="https://github.com/uptime-lab/orchestrator">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
   </div>
 </footer>
 

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How it works · Uptime Orchestrator docs</title>
+<meta name="description" content="What boots a board, what runs on it, and which step checks which.">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<link href="/docs/docs.css" rel="stylesheet">
+<script src="/docs/search.js" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="/">Uptime <span>Orchestrator</span> <small>for Raspberry Pi fleets</small></a>
+    <nav aria-label="Site">
+      <a href="/#start">Start</a>
+      <a href="/#four-minutes">How it works</a>
+      <a href="/#install">Self-host</a>
+      <a href="/#after">Features</a>
+      <a href="/#run">Pricing</a>
+      <a href="/docs/" aria-current="page">Docs</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main class="docs wrap">
+<nav class="side" aria-label="Documentation">
+<div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>
+<h4>Start</h4><ul>
+<li><a href="/docs/hosted/">Quick start on the hosted service</a></li>
+<li><a href="/docs/quick-start/">Quick start on your own server</a></li>
+<li><a href="/docs/interface-tour/">A tour of the interface</a></li>
+<li><a href="/docs/how-it-works/" aria-current="page">How it works</a></li>
+</ul>
+<h4>Devices</h4><ul>
+<li><a href="/docs/add-a-device/">Adding a device</a></li>
+<li><a href="/docs/install-an-os/">Installing an operating system</a></li>
+<li><a href="/docs/node-panel/">Working with a node</a></li>
+<li><a href="/docs/hardware-and-watchdog/">Hardware profiles, overclocking and the watchdog</a></li>
+<li><a href="/docs/backups-and-images/">Backups and golden images</a></li>
+</ul>
+<h4>Operating a fleet</h4><ul>
+<li><a href="/docs/organization/">Organizational units and policies</a></li>
+<li><a href="/docs/access-and-credentials/">Access: SSH keys and device users</a></li>
+<li><a href="/docs/secrets-and-variables/">Secrets and variables</a></li>
+<li><a href="/docs/utilities/">Utilities: managed software</a></li>
+<li><a href="/docs/status-and-audit/">Status, attention and the audit trail</a></li>
+</ul>
+<h4>Automation</h4><ul>
+<li><a href="/docs/playbooks/">Playbooks: automating work across nodes</a></li>
+<li><a href="/docs/api/">Using the API</a></li>
+</ul>
+<h4>Administration</h4><ul>
+<li><a href="/docs/team-and-security/">Team, sign-in security and the device limit</a></li>
+<li><a href="/docs/backup-and-upgrade/">Backup, restore and upgrading the server</a></li>
+<li><a href="/docs/troubleshooting/">Troubleshooting</a></li>
+</ul></nav>
+<article>
+<div class="stamp"><b>Start</b> Documentation</div>
+<h1>How it works</h1>
+<p class="summary">What boots a board, what runs on it, and which step checks which.</p>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#the-parts">The parts</a></li><li><a href="#network-boot-without-pxe">Network boot without PXE</a></li><li><a href="#from-blank-to-managed">From blank to managed</a></li><li><a href="#when-the-os-is-broken">When the OS is broken</a></li><li><a href="#what-checks-what">What checks what</a></li><li><a href="#where-the-chain-stops">Where the chain stops</a></li></ul></nav>
+<p>A board boots a small recovery system from your server. An agent inside it writes the operating system and then keeps the board managed. This page follows that path and says what is checked at each step.</p>
+<h2 id="the-parts">The parts</h2>
+<div class="table"><table><thead><tr><th>Part</th><th>Where it runs</th><th>What it does</th></tr></thead><tbody><tr><td>Server</td><td>Your machine, or our hosted service</td><td>Web UI and API, the device channel, OS image storage, and the signer that prepares bootloaders</td></tr><tr><td>Bootloader</td><td>The board's EEPROM</td><td>Holds the server's name and public key, and fetches the recovery system</td></tr><tr><td>Recovery image</td><td>The board's RAM</td><td>A 98 MB Linux system with the agent inside. It does not touch the drive by itself</td></tr><tr><td>Agent</td><td>Recovery, and later the installed OS</td><td>Connects out to the server, runs your commands and reports back</td></tr></tbody></table></div>
+<p>The board connects out to the server, so it can sit behind NAT.</p>
+<h2 id="network-boot-without-pxe">Network boot without PXE</h2>
+<p>The board uses the HTTP boot built into the Raspberry Pi bootloader:</p>
+<ol><li>It gets an ordinary address from the network's DHCP server.</li><li>Its bootloader asks the server, by name, for the recovery image and its signature over HTTP on port 80.</li><li>It checks the signature against the key it holds, loads the image into RAM and starts it.</li></ol>
+<p>Nothing changes on the router, and the server can be on another network or on the internet. Plain HTTP is enough because the bootloader checks the signature: an image signed by another key does not boot.</p>
+<p>The bootloader learns the server's name and key once per board: from the browser over USB, with a provisioning card, or from a board that already runs Linux (<a href="../add-a-device/">Adding a device</a>).</p>
+<h2 id="from-blank-to-managed">From blank to managed</h2>
+<ol><li>You approve the board by its hardware serial.</li><li>The server prepares a bootloader for that board and the agent writes it.</li><li>The board boots the recovery system from the server.</li><li>The agent streams the OS image you picked onto the drive.</li><li>The agent installs itself into the new system with the board's own credential.</li><li>The board boots from its drive and reports in.</li></ol>
+<p>Over the internet this takes about six minutes on a Compute Module 4 or 5 (<a href="../install-an-os/">Installing an operating system</a>).</p>
+<h2 id="when-the-os-is-broken">When the OS is broken</h2>
+<p>A board whose drive cannot be booted goes round its boot order and asks the server again, about every 30 seconds. Set its <b>Boot behavior</b> to <b>Recovery</b> and the next request gets the recovery system. No power cycle is needed. In two runs a board with a wiped drive was back in recovery 57 and 73 seconds after the switch.</p>
+<figure><video data-src="../img/how-it-works/v1-broken-os-to-recovery.mp4" aria-label="plasma-rig-01, whose drive was wiped, is OFFLINE in the Nodes list; opening it, going to Properties and clicking Recovery under Boot behavior starts a timer, and with no reboot command the node turns violet RECOVERY, its hostname changing to the recovery name, 1 minute 13 seconds after the click" muted loop playsinline preload="none"></video><figcaption>A board that cannot boot its drive reaches recovery on its own after the switch; the wait is fast-forwarded</figcaption></figure>
+<p>A board whose system starts and then hangs does not ask again by itself. It needs a reboot: a power cycle, or a watchdog you armed beforehand (<a href="../hardware-and-watchdog/">Hardware and the watchdog</a>).</p>
+<h2 id="what-checks-what">What checks what</h2>
+<div class="table"><table><thead><tr><th>Step</th><th>Checked by</th><th>How</th></tr></thead><tbody><tr><td>Recovery image</td><td>Bootloader</td><td>RSA signature made with the server's own key, created when you turn network boot on</td></tr><tr><td>Agent in recovery</td><td>Bootloader</td><td>The agent is part of the signed image. Recovery downloads no code</td></tr><tr><td>OS image</td><td>Agent</td><td>SHA-256 sent with the install command. The agent writes the first part of the image last, so a drive that fails the check never becomes bootable</td></tr><tr><td>Agent package</td><td>Server, then agent</td><td>Signature made on hardware keys kept offline. The server checks a release on import, the agent checks the package before installing it</td></tr><tr><td>Commands and secrets</td><td>TLS</td><td>The device channel uses TLS whenever the server has an <code>https</code> address</td></tr></tbody></table></div>
+<p>The agent carries the public keys that verify agent packages, so a board installs only agents signed for the build it runs. A fork built from source replaces that key set and signs its own releases (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/ARTIFACT-SIGNING.md" target="_blank" rel="noopener">ARTIFACT-SIGNING.md</a>).</p>
+<h2 id="where-the-chain-stops">Where the chain stops</h2>
+<ul><li><b>This is not Secure Boot.</b> The bootloader's key is stored in the EEPROM, not fused into the board. Someone who holds the board, or has root on it, can write another key.</li><li><b>The installed OS boots unsigned.</b> The signature covers the recovery system. The board boots the image you installed as it is.</li><li><b>OS images are not signed.</b> The checksum is only as trustworthy as the channel that carried it. On a local server over plain HTTP, that channel is not encrypted.</li><li><b>The server is trusted.</b> Whoever controls your server controls your boards.</li></ul>
+<aside class="callout note"><p><b>Note:</b> A local server without a certificate sends commands and secrets unencrypted. Use it on a network you trust, or give the server a DNS name and let the installer get a certificate.</p></aside>
+<p>Next: <a href="../add-a-device/">Adding a device</a>.</p>
+<div class="pager"><a class="prev" href="/docs/interface-tour/"><small>Previous</small>A tour of the interface</a><a class="next" href="/docs/add-a-device/"><small>Next</small>Adding a device</a></div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="/docs/">Docs</a> · <a href="/subscription/">Subscriptions</a> · <a href="/imprint/">Imprint</a> · <a href="/privacy/">Privacy</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
