@@ -256,7 +256,7 @@ footer a { color: var(--mute); }
 
 <header class="nav">
   <div class="wrap">
-    <a class="mark" href="#top" aria-label="Uptime Orchestrator"><span class="logo" role="img" aria-hidden="true"></span> <small>for Raspberry Pi fleets</small></a>
+    <a class="mark" href="#top" aria-label="Uptime Orchestrator"><span class="logo" role="img" aria-hidden="true"></span> <small>for one Raspberry Pi or a fleet</small></a>
     <nav aria-label="Sections">
       <a href="#start">Start</a>
       <a href="#four-minutes">How it works</a>
@@ -276,7 +276,7 @@ footer a { color: var(--mute); }
     <div class="stamp"><b>Public beta</b> Raspberry Pi 4 and 5, boards and Compute Modules</div>
     <h1>Network boot for<br><span class="out">Raspberry Pi</span> over the internet</h1>
     <div class="lead">
-      <p>Your boards boot from a server anywhere on the internet. No PXE, no TFTP, nothing to set up on their network. A board needs no drive to join: it boots a recovery system into RAM and shows up in your browser.</p>
+      <p>One board or a rack of them boots from a server anywhere on the internet. No PXE, no TFTP, nothing to set up on their network. A board needs no drive to join: it boots a recovery system into RAM and shows up in your browser.</p>
       <div class="cta">
         <a class="btn solid" href="#run">Start free now</a>
         <a class="btn" href="#install">Run it yourself</a>
@@ -461,8 +461,14 @@ footer a { color: var(--mute); }
 
 <section id="after">
   <div class="wrap">
-    <div class="stamp"><b>T+6</b> The board is online</div>
-    <h2>What you do with it next</h2>
+    <div class="stamp"><b>T+6</b> One board, then many</div>
+    <h2>From one board to a fleet</h2>
+    <p class="lede">The first board and the hundredth take the same steps. What changes is where you do them: on a board, on a unit of boards, or from a script.</p>
+    <ol class="steps">
+      <li><b>1</b><h3>One board</h3><p>Fix a broken system from the browser, open a root terminal when SSH is gone, reinstall the OS, keep a backup. Worth it for a single Pi you cannot walk up to.</p></li>
+      <li><b>2</b><h3>A rack or a room</h3><p>Group boards into units. Users, keys and managed software set on a unit reach every board in it, including boards you add later. Capture one configured board and install its image on the others.</p></li>
+      <li><b>3</b><h3>Many sites</h3><p>One command enrols several boards. Playbooks run on a schedule, a board that is offline gets its commands when it reconnects, and the API covers nodes, commands and the audit trail.</p></li>
+    </ol>
     <dl class="spec">
       <div><dt><h3>Users and keys</h3></dt><dd><p>Linux users, <b>SSH keys and sudo</b> for one board, a unit or the whole account.</p></dd></div>
       <div><dt><h3>Images and backups</h3></dt><dd><p><b>Capture a configured board as a golden image</b> and install it on other boards. Back up a drive and restore it later.</p></dd></div>
