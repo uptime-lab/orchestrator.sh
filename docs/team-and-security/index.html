@@ -69,7 +69,7 @@
 <div class="stamp"><b>Administration</b> Documentation</div>
 <h1>Team, sign-in security and the device limit</h1>
 <p class="summary">Invite people, give them roles, protect your sign-in and see how many devices your server admits.</p>
-<nav class="toc" aria-label="On this page"><ul><li><a href="#invite-someone">Invite someone</a></li><li><a href="#which-role-to-give">Which role to give</a></li><li><a href="#turn-on-two-step-sign-in">Turn on two-step sign-in</a></li><li><a href="#see-and-end-your-sessions">See and end your sessions</a></li><li><a href="#the-device-limit">The device limit</a></li><li><a href="#lost-passwords-and-single-sign-on">Lost passwords and single sign-on</a></li></ul></nav>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#invite-someone">Invite someone</a></li><li><a href="#which-role-to-give">Which role to give</a></li><li><a href="#turn-on-two-step-sign-in">Turn on two-step sign-in</a></li><li><a href="#see-and-end-your-sessions">See and end your sessions</a></li><li><a href="#the-device-limit">The device limit</a></li><li><a href="#sign-up-and-mail-on-your-own-server">Sign-up and mail on your own server</a></li><li><a href="#sign-in-with-google-on-your-own-server">Sign in with Google on your own server</a></li><li><a href="#lost-passwords">Lost passwords</a></li></ul></nav>
 <p>Click your initials at the top right: <b>Team Management</b> holds the members, <b>Account</b> your own sign-in.</p>
 <figure><a href="../img/team-and-security/01-account-menu.jpg"><img src="../img/team-and-security/01-account-menu.jpg" alt="The account menu open at the top right, showing the user&#x27;s name, an Active badge, the email address, Team Management, Account and Sign out" loading="lazy"></a><figcaption>The account menu</figcaption></figure>
 <h2 id="invite-someone">Invite someone</h2>
@@ -91,8 +91,20 @@
 <p>Click <b>Sign out</b> on a row to end that session, or <b>Sign out of my other sessions</b> to end all but this one, then confirm. You can hold 10 sessions, and a new sign-in beyond that signs out the one used least recently. Give scripts their own user so they do not push your browser out.</p>
 <h2 id="the-device-limit">The device limit</h2>
 <p>Your own server admits 25 devices free, and a hosted account 10. The count is on <b>Account</b> → <b>Subscription</b>. To raise it on your own server, get an entitlement file at <a href="https://orchestrator.sh/subscription/" target="_blank" rel="noopener">orchestrator.sh/subscription</a> and apply it there. On the hosted service, write to <a href="mailto:sales@orchestrator.sh">sales@orchestrator.sh</a>.</p>
-<h2 id="lost-passwords-and-single-sign-on">Lost passwords and single sign-on</h2>
-<p>The operator resets a forgotten password or a lost authenticator from the server's command line (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#recover-a-lost-password-or-authenticator" target="_blank" rel="noopener">Recover a lost password or authenticator</a>). Sign-in through an identity provider such as Google is off until the operator sets it up (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md#email-and-single-sign-on" target="_blank" rel="noopener">Email and single sign-on</a>).</p>
+<h2 id="sign-up-and-mail-on-your-own-server">Sign-up and mail on your own server</h2>
+<p>The first person to register on a new server becomes its owner. After that, sign-up is closed and nobody has to confirm an address:</p>
+<ul><li>Colleagues join by invitation from <b>Team Management</b>.</li><li>To host separate organisations, the operator sets an invite code. A sign-up with the code works at once.</li></ul>
+<p>The server needs no mail for this. Mail is needed only for open registration, where anyone may sign up: each new address gets a confirmation link and the account does nothing until it is opened. The settings are in <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#create-the-first-owner" target="_blank" rel="noopener">Create the first owner</a>.</p>
+<h2 id="sign-in-with-google-on-your-own-server">Sign in with Google on your own server</h2>
+<p>Sign-in through Google is off until the operator sets it up. The server needs a public HTTPS address.</p>
+<ol><li>In the Google Cloud Console, open <b>APIs &amp; Services</b> → <b>Credentials</b> and configure the <b>OAuth consent screen</b>.</li><li>Click <b>Create Credentials</b> → <b>OAuth client ID</b> and choose <b>Web application</b>. Set the authorized JavaScript origin to <code>https://&lt;your server&gt;</code> and the authorized redirect URI to <code>https://&lt;your server&gt;/api/auth/oidc/callback</code>.</li><li>On the server, write the client secret into <code>secrets/oidc_client_secret</code>.</li><li>Add the three settings below to <code>.env</code> and recreate the backend container.</li></ol>
+<pre><code>OIDC_ENABLED=true
+OIDC_CLIENT_ID=&lt;the client id&gt;
+OIDC_REDIRECT_URL=https://&lt;your server&gt;/api/auth/oidc/callback</code></pre>
+<p>The sign-in page now shows <b>Sign in with Google</b>.</p>
+<p>A Google sign-in with a new address creates an account only where sign-up is open to it, by invite code or open registration. Another OpenID Connect provider works the same way. The full guide is <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/GOOGLE-OAUTH-SETUP.md" target="_blank" rel="noopener">Enabling Google sign-in</a>.</p>
+<h2 id="lost-passwords">Lost passwords</h2>
+<p>The operator resets a forgotten password or a lost authenticator from the server's command line (<a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#recover-a-lost-password-or-authenticator" target="_blank" rel="noopener">Recover a lost password or authenticator</a>).</p>
 <p>Next: <a href="../backup-and-upgrade/">Backup, restore and upgrading the server</a>.</p>
 <div class="pager"><a class="prev" href="/docs/api/"><small>Previous</small>Using the API</a><a class="next" href="/docs/backup-and-upgrade/"><small>Next</small>Backup, restore and upgrading the server</a></div>
 </article>

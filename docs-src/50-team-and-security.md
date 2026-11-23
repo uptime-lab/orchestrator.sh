@@ -56,8 +56,36 @@ Click **Sign out** on a row to end that session, or **Sign out of my other sessi
 
 Your own server admits 25 devices free, and a hosted account 10. The count is on **Account** → **Subscription**. To raise it on your own server, get an entitlement file at [orchestrator.sh/subscription](https://orchestrator.sh/subscription/) and apply it there. On the hosted service, write to [sales@orchestrator.sh](mailto:sales@orchestrator.sh).
 
-## Lost passwords and single sign-on
+## Sign-up and mail on your own server
 
-The operator resets a forgotten password or a lost authenticator from the server's command line ([Recover a lost password or authenticator](https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#recover-a-lost-password-or-authenticator)). Sign-in through an identity provider such as Google is off until the operator sets it up ([Email and single sign-on](https://github.com/uptime-lab/orchestrator/blob/main/docs/CONFIGURATION.md#email-and-single-sign-on)).
+The first person to register on a new server becomes its owner. After that, sign-up is closed and nobody has to confirm an address:
+
+- Colleagues join by invitation from **Team Management**.
+- To host separate organisations, the operator sets an invite code. A sign-up with the code works at once.
+
+The server needs no mail for this. Mail is needed only for open registration, where anyone may sign up: each new address gets a confirmation link and the account does nothing until it is opened. The settings are in [Create the first owner](https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#create-the-first-owner).
+
+## Sign in with Google on your own server
+
+Sign-in through Google is off until the operator sets it up. The server needs a public HTTPS address.
+
+1. In the Google Cloud Console, open **APIs & Services** → **Credentials** and configure the **OAuth consent screen**.
+2. Click **Create Credentials** → **OAuth client ID** and choose **Web application**. Set the authorized JavaScript origin to `https://<your server>` and the authorized redirect URI to `https://<your server>/api/auth/oidc/callback`.
+3. On the server, write the client secret into `secrets/oidc_client_secret`.
+4. Add the three settings below to `.env` and recreate the backend container.
+
+```
+OIDC_ENABLED=true
+OIDC_CLIENT_ID=<the client id>
+OIDC_REDIRECT_URL=https://<your server>/api/auth/oidc/callback
+```
+
+The sign-in page now shows **Sign in with Google**.
+
+A Google sign-in with a new address creates an account only where sign-up is open to it, by invite code or open registration. Another OpenID Connect provider works the same way. The full guide is [Enabling Google sign-in](https://github.com/uptime-lab/orchestrator/blob/main/docs/GOOGLE-OAUTH-SETUP.md).
+
+## Lost passwords
+
+The operator resets a forgotten password or a lost authenticator from the server's command line ([Recover a lost password or authenticator](https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#recover-a-lost-password-or-authenticator)).
 
 Next: [Backup, restore and upgrading the server](../backup-and-upgrade/).
