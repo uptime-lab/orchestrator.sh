@@ -3,7 +3,7 @@ title: Adding a device
 summary: Turn a Raspberry Pi into a managed node, then approve it.
 section: Devices
 ---
-Adopt a device so it shows up in **Nodes** and you can manage it. Open **Nodes**, click **Add node**, and pick the tab that fits your device.
+Open **Nodes**, click **Add node**, and pick the tab that fits your device.
 
 | Your device | Tab |
 |---|---|
@@ -11,7 +11,7 @@ Adopt a device so it shows up in **Nodes** and you can manage it. Open **Nodes**
 | A board you can connect over USB in boot mode | **USB flash** |
 | Blank, and you can put a card into it | **Master image** (provisioning card) |
 
-The device needs Ethernet and outbound access to the server on port 50051, plus port 80 for a server on your local network or 443 for one on the internet. The USB and card ways bring their own recovery system, so you install an OS afterwards ([Installing an operating system](../install-an-os/)).
+The device needs Ethernet and outbound access to the server on port 50051, plus port 80, and 443 for a server on the internet. The USB and card ways bring their own recovery system, so you install an OS afterwards ([Installing an operating system](../install-an-os/)). Both need network boot set up on the server, which the installer offers.
 
 ![Clicking Add node on the Nodes page and stepping through the One command, USB flash and Master image tabs of the panel that opens](img/add-a-device/v1-add-node-tabs.mp4 "The three ways to add a device")
 
@@ -30,7 +30,7 @@ The token works for 7 days and for several devices. You find it under **Secrets*
 
 ## Flash a board from the browser
 
-This writes the board's bootloader so it boots from your server. Use Chrome or Edge over HTTPS. On Windows, install the WinUSB driver first as the tab explains.
+This writes the board's bootloader so it boots from your server. Use Chrome or Edge, with the server opened over HTTPS. A local-network install serves plain HTTP, so it cannot flash from the browser: use a provisioning card there. On Windows, install the WinUSB driver first as the tab explains.
 
 ![The USB flash tab with the Connect device button, an empty Board serial field, the Node name field, the yellow flashing warning, the line Power the device on within 30 days of flashing, and a disabled Flash EEPROM button.](img/add-a-device/04-usb-flash.jpg)
 

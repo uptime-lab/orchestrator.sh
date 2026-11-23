@@ -3,7 +3,7 @@ title: What it is for
 summary: Install, reach and repair Raspberry Pi boards without going to them.
 section: Start
 ---
-A Raspberry Pi is easy to set up on a desk and hard to look after once it is somewhere else. Uptime Orchestrator makes the board ask a server on every boot, so you can fix it from a browser.
+Uptime Orchestrator makes a Raspberry Pi ask your server on every boot, so you can reinstall or repair it from a browser.
 
 ## What you can do
 

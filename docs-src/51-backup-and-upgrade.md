@@ -21,11 +21,9 @@ Paths are as in the community compose file.
 
 ## Restore
 
-The reference has two procedures, [into the same install](https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#restore-into-the-same-install) and [onto an empty host](https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#restore-onto-an-empty-host), and the order of steps matters in both. Prepare an empty host by hand with the same release and `DOMAIN`, because the installer would create new keys and a new owner. Devices reconnect on their own when the restored server keeps the same name and keys.
+The reference has two procedures, [into the same install](https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#restore-into-the-same-install) and [onto an empty host](https://github.com/uptime-lab/orchestrator/blob/main/docs/BACKUP-RESTORE.md#restore-onto-an-empty-host), and the order of steps matters in both. Prepare an empty host by hand with the same release and `DOMAIN`, because the installer would create new keys and a new owner. Keep the same name and keys on the restored server, or its devices cannot reconnect.
 
 ## Upgrade the server
-
-The full procedure is [INSTALL.md → Upgrading](https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#upgrading).
 
 1. Read `CHANGELOG.md` for every release between yours and the new one.
 2. Run the dump by hand and check your copies of `secrets/` and `.env`.
@@ -37,8 +35,8 @@ There is no downgrade across a schema change, so rolling back means restoring th
 
 ## Update agents on devices
 
-The server hands devices the agent release you marked latest when you imported it (`--set-latest`). To update one node, open it and click **Update** in the **Agent** row on **Overview**, which works only while the node is online.
+The server hands devices the agent release you marked latest when you imported it (`--set-latest`). To update one node, open it and click **Update** in the **Agent** row on **Overview**. For an offline node the update waits until it reconnects.
 
-![The Overview tab of an offline node, welding-bot, with Hostname, Unit, IP, MAC, HW serial, Bootloader and an Agent row showing 0.8.5 and a greyed-out Update button](img/backup-and-upgrade/01-agent-row.jpg "Update is greyed out while the node is offline")
+![The Overview tab of an offline node, welding-bot, with Hostname, Unit, IP, MAC, HW serial, Bootloader and an Agent row showing 0.8.5 and a greyed-out Update button](img/backup-and-upgrade/01-agent-row.jpg "The Agent row on Overview")
 
-To update many, open **Status** → **Attention**, filter by **Agent update available**, select the rows and click **Update agent**. A node offline at the time gets the update when it reconnects, and a node still finishing another command is held back until it is done.
+To update many, open **Status** → **Attention**, filter by **Agent update available**, select the rows and click **Update agent**. A node offline at the time gets the update if it reconnects within a day, and a node still finishing another command is held back until it is done.

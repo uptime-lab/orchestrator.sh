@@ -3,7 +3,7 @@ title: Working with a node
 summary: See what a node is, run commands on it, open a terminal, track its files and remove it.
 section: Devices
 ---
-Click a node on **Nodes** to open its panel. Everything you do to one device starts here.
+Click a node on **Nodes** to open its panel. 
 
 ## See what a node is
 

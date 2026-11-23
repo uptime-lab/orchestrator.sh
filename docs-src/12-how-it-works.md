@@ -14,7 +14,7 @@ A board boots a small recovery system from your server. An agent inside it write
 | Recovery image | The board's RAM | A 98 MB Linux system with the agent inside. It does not touch the drive by itself |
 | Agent | Recovery, and later the installed OS | Connects out to the server, runs your commands and reports back |
 
-The board connects out to the server, so it can sit behind NAT.
+
 
 ## Network boot without PXE
 

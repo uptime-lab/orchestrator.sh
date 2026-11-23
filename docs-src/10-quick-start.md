@@ -3,8 +3,6 @@ title: Quick start on your own server
 summary: Install the server with one command and sign in.
 section: Start
 ---
-Uptime Orchestrator manages a fleet of Raspberry Pi boards from one web UI. You adopt devices, install operating systems on them over the network, and control who logs in and what runs on them.
-
 ## What you need
 
 - An x86-64 or arm64 machine or VM running Debian or Ubuntu, with 4 GB of RAM and disk space for your OS images. A Raspberry Pi 5 with an SSD works as the server. The installer installs Docker on Ubuntu. On another distribution, install Docker first.
@@ -33,11 +31,11 @@ It asks a few questions, runs its checks, and asks **Install now? (y/n)** before
 - **Set up network boot? (y/n)** Answer `y` if you want to boot blank devices from the server and install their OS from the web UI. It downloads a recovery image of about 100 MB and creates a signing key.
 - **Email address the owner signs in with.** This becomes the first account, and it owns the server.
 
-Everything goes into `./orchestrator` under the directory you ran the command from. Every question is also a flag for an unattended run (`install.sh --help`, [INSTALL.md](https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md)).
+Everything goes into `./orchestrator` under the directory you ran the command from. Every question is also a flag for an unattended run (`curl -fsSL https://get.orchestrator.sh | sh -s -- --help` lists them, [INSTALL.md](https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md)).
 
 If a step fails, run the installer again with the same answers. It keeps what it already wrote and skips finished steps. If the certificate doesn't arrive, check that the DNS name resolves to the machine's public address from outside and that port 80 is open, then run `docker restart orchestrator-proxy`.
 
-The run ends with the address to open and where the owner password is. It also names two files to copy somewhere safe, off the machine.
+The run ends with the address to open and where the owner password is. It also names the files to copy somewhere safe, off the machine.
 
 > **Warning:** Without `secrets/secrets_encryption_key` a database backup can't be read. Without `data/eeprom-keys/privkey.pem` (created with network boot) you can never sign for your network-booted devices again.
 

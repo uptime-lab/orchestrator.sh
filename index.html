@@ -431,19 +431,19 @@ footer a { color: var(--mute); }
       <code><span class="p">$</span> curl -fsSL https://get.orchestrator.sh | sh</code>
       <button type="button" class="copy" id="copy">Copy command</button>
     </div>
-    <p class="cmdnote">On a fresh Ubuntu machine, x86-64 or arm64. The installer asks which setup you want.</p>
+    <p class="cmdnote">On a fresh Ubuntu machine, x86-64 or arm64, with 4 GB of RAM. Boards reach it on ports 80 and 50051, and from the internet also on 443.</p>
     <div class="install-grid">
       <div class="cases">
         <div>
           <h3>On your local network</h3>
-          <p>For a lab, an office or a home rack. No domain or certificate needed.</p>
+          <p>For a lab, an office or a home rack. Plain HTTP with no certificate, so a blank board joins from a provisioning card, not over USB, and passkeys are unavailable.</p>
         </div>
         <div>
           <h3>From the internet</h3>
           <p>For boards in other places. Point a DNS name at the machine and the installer gets a Let's Encrypt certificate.</p>
         </div>
         <ul>
-          <li><b>The name must not change</b>: every adopted board stores it.</li>
+          <li><b>The name or address must not change</b>: every adopted board stores it.</li>
           <li>The installer offers <b>network boot</b>.</li>
           <li><b>By hand</b>, follow <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md" target="_blank" rel="noopener">the install guide</a>.</li>
         </ul>
@@ -464,11 +464,11 @@ footer a { color: var(--mute); }
   <div class="wrap">
     <div class="stamp"><b>T+6</b> One board, then many</div>
     <h2>From one board to a fleet</h2>
-    <p class="lede">The first board and the hundredth take the same steps. What changes is where you do them: on a board, on a unit of boards, or from a script.</p>
+    <p class="lede">The same server runs one board or many.</p>
     <ol class="steps">
       <li><b>1</b><h3>One board</h3><p>Fix a broken system from the browser, open a root terminal when SSH is gone, reinstall the OS, keep a backup. Worth it for a single Pi you cannot walk up to.</p></li>
       <li><b>2</b><h3>A rack or a room</h3><p>Group boards into units. Users, keys and managed software set on a unit reach every board in it, including boards you add later. Capture one configured board and install its image on the others.</p></li>
-      <li><b>3</b><h3>Many sites</h3><p>One command enrols several boards. Playbooks run on a schedule, a board that is offline gets its commands when it reconnects, and the API covers nodes, commands and the audit trail.</p></li>
+      <li><b>3</b><h3>Many sites</h3><p>The same command enrols every board, and each waits for approval. Playbooks run on a schedule, a board that is offline gets its commands when it reconnects, and the API covers nodes, commands and the audit trail.</p></li>
     </ol>
     <dl class="spec">
       <div><dt><h3>Users and keys</h3></dt><dd><p>Linux users, <b>SSH keys and sudo</b> for one board, a unit or the whole account.</p></dd></div>
@@ -635,15 +635,18 @@ footer a { color: var(--mute); }
       line("", "Your router gives this machine the name: rack.home.arpa") +
       line("c", "A name follows the machine if its address changes.") +
       '<span class="c">Name or address the devices should use [rack.home.arpa]:</span> <span class="a">⏎</span>\n' +
-      '<span class="c">Set up network boot? (y/n) [y]:</span> <span class="a">⏎</span>\n\n' +
+      '<span class="c">Set up network boot? (y/n) [y]:</span> <span class="a">⏎</span>\n' +
+      '<span class="c">Email address the owner signs in with:</span> <span class="a">you@example.com</span>\n' +
+      '<span class="c">Install now? (y/n) [y]:</span> <span class="a">⏎</span>\n\n' +
       line("p", "==> Starting the server") +
-      line("", "The backend is ready. The proxy answers on port 80.") +
+      line("p", "==> Creating the owner account") +
+      line("p", "==> Opening the server to the network") +
+      line("", "The proxy answers on port 80.") +
       line("p", "==> Importing an agent release") +
-      line("p", "==> Setting up network boot") +
-      line("", "Signing key generated. Recovery image signed.") + "\n" +
+      line("p", "==> Setting up network boot") + "\n" +
       line("q", " Open:  http://rack.home.arpa") +
-      line("c", " Sign in with the owner email. The password is in") +
-      line("c", "   ./orchestrator/owner-password"),
+      line("c", " Sign in as you@example.com with the password in") +
+      line("c", "   /home/you/orchestrator/owner-password"),
     "public":
       line("q", "How will your devices and your browser reach this server?") +
       line("", "  1) On my local network only.") +
@@ -652,15 +655,18 @@ footer a { color: var(--mute); }
       '<span class="c">DNS name that points at this machine:</span> <span class="a">orchestrator.example.com</span>\n' +
       line("", "orchestrator.example.com resolves to 203.0.113.10") +
       '<span class="c">Email address for Let\'s Encrypt expiry notices:</span> <span class="a">ops@example.com</span>\n' +
-      '<span class="c">Set up network boot? (y/n) [y]:</span> <span class="a">⏎</span>\n\n' +
+      '<span class="c">Set up network boot? (y/n) [y]:</span> <span class="a">⏎</span>\n' +
+      '<span class="c">Email address the owner signs in with [ops@example.com]:</span> <span class="a">⏎</span>\n' +
+      '<span class="c">Install now? (y/n) [y]:</span> <span class="a">⏎</span>\n\n' +
       line("p", "==> Starting the server") +
+      line("p", "==> Creating the owner account") +
+      line("p", "==> Opening the server to the network") +
       line("", "https://orchestrator.example.com answers with a valid certificate.") +
       line("p", "==> Importing an agent release") +
-      line("p", "==> Setting up network boot") +
-      line("", "Signing key generated. Recovery image signed.") + "\n" +
+      line("p", "==> Setting up network boot") + "\n" +
       line("q", " Open:  https://orchestrator.example.com") +
-      line("c", " Sign in with the owner email. The password is in") +
-      line("c", "   ./orchestrator/owner-password")
+      line("c", " Sign in as ops@example.com with the password in") +
+      line("c", "   /home/you/orchestrator/owner-password")
   };
   var pre = document.getElementById("transcript");
   var tabs = { lan: document.getElementById("tab-lan"), "public": document.getElementById("tab-public") };

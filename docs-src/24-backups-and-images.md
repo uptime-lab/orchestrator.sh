@@ -3,16 +3,16 @@ title: Backups and golden images
 summary: Copy a node's drive to the server, put it back, or turn it into an image for other nodes.
 section: Devices
 ---
-Copy a node's drive to your server and put it back later, or turn a configured node into a golden image you install on other nodes. Both are taken while the node runs the recovery system.
+Both are taken while the node runs the recovery system.
 
 ## Back up a node's drive
 
 1. Open the node, go to **Actions** and click **Reboot to recovery**. Wait until it shows **RECOVERY**.
 2. Under **Provisioning**, click **Create backup**.
-3. Type an **Image title**. Leave **Target Device** on **Boot disk (default)** unless the system lives on another drive.
+3. Type an **Image title**. Leave **Target Device** on the entry marked **(boot disk)** unless the system lives on another drive.
 4. Leave **Golden image** unticked and click **Create backup**.
 5. Open **Command history** and wait until **Capture image** reads **SUCCESS**.
-6. Click **Reboot**. The node starts its own system again, because **Reboot to recovery** lasts for one boot.
+6. Click **Reboot**. The node returns to its saved boot target, normally **Local OS**.
 
 ![The Create backup form on plasma-rig-01 with the title plasma-rig-01 baseline and Golden image unticked](img/backups-and-images/01-create-backup.jpg)
 

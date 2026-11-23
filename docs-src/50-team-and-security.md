@@ -58,20 +58,20 @@ Your own server admits 25 devices free, and a hosted account 10. The count is on
 
 ## Sign-up and mail on your own server
 
-The first person to register on a new server becomes its owner. After that, sign-up is closed and nobody has to confirm an address:
+The first person to register on a new server becomes its owner. After that, sign-up is closed:
 
 - Colleagues join by invitation from **Team Management**.
-- To host separate organisations, the operator sets an invite code. A sign-up with the code works at once.
+- To host separate organisations, the operator puts a code into `secrets/invite_code`, raises `SERVER_MAX_ACCOUNTS` and recreates the backend. A sign-up with the code then works at once.
 
-The server needs no mail for this. Mail is needed only for open registration, where anyone may sign up: each new address gets a confirmation link and the account does nothing until it is opened. The settings are in [Create the first owner](https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#create-the-first-owner).
+None of this needs mail, and nobody has to confirm an address. Mail is required only for open registration, where anyone may sign up: each new address gets a confirmation link, and the account can do nothing until the link is opened. With mail set up, the server also sends invitations and lets people reset a forgotten password themselves. The settings are in [Create the first owner](https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md#create-the-first-owner).
 
 ## Sign in with Google on your own server
 
 Sign-in through Google is off until the operator sets it up. The server needs a public HTTPS address.
 
-1. In the Google Cloud Console, open **APIs & Services** → **Credentials** and configure the **OAuth consent screen**.
+1. In the Google Cloud Console, open **APIs & Services** → **Credentials** and configure the **OAuth consent screen** and publish it.
 2. Click **Create Credentials** → **OAuth client ID** and choose **Web application**. Set the authorized JavaScript origin to `https://<your server>` and the authorized redirect URI to `https://<your server>/api/auth/oidc/callback`.
-3. On the server, write the client secret into `secrets/oidc_client_secret`.
+3. On the server, write the client secret into `secrets/oidc_client_secret` with `sudo tee`. The file belongs to user 1000 with mode 0400.
 4. Add the three settings below to `.env` and recreate the backend container.
 
 ```
@@ -82,7 +82,7 @@ OIDC_REDIRECT_URL=https://<your server>/api/auth/oidc/callback
 
 The sign-in page now shows **Sign in with Google**.
 
-A Google sign-in with a new address creates an account only where sign-up is open to it, by invite code or open registration. Another OpenID Connect provider works the same way. The full guide is [Enabling Google sign-in](https://github.com/uptime-lab/orchestrator/blob/main/docs/GOOGLE-OAUTH-SETUP.md).
+A Google sign-in with a new address creates an account only where sign-up is open to it, by invite code or open registration. For another OpenID Connect provider, also set `OIDC_ISSUER_URL` and `OIDC_PROVIDER_NAME`. The full guide is [Enabling Google sign-in](https://github.com/uptime-lab/orchestrator/blob/main/docs/GOOGLE-OAUTH-SETUP.md).
 
 ## Lost passwords
 

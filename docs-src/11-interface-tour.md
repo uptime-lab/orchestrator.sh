@@ -3,8 +3,6 @@ title: A tour of the interface
 summary: Where each section is and how to read the Nodes list.
 section: Start
 ---
-Find your way around the web UI. The list below links each top-level section to its page in this guide.
-
 ![The Nodes page: top navigation, the Organizational Units sidebar on the left and the table of twelve nodes](img/interface-tour/01-nodes-page.jpg)
 
 ## Where things are

@@ -73,7 +73,6 @@
 <p>A board boots a small recovery system from your server. An agent inside it writes the operating system and then keeps the board managed. This page follows that path and says what is checked at each step.</p>
 <h2 id="the-parts">The parts</h2>
 <div class="table"><table><thead><tr><th>Part</th><th>Where it runs</th><th>What it does</th></tr></thead><tbody><tr><td>Server</td><td>Your machine, or our hosted service</td><td>Web UI and API, the device channel, OS image storage, and the signer that prepares bootloaders</td></tr><tr><td>Bootloader</td><td>The board's EEPROM</td><td>Holds the server's name and public key, and fetches the recovery system</td></tr><tr><td>Recovery image</td><td>The board's RAM</td><td>A 98 MB Linux system with the agent inside. It does not touch the drive by itself</td></tr><tr><td>Agent</td><td>Recovery, and later the installed OS</td><td>Connects out to the server, runs your commands and reports back</td></tr></tbody></table></div>
-<p>The board connects out to the server, so it can sit behind NAT.</p>
 <h2 id="network-boot-without-pxe">Network boot without PXE</h2>
 <p>The board uses the HTTP boot built into the Raspberry Pi bootloader:</p>
 <ol><li>It gets an ordinary address from the network's DHCP server.</li><li>Its bootloader asks the server, by name, for the recovery image and its signature over HTTP on port 80.</li><li>It checks the signature against the key it holds, loads the image into RAM and starts it.</li></ol>

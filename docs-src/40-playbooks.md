@@ -78,7 +78,7 @@ On an offline node, scripts, reboots and file reads fail at once, while **Set ho
 2. Click a run to open **Run details**.
 3. Click **Show output** to see each step's result, with `EXIT_CODE`, `STDERR` and `STDOUT` for scripts.
 
-Each node has a bar with one segment per step. Green succeeded, orange is running, red failed.
+Each node has a bar with one segment per step. Green means the step succeeded, orange that it is running, red that it failed.
 
 ![Opening the newest Collect diagnostics run on the Runs tab, clicking Show output and scrolling through the four Run script steps with their exit codes and output](img/playbooks/v2-read-run.mp4 "Read a run's output")
 
