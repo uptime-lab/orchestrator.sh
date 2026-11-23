@@ -20,6 +20,7 @@ a looping silent clip), and inline `code`, **bold**,
 *emphasis*, [links](url). Link to another page as [text](../<slug>/).
 Images live in docs/img/<slug>/ and are referenced relative to docs/.
 """
+import hashlib
 import html
 import json
 import os
@@ -29,6 +30,14 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "docs-src")
 OUT = os.path.join(ROOT, "docs")
+
+
+def _stamp(name):
+    """A short content hash, so a changed stylesheet or script is fetched
+    again instead of served from the browser's cache."""
+    with open(os.path.join(OUT, name), "rb") as fh:
+        return hashlib.sha256(fh.read()).hexdigest()[:10]
+
 SEARCH = '<div class="search" role="search"><input type="search" id="docs-search" placeholder="Search the docs" aria-label="Search the documentation" autocomplete="off" spellcheck="false"><kbd>/</kbd><ol id="docs-results" hidden></ol></div>'
 SECTION_ORDER = ["Start", "Devices", "Operating a fleet", "Automation", "Administration"]
 
@@ -211,8 +220,8 @@ HEAD = """<!DOCTYPE html>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ccff3d">
 <link href="/fonts/fonts.css" rel="stylesheet">
-<link href="/docs/docs.css" rel="stylesheet">
-<script src="/docs/search.js" defer></script>
+<link href="/docs/docs.css?v=__CSS__" rel="stylesheet">
+<script src="/docs/search.js?v=__JS__" defer></script>
 </head>
 <body>
 
@@ -230,7 +239,7 @@ HEAD = """<!DOCTYPE html>
     <span class="proto">Public beta</span>
   </div>
 </header>
-"""
+""".replace("__CSS__", _stamp("docs.css")).replace("__JS__", _stamp("search.js"))
 
 FOOT = """
 <footer>
