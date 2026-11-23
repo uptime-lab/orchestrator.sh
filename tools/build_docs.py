@@ -222,6 +222,7 @@ HEAD = """<!DOCTYPE html>
 <link href="/fonts/fonts.css" rel="stylesheet">
 <link href="/docs/docs.css?v=__CSS__" rel="stylesheet">
 <script src="/docs/search.js?v=__JS__" defer></script>
+<script data-goatcounter="https://orchestrator.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 
