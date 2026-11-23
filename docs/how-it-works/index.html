@@ -67,7 +67,7 @@
 <div class="stamp"><b>Start</b> Documentation</div>
 <h1>How it works</h1>
 <p class="summary">What boots a board, what runs on it, and which step checks which.</p>
-<nav class="toc" aria-label="On this page"><ul><li><a href="#the-parts">The parts</a></li><li><a href="#network-boot-without-pxe">Network boot without PXE</a></li><li><a href="#from-blank-to-managed">From blank to managed</a></li><li><a href="#when-the-os-is-broken">When the OS is broken</a></li><li><a href="#what-checks-what">What checks what</a></li><li><a href="#where-the-chain-stops">Where the chain stops</a></li></ul></nav>
+<nav class="toc" aria-label="On this page"><ul><li><a href="#the-parts">The parts</a></li><li><a href="#network-boot-without-pxe">Network boot without PXE</a></li><li><a href="#from-blank-to-ready">From blank to ready</a></li><li><a href="#when-the-os-is-broken">When the OS is broken</a></li><li><a href="#what-checks-what">What checks what</a></li><li><a href="#where-the-chain-stops">Where the chain stops</a></li></ul></nav>
 <p>A board boots a small recovery system from your server. An agent inside it writes the operating system and then keeps the board managed. This page follows that path and says what is checked at each step.</p>
 <h2 id="the-parts">The parts</h2>
 <div class="table"><table><thead><tr><th>Part</th><th>Where it runs</th><th>What it does</th></tr></thead><tbody><tr><td>Server</td><td>Your machine, or our hosted service</td><td>Web UI and API, the device channel, OS image storage, and the signer that prepares bootloaders</td></tr><tr><td>Bootloader</td><td>The board's EEPROM</td><td>Holds the server's name and public key, and fetches the recovery system</td></tr><tr><td>Recovery image</td><td>The board's RAM</td><td>A 98 MB Linux system with the agent inside. It does not touch the drive by itself</td></tr><tr><td>Agent</td><td>Recovery, and later the installed OS</td><td>Connects out to the server, runs your commands and reports back</td></tr></tbody></table></div>
@@ -77,7 +77,7 @@
 <ol><li>It gets an ordinary address from the network's DHCP server.</li><li>Its bootloader asks the server, by name, for the recovery image and its signature over HTTP on port 80.</li><li>It checks the signature against the key it holds, loads the image into RAM and starts it.</li></ol>
 <p>Nothing changes on the router, and the server can be on another network or on the internet. Plain HTTP is enough because the bootloader checks the signature: an image signed by another key does not boot.</p>
 <p>The bootloader learns the server's name and key once per board: from the browser over USB, with a provisioning card, or from a board that already runs Linux (<a href="../add-a-device/">Adding a device</a>).</p>
-<h2 id="from-blank-to-managed">From blank to managed</h2>
+<h2 id="from-blank-to-ready">From blank to ready</h2>
 <ol><li>You approve the board by its hardware serial.</li><li>The server prepares a bootloader for that board and the agent writes it.</li><li>The board boots the recovery system from the server.</li><li>The agent streams the OS image you picked onto the drive.</li><li>The agent installs itself into the new system with the board's own credential.</li><li>The board boots from its drive and reports in.</li></ol>
 <p>Over the internet this takes about six minutes on a Compute Module 4 or 5 (<a href="../install-an-os/">Installing an operating system</a>).</p>
 <h2 id="when-the-os-is-broken">When the OS is broken</h2>

@@ -28,7 +28,7 @@ Nothing changes on the router, and the server can be on another network or on th
 
 The bootloader learns the server's name and key once per board: from the browser over USB, with a provisioning card, or from a board that already runs Linux ([Adding a device](../add-a-device/)).
 
-## From blank to managed
+## From blank to ready
 
 1. You approve the board by its hardware serial.
 2. The server prepares a bootloader for that board and the agent writes it.
