@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms · Uptime Orchestrator</title>
+<meta name="description" content="Terms of the hosted Uptime Orchestrator beta: what the service does to your devices and what it does not promise.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ccff3d">
+<link href="/fonts/fonts.css" rel="stylesheet">
+<style>
+/* COPIED from ../index.html (tokens, base, nav, buttons, stamps, spec list,
+   footer) so the landing stays a single file. Change both together. */
+:root {
+  color-scheme: dark;
+  --ink: #050604;
+  --panel: #0c0e09;
+  --line: #232a12;
+  --lime: #c8f31d;
+  --lime-deep: #5d7410;
+  --violet: #8b4dff;
+  --text: #e8ecda;
+  --mute: #8c9279;
+  --display: "Archivo", "Arial Black", "Helvetica Neue", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --gutter: clamp(16px, 4vw, 56px);
+  --cut: 18px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--ink); color: var(--text);
+  font: 400 15px/1.6 var(--mono);
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 64px 64px; background-position: -1px -1px;
+  background-attachment: fixed;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(120% 70% at 50% 0%, transparent 0%, var(--ink) 75%);
+}
+a { color: var(--lime); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+.wrap { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 0 var(--gutter); }
+
+h1, h2, h3 { font-family: var(--display); font-stretch: 125%; text-transform: uppercase; margin: 0; text-wrap: balance; }
+h1 { font-weight: 900; font-size: clamp(40px, 8.4vw, 124px); line-height: .88; letter-spacing: -.02em; }
+h2 { font-weight: 900; font-size: clamp(28px, 4.6vw, 62px); line-height: .95; letter-spacing: -.015em; }
+h3 { font-weight: 800; font-size: 17px; letter-spacing: .01em; }
+p { margin: 0; max-width: 62ch; }
+.mute { color: var(--mute); }
+.lime { color: var(--lime); }
+.out { color: transparent; -webkit-text-stroke: 1.5px var(--lime); }
+
+header.nav { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--ink) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; gap: 28px; min-height: 60px; flex-wrap: wrap; }
+.mark { font-family: var(--display); font-stretch: 125%; font-weight: 900; text-transform: uppercase; letter-spacing: .02em; color: var(--lime); text-decoration: none; display: flex; gap: 10px; align-items: baseline; }
+.mark small { font: 500 11px var(--mono); color: var(--mute); letter-spacing: .14em; }
+.mark .logo { display: block; align-self: center; width: 112px; height: 31px; background: var(--text); -webkit-mask: url(/logo.svg) center / contain no-repeat; mask: url(/logo.svg) center / contain no-repeat; }
+.mark { align-items: center; }
+.nav nav { display: flex; gap: 22px; margin-left: auto; flex-wrap: wrap; }
+.nav nav a { color: var(--text); text-decoration: none; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.nav nav a:hover { color: var(--lime); }
+.btn { display: inline-block; font: 700 13px var(--mono); letter-spacing: .1em; text-transform: uppercase; text-decoration: none; padding: 14px 22px; border: 1px solid var(--lime); color: var(--lime); background: transparent; cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); }
+.btn:not(.solid) { clip-path: none; }
+.btn.solid { background: var(--lime); color: var(--ink); }
+.btn:hover { background: var(--lime); color: var(--ink); }
+.btn.solid:hover { background: var(--text); border-color: var(--text); }
+
+section { position: relative; padding: clamp(56px, 9vw, 120px) 0 0; }
+.stamp { display: flex; align-items: center; gap: 14px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); margin-bottom: 22px; }
+.stamp b { color: var(--ink); background: var(--lime); padding: 3px 9px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stamp::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--lime-deep), transparent); }
+
+.hero { padding-top: clamp(40px, 6vw, 84px); }
+.hero .lead { margin-top: 28px; display: grid; gap: 14px; }
+.hero .lead p { font-size: clamp(15px, 1.5vw, 18px); }
+
+.spec { margin: 30px 0 0; border-top: 1px solid var(--lime-deep); }
+.spec div { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.spec dt, .spec h3 { color: var(--lime); }
+.spec dd { margin: 0; }
+.spec p { color: var(--mute); max-width: 74ch; font-size: 14px; }
+.spec p b { color: var(--text); font-weight: 500; }
+@media (max-width: 720px) { .spec div { grid-template-columns: 1fr; gap: 6px; } }
+
+footer { margin-top: clamp(64px, 10vw, 140px); border-top: 1px solid var(--line); padding: 34px 0 60px; font-size: 12.5px; color: var(--mute); }
+footer .wrap { display: flex; gap: 14px 40px; flex-wrap: wrap; justify-content: space-between; }
+footer a { color: var(--mute); }
+.proto { border: 1px dashed var(--mute); padding: 2px 8px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* end of the copied block */
+
+/* this page only: the contact panel, cut like the landing's rack */
+.ask { margin-top: 30px; border: 1px solid var(--lime-deep); background: var(--panel); padding: clamp(22px, 3vw, 40px);
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 5vw, 64px); align-items: start;
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut))); }
+.ask .send { display: grid; gap: 16px; justify-items: start; }
+.ask .send p { color: var(--mute); font-size: 14px; }
+.ask .addr { color: var(--text); overflow-wrap: anywhere; }
+.ask ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.ask li { padding-left: 18px; position: relative; color: var(--mute); font-size: 14px; }
+.ask li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 1px; background: var(--lime); }
+.ask li b { color: var(--text); font-weight: 500; }
+.back { margin-top: 30px; display: flex; gap: 14px; flex-wrap: wrap; }
+@media (max-width: 860px) { .ask { grid-template-columns: 1fr; } }
+.legal h2 { font-size: clamp(20px, 2.2vw, 28px); line-height: 1.1; margin: 44px 0 12px; }
+.legal p, .legal li { color: var(--mute); max-width: 74ch; font-size: 15px; line-height: 1.6; }
+.legal p + p { margin-top: 12px; }
+.legal ul { margin: 8px 0 0; padding-left: 20px; }
+.legal a { color: inherit; text-decoration: underline; }
+.legal { padding-bottom: clamp(56px, 9vw, 120px); }
+</style>
+<script data-goatcounter="https://orchestrator.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="../" aria-label="Uptime Orchestrator"><span class="logo" role="img" aria-hidden="true"></span> <small>from one Raspberry Pi to a fleet</small></a>
+    <nav aria-label="Site">
+      <a href="../#start">Start</a>
+      <a href="../#four-minutes">How it works</a>
+      <a href="../#install">Self-host</a>
+      <a href="../#after">Features</a>
+      <a href="../#run">Pricing</a>
+      <a href="../docs/">Docs</a>
+    </nav>
+    <span class="proto">Public beta</span>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero legal" aria-labelledby="title">
+  <div class="wrap">
+    <h1 id="title">Terms</h1>
+    <p>These terms cover the hosted service at <strong>app.orchestrator.sh</strong>, run by Uptime Lab Inc. Last updated 25 November 2026. A server you install yourself is yours to run: it is covered by the licence in the <a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">repository</a>, not by this page.</p>
+    <h2>The service is in beta</h2>
+    <p>Orchestrator is beta software, and it controls real hardware. Before you point it at a device, know what it can do.</p>
+    <ul>
+      <li>Nothing on your devices is erased unless you ask for it. Adopting a device installs the agent and updates its bootloader firmware, and leaves your data untouched. The platform can erase drives, install an operating system and restore images, and those are irreversible: each asks you to confirm first, but a playbook you start performs the steps it contains without asking again.</li>
+      <li>The platform reboots your devices. Installs, playbooks and recovery boots reboot on purpose, and an armed watchdog reboots a device on its own when it stops responding.</li>
+      <li>There is no SLA, and maintenance can happen without notice. Changes are tested against real hardware in a test environment before they reach this one.</li>
+      <li>The API, the data model and playbook definitions may still change in incompatible ways between beta releases.</li>
+      <li>Do not use it on production hardware you cannot afford to lose, or as the only way to reach a device you depend on.</li>
+    </ul>
+    <h2>What the platform does on your devices</h2>
+    <p>Adopting a device installs an agent that runs as root and executes what the platform sends it. It does not erase anything by itself. In practice that means:</p>
+    <ul>
+      <li>It runs commands and whole scripts you, or a playbook, define, as root, with no sandbox. Anything root can do on that device, this platform can do.</li>
+      <li>It can write operating systems to disk, erase drives, and capture and restore disk images. Each of these asks you to confirm first, and none of them can be undone afterwards.</li>
+      <li>It flashes the bootloader EEPROM on Raspberry Pi hardware and changes the boot order. A device can be left booting from the network instead of its disk.</li>
+      <li>It reboots devices: deliberately during installs, playbooks and recovery boots, and on its own when a watchdog you armed decides the device stopped responding.</li>
+      <li>It creates and removes local login users on the device, and manages their SSH keys, passwords and sudo rights.</li>
+      <li>A playbook runs the steps it contains against the nodes you pick, without confirming each one. Read a playbook before you run it.</li>
+    </ul>
+    <h2>Your hardware, your responsibility</h2>
+    <p>Connect only devices you own or are allowed to manage. What you ask the platform to do to them, by hand, by playbook or on a schedule, is your decision.</p>
+    <h2>Your account and your data</h2>
+    <p>The account's owner can download the account's data as one file and file a request to delete the account, both from the account page. The <a href="../privacy/">privacy notice</a> covers this website; for a question about the data the hosted service holds, write to <a href="mailto:info@orchestrator.sh">info@orchestrator.sh</a>.</p>
+    <h2>Reaching a human</h2>
+    <p>For anything private, such as a leaked key or an account problem, write to <a href="mailto:info@orchestrator.sh">info@orchestrator.sh</a>. A security report goes to <a href="mailto:security@orchestrator.sh">security@orchestrator.sh</a>, never to a public issue. For bugs, questions and feature requests, <a href="https://github.com/uptime-lab/orchestrator/issues" target="_blank" rel="noopener">open an issue</a>.</p>
+    <p>This is a small team running a beta. Expect an answer in days, not minutes.</p>
+    <h2>When these terms change</h2>
+    <p>The date at the top changes with them.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Uptime Orchestrator is made by Uptime Lab, the people behind the Compute Blade. Raspberry Pi is a trademark of Raspberry Pi Ltd.</span>
+    <span><a href="https://github.com/uptime-lab/orchestrator" target="_blank" rel="noopener">Source</a> · <a href="https://github.com/uptime-lab/orchestrator/blob/main/docs/INSTALL.md" target="_blank" rel="noopener">Install guide</a> · <a href="../docs/">Docs</a> · <a href="../subscription/">Subscriptions</a> · <a href="../imprint/">Imprint</a> · <a href="../privacy/">Privacy</a> · <a href="../terms/">Terms</a> · <a href="https://computeblade.com" target="_blank" rel="noopener">Compute Blade</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
